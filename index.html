@@ -238,6 +238,7 @@
         <a href="#achievements" class="nav-link">Achievements</a>
         <a href="#experience" class="nav-link">Experience</a>
         <a href="#projects" class="nav-link">Projects</a>
+        <a href="#toolkit" class="nav-link">Toolkit</a>
         <a href="#expertise" class="nav-link">Expertise</a>
         <a href="#education" class="nav-link">Education</a>
         <a href="#insights" class="nav-link">Insights</a>
@@ -595,6 +596,25 @@
     </div>
   </section>
 
+  <!-- TOOLKIT -->
+  <section class="block" id="toolkit">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-tag">// Free Engineering Toolkit</span>
+        <h2 class="sec-title">Tools I built — <span class="grad">free for every marine electrical engineer</span></h2>
+        <p class="sec-sub">Browser-based calculators, commissioning checklists, test forms, reference tables and animated power-system concepts. No signup, no backend — built from 16+ years of delivery practice. All results indicative; verify against class rules.</p>
+      </div>
+      <div class="ins-grid">
+        <a href="toolkit/index.html" class="ins-card"><div class="num">⚡ 11 TOOLS</div><h4>Engineering Calculators</h4><p>Short circuit, switchboard rating, volt drop, motor &amp; transformer FLC, earth fault, fuel consumption, panel heat loss, adiabatic earth-cable sizing, Ex e enclosure heat dissipation.</p><span class="read">Open calculators →</span></a>
+        <a href="toolkit/projects.html" class="ins-card"><div class="num">🚢 ANIMATED CONCEPTS</div><h4>Power System Concepts — How They Work</h4><p>Animated concept SLDs of delivered systems with functional walk-throughs — 4-source hybrid FCB architecture, main switchboard, redundant AMS network, autonomous-tug remote control.</p><span class="read">View concepts →</span></a>
+        <a href="toolkit/checklists.html" class="ins-card"><div class="num">✅ 12 TEMPLATES</div><h4>Commissioning Checklists</h4><p>HV switchgear, LV switchboard, transformer, VSD, generator, UPS/DDUPS, busway, cabling, power turn-on, documentation, FAT — interactive with progress, CSV export and print.</p><span class="read">Open checklists →</span></a>
+        <a href="toolkit/testforms.html" class="ins-card"><div class="num">🧪 RECORDS</div><h4>Test Forms</h4><p>Continuity &amp; insulation-resistance (megger) sheet with automatic pass/fail evaluation and CSV export, plus a printable general test certificate.</p><span class="read">Open test forms →</span></a>
+        <a href="toolkit/reference.html" class="ins-card"><div class="num">📚 6 TABLES</div><h4>Reference Tables</h4><p>ANSI protection functions, motor FLC &amp; trip sizes, XLPE cable parameters, IR test voltages, illuminance levels, hazardous-area Ex marking guide.</p><span class="read">Open reference →</span></a>
+        <a href="https://github.com/mnelahi-ai/marine-electrical-toolkit" target="_blank" rel="noopener" class="ins-card"><div class="num">⌨ OPEN SOURCE</div><h4>Python Tools on GitHub</h4><p>Hull-folder ingest &amp; equipment extractor, load-list workbook builder, cable schedule generator, research queue and folder organiser.</p><span class="read">View source →</span></a>
+      </div>
+    </div>
+  </section>
+
   <!-- INSIGHTS -->
   <section class="block" id="insights">
     <div class="wrap">
@@ -661,4 +681,9 @@
 
     const rev=document.querySelectorAll('.ach-card,.tl-item,.proj-card,.comp-card,.emerge-card,.ins-card,.sec-head,.edu-col,.hero-card');
     rev.forEach(el=>el.classList.add('reveal'));
-    const ro=new IntersectionObserver(es=>{es.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*60);
+    const ro=new IntersectionObserver(es=>{es.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*60);ro.unobserve(e.target);}});},{threshold:.12});
+    rev.forEach(el=>ro.observe(el));
+  });
+  </script>
+</body>
+</html>
