@@ -1,44 +1,647 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Marine Electrical Toolkit — calculators, load analysis, checklists, test forms, reference tables and power-system concepts, all in one page.">
-<title>Marine Electrical Toolkit — All-in-One</title>
+<meta name="description" content="M. Nelahi — Marine Systems Architect & Reliability Engineer. FPSO to Shore-Power, FMEA to Handover, DNV/ABS/BV to SP Services. Free engineering toolkit included.">
+<title>M. Nelahi — Marine Systems Architect &amp; Reliability Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#0f1722;--panel:#16222f;--panel2:#1d2c3d;--line:#2b4258;--txt:#e8eef4;--mut:#8fa6ba;--acc:#34b8a0;--amber:#e9a23d;}
-  *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%}
-  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--txt);display:flex;flex-direction:column}
-  header{display:flex;align-items:center;gap:14px;padding:12px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
-  header h1{font-size:16px;font-weight:600;white-space:nowrap}
-  .tabs{display:flex;gap:6px;flex-wrap:wrap}
-  .tabs button{background:var(--panel2);color:var(--mut);border:1px solid var(--line);border-radius:7px;padding:8px 14px;font-size:13px;cursor:pointer}
-  .tabs button.on{background:var(--acc);color:#06251f;border-color:var(--acc);font-weight:700}
-  .port{margin-left:auto;color:var(--amber);font-weight:600;font-size:13px;text-decoration:none;white-space:nowrap}
-  iframe{flex:1;width:100%;border:none;background:var(--bg)}
+/* ============ TOKENS ============ */
+:root{
+  --bg:#0a0f1c; --bg2:#0e1526; --panel:#121a2e; --panel2:#172138;
+  --line:#1f2c47; --line2:#2a3a5c;
+  --txt:#e9eef7; --mut:#94a3bd; --mut2:#6b7a96;
+  --teal:#00d4aa; --blue:#4f9cf9;
+  --teal-dim:rgba(0,212,170,.12); --blue-dim:rgba(79,156,249,.12);
+  --shadow:0 12px 40px rgba(0,0,0,.45);
+  --grad:linear-gradient(135deg,var(--blue),var(--teal));
+}
+[data-theme="light"]{
+  --bg:#f6f8fb; --bg2:#eef2f8; --panel:#ffffff; --panel2:#f1f5fa;
+  --line:#dbe4f0; --line2:#c3d2e6;
+  --txt:#15233c; --mut:#4d617f; --mut2:#7186a3;
+  --teal:#00a886; --blue:#2f7de0;
+  --teal-dim:rgba(0,168,134,.10); --blue-dim:rgba(47,125,224,.10);
+  --shadow:0 12px 36px rgba(21,35,60,.12);
+}
+/* ============ BASE ============ */
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--txt);line-height:1.6;transition:background .35s,color .35s}
+img,svg{display:block}
+a{color:var(--teal);text-decoration:none}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+section{padding:96px 0}
+.serif{font-family:'Instrument Serif',serif;font-weight:400}
+.eyebrow{display:inline-block;font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin-bottom:14px}
+h2.sec-title{font-family:'Instrument Serif',serif;font-size:clamp(32px,4.5vw,46px);font-weight:400;line-height:1.15;margin-bottom:14px}
+.sec-sub{color:var(--mut);max-width:680px;margin-bottom:48px;font-size:16.5px}
+/* fade-up animation */
+.fu{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+.fu.vis{opacity:1;transform:none}
+/* ============ NAV ============ */
+nav{position:sticky;top:0;z-index:100;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;gap:28px;height:68px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;color:var(--txt)}
+.nav-links{display:flex;gap:26px;margin-left:auto;align-items:center}
+.nav-links a{color:var(--mut);font-size:14.5px;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--teal)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:10px;font-weight:600;font-size:14.5px;cursor:pointer;border:1px solid transparent;transition:transform .15s,box-shadow .2s,background .2s,border-color .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn-pri{background:var(--grad);color:#04121c}
+.btn-ghost{border-color:var(--line2);color:var(--txt);background:transparent}
+.btn-ghost:hover{border-color:var(--teal)}
+.btn-sm{padding:8px 16px;font-size:13.5px}
+#themeBtn{background:transparent;border:1px solid var(--line2);color:var(--txt);width:40px;height:40px;border-radius:10px;cursor:pointer;display:grid;place-items:center;font-size:16px}
+#themeBtn:hover{border-color:var(--teal)}
+#burger{display:none;background:transparent;border:1px solid var(--line2);color:var(--txt);width:42px;height:40px;border-radius:10px;cursor:pointer;font-size:18px}
+/* mobile menu */
+#mMenu{position:fixed;inset:0;z-index:200;background:var(--bg);display:none;flex-direction:column;align-items:center;justify-content:center;gap:30px}
+#mMenu.open{display:flex}
+#mMenu a{font-size:24px;font-weight:600;color:var(--txt)}
+#mMenu .close{position:absolute;top:20px;right:24px;font-size:28px;background:none;border:none;color:var(--mut);cursor:pointer}
+/* ============ HERO ============ */
+.hero{padding:110px 0 90px;position:relative;overflow:hidden;background:
+  radial-gradient(900px 480px at 85% -10%,var(--blue-dim),transparent 60%),
+  radial-gradient(700px 420px at -5% 100%,var(--teal-dim),transparent 60%)}
+.hero-grid{display:grid;grid-template-columns:1.5fr .9fr;gap:48px;align-items:center}
+.hero h1{font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(40px,6vw,68px);line-height:1.08;margin:14px 0 22px}
+.hero h1 em{font-style:italic;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-sub{color:var(--mut);font-size:18px;max-width:620px;margin-bottom:34px}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:48px}
+.stats{display:grid;grid-template-columns:repeat(4,auto);gap:38px;max-width:720px}
+.stat .n{font-size:30px;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat .l{font-size:13px;color:var(--mut);margin-top:2px}
+.badge-wrap{display:flex;justify-content:center}
+.badge{width:230px;height:230px;animation:spin 28s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* ============ ABOUT ============ */
+.cards4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:28px 24px;transition:transform .2s,border-color .2s,box-shadow .25s}
+.card:hover{transform:translateY(-4px);border-color:var(--teal);box-shadow:var(--shadow)}
+.card .ic{width:46px;height:46px;border-radius:12px;background:var(--teal-dim);display:grid;place-items:center;margin-bottom:16px;font-size:21px}
+.card h3{font-size:17px;margin-bottom:8px}
+.card p{color:var(--mut);font-size:14px}
+.diff-table{margin-top:64px;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.diff-table table{width:100%;border-collapse:collapse;font-size:14.5px}
+.diff-table th{background:var(--panel2);text-align:left;padding:15px 20px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+.diff-table td{padding:16px 20px;border-top:1px solid var(--line);vertical-align:top}
+.diff-table td:first-child{font-weight:700;color:var(--teal);white-space:nowrap}
+.diff-table td:nth-child(2){color:var(--mut)}
+/* ============ SERVICES ============ */
+#services{background:var(--bg2)}
+.svc-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.svc{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:32px;transition:border-color .2s,box-shadow .25s}
+.svc:hover{border-color:var(--blue);box-shadow:var(--shadow)}
+.svc .num{font-family:'Instrument Serif',serif;font-size:38px;color:var(--blue);opacity:.85}
+.svc h3{font-size:19px;margin:10px 0 16px}
+.svc ul{list-style:none}
+.svc li{position:relative;padding:6px 0 6px 26px;color:var(--mut);font-size:14.5px}
+.svc li::before{content:"→";position:absolute;left:0;color:var(--teal);font-weight:700}
+.engage{margin-top:40px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.engage .lbl{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);font-weight:700;margin-right:6px}
+.chip{padding:9px 18px;border-radius:999px;border:1px solid var(--line2);font-size:13.5px;font-weight:600;color:var(--txt);background:var(--panel)}
+.chip b{color:var(--teal)}
+/* ============ PROJECTS ============ */
+.proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.proj{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:30px;display:flex;flex-direction:column;gap:14px;transition:transform .2s,border-color .2s,box-shadow .25s}
+.proj:hover{transform:translateY(-4px);border-color:var(--teal);box-shadow:var(--shadow)}
+.proj h3{font-size:18.5px;line-height:1.3}
+.proj .role{font-size:13.5px;color:var(--mut2)}
+.kpis{display:flex;flex-wrap:wrap;gap:8px}
+.kpi{background:var(--teal-dim);color:var(--teal);font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:8px}
+.proj p.nar{color:var(--mut);font-size:14.5px;flex:1}
+.tags{display:flex;flex-wrap:wrap;gap:7px}
+.tag{font-size:12px;font-weight:600;color:var(--blue);background:var(--blue-dim);padding:5px 11px;border-radius:999px}
+/* ============ TOOLKIT ============ */
+#toolkit{background:var(--bg2)}
+.tool-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.tool{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:30px;display:flex;flex-direction:column;transition:transform .2s,border-color .2s,box-shadow .25s}
+.tool:hover{transform:translateY(-4px);border-color:var(--teal);box-shadow:var(--shadow)}
+.tool .ic{width:48px;height:48px;border-radius:12px;background:var(--blue-dim);display:grid;place-items:center;font-size:22px;margin-bottom:16px}
+.tool h3{font-size:17px;margin-bottom:8px}
+.tool p{color:var(--mut);font-size:14px;flex:1;margin-bottom:20px}
+.tool .btn{align-self:flex-start}
+.live-tools{margin-top:44px;padding:24px 28px;border:1px dashed var(--line2);border-radius:16px;display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center}
+.live-tools .lbl{font-weight:700;font-size:14px;color:var(--txt)}
+.live-tools a{font-size:14px;font-weight:600}
+/* ============ LINKEDIN ============ */
+.hl-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:48px}
+.hl{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;cursor:pointer;position:relative;transition:border-color .2s,transform .15s}
+.hl:hover{border-color:var(--teal);transform:translateY(-2px)}
+.hl .hn{font-size:11.5px;font-weight:800;letter-spacing:.1em;color:var(--teal);margin-bottom:6px;display:flex;justify-content:space-between;align-items:center}
+.hl .hn .cp{font-size:11px;color:var(--mut2);font-weight:600;letter-spacing:0}
+.hl p{font-size:13.8px;color:var(--mut);line-height:1.5}
+.panel2col{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.txt-panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:28px;display:flex;flex-direction:column}
+.txt-panel .plabel{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
+.txt-panel .plabel h3{font-size:15.5px}
+.txt-panel pre{white-space:pre-wrap;font-family:'Inter',sans-serif;font-size:13.5px;color:var(--mut);line-height:1.65;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:20px;flex:1;max-height:420px;overflow-y:auto}
+/* toast */
+#toast{position:fixed;bottom:28px;left:50%;transform:translate(-50%,80px);background:var(--grad);color:#04121c;font-weight:700;font-size:14px;padding:13px 26px;border-radius:12px;z-index:300;opacity:0;transition:transform .3s,opacity .3s;pointer-events:none;box-shadow:var(--shadow)}
+#toast.show{transform:translate(-50%,0);opacity:1}
+/* ============ CONTACT ============ */
+#contact{background:var(--bg2)}
+.contact-box{text-align:center;max-width:760px;margin:0 auto}
+.contact-box h2{font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(32px,4.5vw,48px);margin-bottom:16px}
+.contact-box p{color:var(--mut);font-size:17px;margin-bottom:36px}
+.contact-ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+/* ============ FOOTER ============ */
+footer{border-top:1px solid var(--line);padding:30px 0}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+.foot .l{color:var(--mut2);font-size:13.5px}
+.foot .r{display:flex;gap:22px}
+.foot .r a{color:var(--mut);font-size:13.5px;font-weight:500}
+.foot .r a:hover{color:var(--teal)}
+/* ============ RESPONSIVE ============ */
+@media(max-width:1000px){
+  .cards4{grid-template-columns:1fr 1fr}
+  .tool-grid{grid-template-columns:1fr 1fr}
+  .hero-grid{grid-template-columns:1fr}
+  .badge-wrap{display:none}
+}
+@media(max-width:760px){
+  section{padding:68px 0}
+  .nav-links,#ghBtn{display:none}
+  #burger{display:block}
+  .svc-grid,.proj-grid,.hl-grid,.panel2col,.tool-grid,.cards4{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr 1fr;gap:22px}
+  .hero{padding:70px 0 60px}
+  .diff-table{overflow-x:auto}
+  .diff-table table{min-width:560px}
+}
 </style>
 </head>
 <body>
-<header>
-  <h1>⚓ Marine Electrical Toolkit</h1>
-  <div class="tabs" id="tabs"></div>
-  <a class="port" href="../index.html">Portfolio ↗</a>
+
+<!-- ================= NAV ================= -->
+<nav>
+  <div class="wrap nav-in">
+    <a class="logo" href="#top" aria-label="Home">
+      <svg width="30" height="30" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <circle cx="16" cy="16" r="14.5" stroke="url(#lg)" stroke-width="2.4"/>
+        <path d="M16 6v14M16 20c-4 0-7-2.6-7.5-5M16 20c4 0 7-2.6 7.5-5M11 9.5h10" stroke="url(#lg)" stroke-width="2.4" stroke-linecap="round"/>
+        <defs><linearGradient id="lg" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#4f9cf9"/><stop offset="1" stop-color="#00d4aa"/></linearGradient></defs>
+      </svg>
+      M.&nbsp;Nelahi
+    </a>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#projects">Projects</a>
+      <a href="#toolkit">Toolkit</a>
+      <a href="#linkedin">LinkedIn</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <button id="themeBtn" aria-label="Toggle theme">☀️</button>
+    <a id="ghBtn" class="btn btn-ghost btn-sm" href="https://github.com/mnelahi-ai" target="_blank" rel="noopener">GitHub</a>
+    <button id="burger" aria-label="Open menu">☰</button>
+  </div>
+</nav>
+
+<div id="mMenu" aria-hidden="true">
+  <button class="close" aria-label="Close menu">✕</button>
+  <a href="#about">About</a>
+  <a href="#services">Services</a>
+  <a href="#projects">Projects</a>
+  <a href="#toolkit">Toolkit</a>
+  <a href="#linkedin">LinkedIn</a>
+  <a href="#contact">Contact</a>
+  <a href="https://github.com/mnelahi-ai" target="_blank" rel="noopener">GitHub ↗</a>
+</div>
+
+<!-- ================= HERO ================= -->
+<header class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow fu">Singapore-based · Global Execution</span>
+      <h1 class="fu">Marine Systems <em>Architect</em> &amp; Reliability Engineer</h1>
+      <p class="hero-sub fu">I bridge complex offshore electrical design with local regulatory compliance — FPSO to Shore-Power, FMEA to Handover, DNV/ABS/BV to SP&nbsp;Services.</p>
+      <div class="hero-ctas fu">
+        <a class="btn btn-pri" href="#projects">View Projects</a>
+        <a class="btn btn-ghost" href="#toolkit">Download Toolkit</a>
+        <a class="btn btn-ghost" href="../assets/Mashuk_Elahi_Resume.pdf" target="_blank" rel="noopener">Resume PDF</a>
+      </div>
+      <div class="stats fu">
+        <div class="stat"><div class="n">15+</div><div class="l">Years</div></div>
+        <div class="stat"><div class="n">40+</div><div class="l">Projects</div></div>
+        <div class="stat"><div class="n">0</div><div class="l">Major NCRs</div></div>
+        <div class="stat"><div class="n">3&nbsp;GW</div><div class="l">Offshore Wind</div></div>
+      </div>
+    </div>
+    <div class="badge-wrap fu">
+      <svg class="badge" viewBox="0 0 200 200" aria-hidden="true">
+        <defs>
+          <path id="circ" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"/>
+          <linearGradient id="bg2" x1="0" y1="0" x2="200" y2="200"><stop stop-color="#4f9cf9"/><stop offset="1" stop-color="#00d4aa"/></linearGradient>
+        </defs>
+        <circle cx="100" cy="100" r="96" fill="none" stroke="url(#bg2)" stroke-width="1.4" opacity=".5"/>
+        <circle cx="100" cy="100" r="58" fill="none" stroke="url(#bg2)" stroke-width="1.4" opacity=".5"/>
+        <text font-size="14.5" font-weight="700" letter-spacing="3.5" fill="url(#bg2)" font-family="Inter,sans-serif">
+          <textPath href="#circ">DESIGN · TO · HANDOVER · CERTAINTY · DESIGN · TO · HANDOVER ·</textPath>
+        </text>
+        <path d="M100 70v50M100 112c-13 0-23-8.4-24.5-16M100 112c13 0 23-8.4 24.5-16M84 81h32M100 70a6 6 0 1 1 .01 0" stroke="url(#bg2)" stroke-width="4" stroke-linecap="round" fill="none"/>
+      </svg>
+    </div>
+  </div>
 </header>
-<iframe id="fr" src="index.html" title="Toolkit content"></iframe>
+
+<!-- ================= ABOUT ================= -->
+<section id="about">
+  <div class="wrap">
+    <span class="eyebrow fu">About</span>
+    <h2 class="sec-title fu">Four disciplines. One accountable engineer.</h2>
+    <p class="sec-sub fu">Full-lifecycle marine electrical engineering — from master topology to the signed handover certificate.</p>
+    <div class="cards4">
+      <div class="card fu">
+        <div class="ic">🧭</div>
+        <h3>Systems Architecture</h3>
+        <p>Master topology design across IAS/PMS/DCS, IEC 61850 substation communications, and DP2/DP3 redundancy concepts.</p>
+      </div>
+      <div class="card fu">
+        <div class="ic">🛡️</div>
+        <h3>Compliance &amp; Safety</h3>
+        <p>DNV/ABS/BV class closure, IEC 60079 hazardous-area design, IEC 80005-1 shore power, SP Services authority submissions.</p>
+      </div>
+      <div class="card fu">
+        <div class="ic">⚙️</div>
+        <h3>Commissioning &amp; FMEA</h3>
+        <p>H767 FMEA methodology, Terasaki torque-verified terminations, and the 47-point sub-station handover protocol.</p>
+      </div>
+      <div class="card fu">
+        <div class="ic">🖥️</div>
+        <h3>Digital Documentation</h3>
+        <p>ETAP/DIgSILENT digital-twin delivery and CMMS-ready handover — owners receive a live model, not a paper trail.</p>
+      </div>
+    </div>
+    <div class="diff-table fu">
+      <table>
+        <thead><tr><th>Dimension</th><th>What Others Do</th><th>What I Do</th></tr></thead>
+        <tbody>
+          <tr><td>Vertical Integration</td><td>Hand off between design, vendor, and commissioning teams — gaps appear at every interface.</td><td>Own the chain end-to-end: topology → vendor packages → commissioning → formal operational handover.</td></tr>
+          <tr><td>Vendor-Agnostic</td><td>Lock the owner into a single OEM ecosystem early.</td><td>Score ABB / Siemens / GE / Wärtsilä bids on engineering merit; integration risk priced before award.</td></tr>
+          <tr><td>Regulatory Fluency</td><td>Treat class and grid authority as separate, late-stage hurdles.</td><td>Run DNV/ABS/BV notation and SP Services / LEW / EMA submissions in parallel from FEED — zero re-submissions.</td></tr>
+          <tr><td>Digital Handover</td><td>Deliver binders of scanned test sheets.</td><td>Deliver an ETAP/DIgSILENT digital twin plus tagged CMMS asset register, live on Day 1.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SERVICES ================= -->
+<section id="services">
+  <div class="wrap">
+    <span class="eyebrow fu">Services</span>
+    <h2 class="sec-title fu">Engagement-ready scopes</h2>
+    <p class="sec-sub fu">Four packaged service lines, each with defined deliverables and acceptance criteria.</p>
+    <div class="svc-grid">
+      <div class="svc fu">
+        <div class="num">01</div>
+        <h3>Technical Due Diligence &amp; Owner's Engineering</h3>
+        <ul>
+          <li>SLD / load list gap analysis vs. DNV/ABS/BV rule sets</li>
+          <li>Vendor bid scoring — ABB / Siemens / GE / Wärtsilä</li>
+          <li>Class notation pathway: BATTERY(POWER), SHORE POWER, GAS FUELLED</li>
+          <li>SP Services HV/LV, LEW/QP, EMA submission management</li>
+          <li>FAT/SAT protocols + punch-list closure</li>
+        </ul>
+      </div>
+      <div class="svc fu">
+        <div class="num">02</div>
+        <h3>System Reliability &amp; FMEA Engineering</h3>
+        <ul>
+          <li>H767 FMEA — generation, distribution, propulsion, automation</li>
+          <li>RPN-driven mitigations: redundancy, protection, monitoring</li>
+          <li>SIL/PL assessment IEC 61508/61511 for ESD, F&amp;G, DP</li>
+          <li>Critical spare analysis</li>
+          <li>Digital FMEA register → CMMS-ready</li>
+        </ul>
+      </div>
+      <div class="svc fu">
+        <div class="num">03</div>
+        <h3>Commissioning Strategy &amp; Execution</h3>
+        <ul>
+          <li>Commissioning master plan — test sequence, hold points</li>
+          <li>Terasaki torque verification — QR-coded photographic register</li>
+          <li>Protection relay testing IEC 60255 — injection, coordination</li>
+          <li>Generator sync, load sharing, governor/AVR, black-start</li>
+          <li>47-point sub-station handover package</li>
+        </ul>
+      </div>
+      <div class="svc fu">
+        <div class="num">04</div>
+        <h3>Regulatory &amp; Authority Liaison (Singapore)</h3>
+        <ul>
+          <li>SP Services HV/LV — contestable vs. non-contestable strategy</li>
+          <li>LEW/QP endorsement coordination</li>
+          <li>EMA licensing, WSH Act, PTW systems</li>
+          <li>IEC 80005-1 shore-power + IEC 62443 cybersecurity</li>
+          <li>IEC 60079 hazardous area — Ex dossier, MOM/SCDF</li>
+        </ul>
+      </div>
+    </div>
+    <div class="engage fu">
+      <span class="lbl">Engagement models</span>
+      <span class="chip"><b>Retainer</b> — ongoing owner's engineer</span>
+      <span class="chip"><b>Fixed-Fee</b> — defined deliverable</span>
+      <span class="chip"><b>Day Rate</b> — site &amp; survey support</span>
+      <span class="chip"><b>Milestone-Gated</b> — EPCIC phases</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROJECTS ================= -->
+<section id="projects">
+  <div class="wrap">
+    <span class="eyebrow fu">Projects</span>
+    <h2 class="sec-title fu">Selected work</h2>
+    <p class="sec-sub fu">Representative engagements across FPSO, hybrid retrofit, shore power, reliability, and digital handover.</p>
+    <div class="proj-grid">
+
+      <div class="proj fu">
+        <h3>FPSO Topside Electrification — 150 MW</h3>
+        <div class="role">Electrical Package Lead (Owner's Engineer) · West Africa · DNV Class</div>
+        <div class="kpis"><span class="kpi">0 Major NCRs</span><span class="kpi">−12% CAPEX</span><span class="kpi">−3 wks commissioning</span><span class="kpi">2,400 CMMS Assets</span></div>
+        <p class="nar">Master topology (IAS/PMS/DCS), H767 FMEA — 14 critical RPNs mitigated, DNV BATTERY(POWER) notation secured, 1,200+ torque-verified joints, ETAP model + CMMS Day 1.</p>
+        <div class="tags"><span class="tag">11 kV</span><span class="tag">IEC 61892</span><span class="tag">DNV</span><span class="tag">FMEA H767</span><span class="tag">IEC 60079</span><span class="tag">Digital Twin</span></div>
+      </div>
+
+      <div class="proj fu">
+        <h3>Hybrid Retrofit — 24m CTV, North Sea</h3>
+        <div class="role">VFD Commissioning Lead · Norway Operator · Singapore Design / Norway Yard</div>
+        <div class="kpis"><span class="kpi">−18% Fuel</span><span class="kpi">−22% CO₂e</span><span class="kpi">THDi &lt;5% at PCC</span><span class="kpi">DNV BATTERY(POWER)</span></div>
+        <p class="nar">PMS/EMS diesel↔battery transfer &lt;200 ms, AFE-VFD harmonic study, zero NCR, Terasaki torque-verified, delivered 3 weeks early.</p>
+        <div class="tags"><span class="tag">6.6 kV VFD</span><span class="tag">1.2 MWh BESS</span><span class="tag">AFE</span><span class="tag">IEC 61892</span><span class="tag">DNV-ST-0097</span></div>
+      </div>
+
+      <div class="proj fu">
+        <h3>Shore-Power — Singapore Cruise Terminal</h3>
+        <div class="role">Technical Advisor / LEW Liaison · Singapore Port Authority · SP Services 22 kV</div>
+        <div class="kpis"><span class="kpi">−40% Port Emissions</span><span class="kpi">8-week Authority Approval</span><span class="kpi">16 MW</span><span class="kpi">0 Re-submissions</span></div>
+        <p class="nar">IEC 80005-1 interface, contestable works saved 6 weeks, LEW/QP + EMA submission, cybersecurity segmentation, zero re-submissions.</p>
+        <div class="tags"><span class="tag">IEC 80005-1</span><span class="tag">SP Services</span><span class="tag">LEW/QP</span><span class="tag">22 kV</span><span class="tag">IEC 62443</span></div>
+      </div>
+
+      <div class="proj fu">
+        <h3>FMEA Program — MODU 11 kV / 45 MW</h3>
+        <div class="role">Reliability Lead · Mobile Offshore Drilling Unit · H767 Methodology</div>
+        <div class="kpis"><span class="kpi">14 Critical RPNs</span><span class="kpi">−40% Commissioning Surprises</span><span class="kpi">SIL 2</span><span class="kpi">Live CMMS Register</span></div>
+        <p class="nar">H767 across generation/distribution/propulsion/automation, 14 critical RPNs mitigated via redundant bus-tie + diverse protection + UPS-backed PMS.</p>
+        <div class="tags"><span class="tag">H767 FMEA</span><span class="tag">11 kV</span><span class="tag">IEC 61508</span><span class="tag">IEC 61511</span><span class="tag">SIL 2</span></div>
+      </div>
+
+      <div class="proj fu">
+        <h3>DP3 Drillship Power Upgrade</h3>
+        <div class="role">Electrical Package Engineer · Korean Yard · Major Drilling Contractor</div>
+        <div class="kpis"><span class="kpi">DP3 Class Notation</span><span class="kpi">A60 Fire Barrier</span><span class="kpi">99.8% Power Availability</span></div>
+        <p class="nar">DP3 redundancy validation per IMO MSC/Circ.1580, A60 subdivision confirmed, FMEA worst-case, protection coordination — no cascading failure.</p>
+        <div class="tags"><span class="tag">DP3</span><span class="tag">IMO MSC/Circ.1580</span><span class="tag">ETAP</span><span class="tag">IEC 61892</span></div>
+      </div>
+
+      <div class="proj fu">
+        <h3>Digital Twin &amp; CMMS Handover — 8-Vessel Fleet</h3>
+        <div class="role">Digital Engineering Lead · Singapore Operator · ETAP + IBM Maximo</div>
+        <div class="kpis"><span class="kpi">−30% Commissioning Time</span><span class="kpi">12,000+ Tagged Assets</span><span class="kpi">Virtual FAT</span></div>
+        <p class="nar">ETAP digital twin for 8-vessel fleet, standardised tag naming, virtual FAT −30% on-site time, 12,000+ CMMS assets delivered Day 1.</p>
+        <div class="tags"><span class="tag">ETAP</span><span class="tag">DIgSILENT</span><span class="tag">IBM Maximo</span><span class="tag">Digital Twin</span><span class="tag">Virtual FAT</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= TOOLKIT ================= -->
+<section id="toolkit">
+  <div class="wrap">
+    <span class="eyebrow fu">Toolkit</span>
+    <h2 class="sec-title fu">Free engineering toolkit</h2>
+    <p class="sec-sub fu">The actual working documents used to close class notations, pass authority inspections, and hand over live CMMS registers.</p>
+    <div class="tool-grid">
+
+      <div class="tool fu">
+        <div class="ic">📋</div>
+        <h3>Sub-Station Handover Checklist (47-point)</h3>
+        <p>IEC 61892 / DNV-ST-0097 / Terasaki — documentation, torque, insulation, protection, operational, and sign-off sections.</p>
+        <a class="btn btn-pri btn-sm" href="https://github.com/mnelahi-ai/portfolio/releases/latest/download/Substation_Handover_Checklist_47pt.pdf">Download PDF</a>
+      </div>
+
+      <div class="tool fu">
+        <div class="ic">🔩</div>
+        <h3>Terasaki MCCB/ACB Torque Standards</h3>
+        <p>TSC/TSD MCCB 125A→800A, AR/AS ACB 2000A→6300A. Nm values, bolt specs, 2-stage tightening, failure modes.</p>
+        <a class="btn btn-pri btn-sm" href="https://github.com/mnelahi-ai/portfolio/releases/latest/download/Terasaki_MCCB_ACB_Torque_Standards.pdf">Download PDF</a>
+      </div>
+
+      <div class="tool fu">
+        <div class="ic">📊</div>
+        <h3>FMEA Template — Marine Power Systems (H767)</h3>
+        <p>Excel: H767 categories, RPN calculation, action tracking, risk register. Generation / Distribution / Propulsion / Automation.</p>
+        <a class="btn btn-pri btn-sm" href="https://github.com/mnelahi-ai/portfolio/releases/latest/download/FMEA_Template_Marine_Power_H767.xlsx">Download Excel</a>
+      </div>
+
+      <div class="tool fu">
+        <div class="ic">🏛️</div>
+        <h3>SP Services Connection Procedure (Singapore)</h3>
+        <p>HV/LV grid connection: contestable strategy, LEW/QP submissions, EMA licensing, WSH compliance timeline.</p>
+        <a class="btn btn-pri btn-sm" href="https://github.com/mnelahi-ai/portfolio/releases/latest/download/SP_Services_Connection_Procedure.pdf">Download PDF</a>
+      </div>
+
+      <div class="tool fu">
+        <div class="ic">✅</div>
+        <h3>Commissioning Protocol (FAT → SAT → Handover)</h3>
+        <p>System hierarchy, test sequence, resource loading, class witness points, hold points, ITP integration.</p>
+        <a class="btn btn-pri btn-sm" href="https://github.com/mnelahi-ai/portfolio/releases/latest/download/Commissioning_Protocol_FAT_SAT_Handover.pdf">Download PDF</a>
+      </div>
+
+      <div class="tool fu">
+        <div class="ic">📄</div>
+        <h3>Resume &amp; One-Pager (PDF)</h3>
+        <p>Full CV + single-page technical profile with QR code. ATS-friendly. Updated each project cycle.</p>
+        <a class="btn btn-pri btn-sm" href="../assets/Mashuk_Elahi_Resume.pdf" target="_blank" rel="noopener">Download Resume</a>
+      </div>
+
+    </div>
+    <div class="live-tools fu">
+      <span class="lbl">⚡ Interactive tools (browser-based):</span>
+      <a href="index.html">Calculators (11)</a>
+      <a href="loadcalc.html">Load Analysis</a>
+      <a href="checklists.html">Checklists (12)</a>
+      <a href="testforms.html">Test Forms</a>
+      <a href="reference.html">Reference Tables (6)</a>
+      <a href="projects.html">Concepts &amp; Animations</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LINKEDIN ================= -->
+<section id="linkedin">
+  <div class="wrap">
+    <span class="eyebrow fu">LinkedIn</span>
+    <h2 class="sec-title fu">Positioning library</h2>
+    <p class="sec-sub fu">Ten field-tested headlines — click any card to copy it to your clipboard.</p>
+    <div class="hl-grid">
+      <div class="hl fu" data-copy="FPSO & Offshore Wind Electrical Architect | Master Topology (IAS/PMS/DCS) | FMEA-Driven Reliability | DNV/ABS/BV Class Closure | SP Services Grid Integration"><div class="hn">H1 — ARCHITECT <span class="cp">click to copy</span></div><p>FPSO &amp; Offshore Wind Electrical Architect | Master Topology (IAS/PMS/DCS) | FMEA-Driven Reliability | DNV/ABS/BV Class Closure | SP Services Grid Integration</p></div>
+      <div class="hl fu" data-copy="Marine Commissioning & Handover Specialist | Generation Commissioning | Torque-Standard Verification (Terasaki) | Sub-Station Handover Protocols | Zero-NCR Track Record"><div class="hn">H2 — COMMISSIONING <span class="cp">click to copy</span></div><p>Marine Commissioning &amp; Handover Specialist | Generation Commissioning | Torque-Standard Verification (Terasaki) | Sub-Station Handover Protocols | Zero-NCR Track Record</p></div>
+      <div class="hl fu" data-copy="Marine Regulatory & Safety Engineering Lead | IEC 60079 Hazardous Area | LEW/QP Singapore | FMEA H767 | SP Services | Digital-First Documentation Toolkit"><div class="hn">H3 — REGULATORY <span class="cp">click to copy</span></div><p>Marine Regulatory &amp; Safety Engineering Lead | IEC 60079 Hazardous Area | LEW/QP Singapore | FMEA H767 | SP Services | Digital-First Documentation Toolkit</p></div>
+      <div class="hl fu" data-copy="Marine VFD & Harmonic Mitigation Specialist | 11 kV/6.6 kV AFE-VFD Commissioning | THDi <5% at PCC | DNV BATTERY(POWER) | ABB/Siemens/Danfoss Platforms"><div class="hn">H4 — VFD <span class="cp">click to copy</span></div><p>Marine VFD &amp; Harmonic Mitigation Specialist | 11 kV/6.6 kV AFE-VFD Commissioning | THDi &lt;5% at PCC | DNV BATTERY(POWER) | ABB/Siemens/Danfoss Platforms</p></div>
+      <div class="hl fu" data-copy="Hybrid Power Systems Engineer | Diesel-Electric → Battery-Hybrid Conversions | PMS/EMS Architecture | 35% OPEX Reduction on OSV Fleet | BATTERY(POWER) Notation"><div class="hn">H5 — HYBRID <span class="cp">click to copy</span></div><p>Hybrid Power Systems Engineer | Diesel-Electric → Battery-Hybrid Conversions | PMS/EMS Architecture | 35% OPEX Reduction on OSV Fleet | BATTERY(POWER) Notation</p></div>
+      <div class="hl fu" data-copy="FPSO & Floating Wind E-House Power Lead | Hazardous-Area MV/LV Design | IEC 60079/61892 | 150 MW Topside Electrification | FEED → Hook-Up → Class Closure"><div class="hn">H6 — E-HOUSE <span class="cp">click to copy</span></div><p>FPSO &amp; Floating Wind E-House Power Lead | Hazardous-Area MV/LV Design | IEC 60079/61892 | 150 MW Topside Electrification | FEED → Hook-Up → Class Closure</p></div>
+      <div class="hl fu" data-copy="Shore-Power & Cold-Ironing Expert | IEC 80005-1 Compliance | SP Services HV/LV Connection | 40% Port Emissions Cut | LEW/QP Singapore"><div class="hn">H7 — SHORE POWER <span class="cp">click to copy</span></div><p>Shore-Power &amp; Cold-Ironing Expert | IEC 80005-1 Compliance | SP Services HV/LV Connection | 40% Port Emissions Cut | LEW/QP Singapore</p></div>
+      <div class="hl fu" data-copy="Marine Power Reliability Engineer | FMEA H767 | SIL/PL Assessment IEC 61508/61511 | Critical Spare Analysis | RPN-Driven Design | CMMS-Ready Handover"><div class="hn">H8 — RELIABILITY <span class="cp">click to copy</span></div><p>Marine Power Reliability Engineer | FMEA H767 | SIL/PL Assessment IEC 61508/61511 | Critical Spare Analysis | RPN-Driven Design | CMMS-Ready Handover</p></div>
+      <div class="hl fu" data-copy="Marine Electrical Digitalization Lead | Digital Twin Commissioning | ETAP/DIgSILENT | 30% Comm. Time Reduction | 12,000+ CMMS Assets | Virtual FAT"><div class="hn">H9 — DIGITAL <span class="cp">click to copy</span></div><p>Marine Electrical Digitalization Lead | Digital Twin Commissioning | ETAP/DIgSILENT | 30% Comm. Time Reduction | 12,000+ CMMS Assets | Virtual FAT</p></div>
+      <div class="hl fu" data-copy="Marine Electrical Package Manager | EPCIC Scope Definition | Vendor Assessment (Switchgear/Transformers/VFDs) | 15% CAPEX Optimisation | Multi-Yard (SG/KR/CN/EU)"><div class="hn">H10 — PACKAGE MGR <span class="cp">click to copy</span></div><p>Marine Electrical Package Manager | EPCIC Scope Definition | Vendor Assessment (Switchgear/Transformers/VFDs) | 15% CAPEX Optimisation | Multi-Yard (SG/KR/CN/EU)</p></div>
+    </div>
+
+    <div class="panel2col">
+      <div class="txt-panel fu">
+        <div class="plabel">
+          <h3>LinkedIn About Section — Ready to Paste</h3>
+          <button class="btn btn-ghost btn-sm copy-panel" data-target="aboutTxt">Copy</button>
+        </div>
+        <pre id="aboutTxt">I deliver high-reliability marine electrical systems that bridge the gap between complex offshore design and local regulatory compliance.
+
+My work spans the full engineering lifecycle: from master topology (IAS/PMS/DCS) and FMEA-driven system design through vendor package management, commissioning, and formal operational handover — including 47-point substation protocols, Terasaki torque-verified terminations, and CMMS-ready digital twin delivery.
+
+Specialist in:
+→ FPSO &amp; Offshore Wind topside electrification (11 kV, 150 MW+)
+→ Hybrid propulsion &amp; BESS retrofit (6.6 kV VFD, DNV BATTERY(POWER))
+→ Shore-power deployment (IEC 80005-1, SP Services, LEW/QP Singapore)
+→ Reliability engineering: FMEA H767, SIL/PL assessment, critical spares
+→ Digital handover: ETAP/DIgSILENT → IBM Maximo CMMS, Day 1
+
+Across 40+ projects in Singapore, Korea, China, Norway, and West Africa, the record is consistent: zero major NCRs, on-schedule commissioning, and owners who receive a live digital twin — not a paper trail.
+
+📎 Free engineering toolkit: mnelahi-ai.github.io/portfolio/toolkit/all.html</pre>
+      </div>
+      <div class="txt-panel fu">
+        <div class="plabel">
+          <h3>LinkedIn Launch Post — Ready to Post</h3>
+          <button class="btn btn-ghost btn-sm copy-panel" data-target="postTxt">Copy</button>
+        </div>
+        <pre id="postTxt">I just published my engineering toolkit — and it's free.
+
+After 15 years across FPSO electrification, hybrid CTV retrofits, and Singapore shore-power deployments, I've open-sourced the practical tools I actually use on projects.
+
+What's in the toolkit:
+✅ 47-point Sub-Station Handover Checklist (IEC 61892 / DNV-ST-0097)
+✅ Terasaki MCCB/ACB Torque Standards — Nm values per frame, re-torque protocol
+✅ FMEA Template — H767 methodology, RPN calculation, action tracking
+✅ SP Services Grid Connection Procedure (Singapore HV/LV, LEW/QP workflow)
+✅ Commissioning Protocol — FAT → SAT → Handover, class-witness ready
+
+These aren't pulled from textbooks. They're the actual checklists used to close DNV class notations, pass SP Services inspections, and hand over 12,000+ tagged assets to client CMMS systems.
+
+Link in comments 👇
+
+#MarineElectrical #OffshoreEngineering #Commissioning #FMEA #ShipElectrical</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section id="contact">
+  <div class="wrap contact-box">
+    <h2 class="fu">Book a 30-Minute Technical Fit Call</h2>
+    <p class="fu">Tell me your project scope. I'll send a 1-page proposal within 24 hours.</p>
+    <div class="contact-ctas fu">
+      <!-- TODO: Replace mailto fallback with Calendly URL when available — no Calendly link found in existing portfolio files -->
+      <a class="btn btn-pri" href="mailto:m_nelahi@yahoo.com?subject=Technical%20Fit%20Call%20Request">Book a Call</a>
+      <a class="btn btn-ghost" href="mailto:m_nelahi@yahoo.com">Email</a>
+      <a class="btn btn-ghost" href="https://www.linkedin.com/in/mashukelahi" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn btn-ghost" href="https://github.com/mnelahi-ai" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="wrap foot">
+    <div class="l">© 2026 M. Nelahi — Marine Systems Architect &amp; Reliability Engineer — Singapore</div>
+    <div class="r">
+      <a href="#top">Top</a>
+      <a href="https://github.com/mnelahi-ai" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/mashukelahi" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="../assets/Mashuk_Elahi_Resume.pdf" target="_blank" rel="noopener">Resume</a>
+    </div>
+  </div>
+</footer>
+
+<div id="toast" role="status">Copied to clipboard ✓</div>
+
 <script>
-const PAGES=[["Calculators","index.html"],["Load Analysis","loadcalc.html"],["Checklists","checklists.html"],
-  ["Test Forms","testforms.html"],["Reference","reference.html"],["Projects & Concepts","projects.html"]];
-const tabs=document.getElementById('tabs'), fr=document.getElementById('fr');
-PAGES.forEach(([n,u],i)=>{
-  const b=document.createElement('button'); b.textContent=n;
-  b.onclick=()=>{fr.src=u;tabs.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
-    history.replaceState(null,'','#'+u.replace('.html',''));};
-  tabs.appendChild(b); if(i===0)b.classList.add('on');
+/* ---------- Theme toggle (in-memory variable, no localStorage) ---------- */
+let theme = 'dark';
+const themeBtn = document.getElementById('themeBtn');
+function applyTheme(){
+  document.documentElement.setAttribute('data-theme', theme);
+  themeBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+}
+themeBtn.addEventListener('click', () => {
+  theme = theme === 'dark' ? 'light' : 'dark';
+  applyTheme();
 });
-// deep link: all.html#loadcalc opens that tab
-const h=location.hash.replace('#','');
-if(h){const i=PAGES.findIndex(p=>p[1].startsWith(h)); if(i>=0)tabs.children[i].click();}
+applyTheme();
+
+/* ---------- Mobile menu ---------- */
+const burger = document.getElementById('burger');
+const mMenu  = document.getElementById('mMenu');
+burger.addEventListener('click', () => { mMenu.classList.add('open'); mMenu.setAttribute('aria-hidden','false'); });
+mMenu.querySelector('.close').addEventListener('click', closeMenu);
+mMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+function closeMenu(){ mMenu.classList.remove('open'); mMenu.setAttribute('aria-hidden','true'); }
+
+/* ---------- Copy to clipboard + toast ---------- */
+const toast = document.getElementById('toast');
+let toastTimer = null;
+function showToast(msg){
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+}
+function copyText(txt, label){
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(
+      () => showToast(label + ' copied to clipboard ✓'),
+      () => fallbackCopy(txt, label)
+    );
+  } else { fallbackCopy(txt, label); }
+}
+function fallbackCopy(txt, label){
+  const ta = document.createElement('textarea');
+  ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); showToast(label + ' copied to clipboard ✓'); }
+  catch(e){ showToast('Copy failed — select text manually'); }
+  document.body.removeChild(ta);
+}
+document.querySelectorAll('.hl').forEach(card => {
+  card.addEventListener('click', () => {
+    const label = card.querySelector('.hn').textContent.split('—')[0].trim();
+    copyText(card.dataset.copy, label);
+  });
+});
+document.querySelectorAll('.copy-panel').forEach(btn => {
+  btn.addEventListener('click', () => {
+    copyText(document.getElementById(btn.dataset.target).textContent, 'Text');
+  });
+});
+
+/* ---------- IntersectionObserver fade-up ---------- */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add('vis'); io.unobserve(e.target); } });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.fu').forEach(el => io.observe(el));
+/* Reveal elements already in view on load */
+window.addEventListener('load', () => {
+  document.querySelectorAll('.fu').forEach(el => {
+    if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('vis');
+  });
+});
 </script>
 </body>
 </html>
