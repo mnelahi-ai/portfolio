@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Mashuk Elahi — Mission-Critical Power Systems & Critical Facilities. Six case studies reframed around the Level 1–6 commissioning framework: MV/HV switchgear & ABB 800xA fire/gas, IEC 61850 protection relays, semiconductor cleanroom critical power, BESS/EPMS integration, Python-automated EPMS load lists, and autonomous remote power.">
+<meta name="author" content="Mashuk Elahi">
+<meta property="og:title" content="Mashuk Elahi — Mission-Critical Power Systems & Critical Facilities">
+<meta property="og:description" content="Six case studies · Level 1–6 commissioning framework · N+1/2N+1 redundancy · zero-tolerance commissioning · first-pass certification.">
+<meta property="og:type" content="profile">
+<title>Mashuk Elahi · Mission-Critical Power Systems &amp; Critical Facilities</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="assets/site.webmanifest">
+<meta name="theme-color" content="#0f172a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy-950:#020617; --navy-900:#0a0f1e; --navy-800:#0f172a;
+  --blue-400:#60A5FA; --blue-500:#3B82F6; --blue-600:#2563EB;
+  --amber-400:#FBBF24; --amber-500:#F59E0B;
+  --emerald-400:#34D399; --emerald-500:#10B981;
+  --text:#e2e8f0; --text-dim:#94a3b8; --text-faint:#64748b;
+  --gradient-primary:linear-gradient(135deg,var(--blue-400),var(--amber-500));
+  --gradient-blue:linear-gradient(135deg,#3B82F6,#60A5FA);
+  --gradient-glass:linear-gradient(135deg,rgba(255,255,255,0.07),rgba(255,255,255,0.02));
+  --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --font-mono:'JetBrains Mono','Fira Code',monospace;
+  --section-pad:clamp(3.5rem,7vw,6.5rem);
+  --glass-bg:rgba(15,23,42,0.6); --glass-border:rgba(96,165,250,0.15);
+  --glass-blur:blur(20px);
+  --ease:cubic-bezier(0.16,1,0.3,1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--font-sans);background:var(--navy-950);color:var(--text);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+#particles-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.5}
+.wrap{max-width:1180px;margin:0 auto;padding:0 1.5rem}
+
+.navbar{position:fixed;top:0;left:0;right:0;z-index:1000;padding:1rem 0;transition:all .4s var(--ease)}
+.navbar.scrolled{background:rgba(10,15,30,.85);backdrop-filter:var(--glass-blur);border-bottom:1px solid var(--glass-border);padding:.55rem 0}
+.nav-container{max-width:1180px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.nav-brand{display:flex;align-items:center;gap:.7rem}
+.brand-icon{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:var(--gradient-glass);border:1px solid var(--glass-border);font-family:var(--font-mono);font-weight:700;color:var(--blue-400);font-size:.95rem;flex-shrink:0}
+.brand-name{font-weight:700;letter-spacing:.02em;font-size:1rem;white-space:nowrap}
+.brand-name span{color:var(--text-dim);font-weight:400}
+.nav-links{display:flex;gap:1.4rem}
+.nav-link{color:var(--text-dim);font-size:.9rem;font-weight:500;transition:color .25s;position:relative}
+.nav-link:hover,.nav-link.on{color:var(--text)}
+.nav-link::after{content:'';position:absolute;left:0;bottom:-4px;width:0;height:2px;background:var(--gradient-primary);transition:width .3s var(--ease)}
+.nav-link:hover::after,.nav-link.on::after{width:100%}
+.nav-cta{display:flex;align-items:center;gap:.7rem}
+.nav-resume{display:inline-flex;align-items:center;gap:.4rem;padding:.5rem .9rem;border-radius:9px;font-size:.85rem;font-weight:600;background:var(--gradient-blue);color:#fff;transition:transform .25s var(--ease),box-shadow .25s}
+.nav-resume:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(59,130,246,.4)}
+
+.pagehead{position:relative;z-index:1;padding:8.5rem 0 3rem}
+.sec-tag{display:inline-block;font-family:var(--font-mono);font-size:.78rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--amber-400);margin-bottom:.8rem}
+.sec-title{font-size:clamp(1.9rem,4.2vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.01em;margin-bottom:1rem}
+.sec-title .grad{background:var(--gradient-primary);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.sec-sub{color:var(--text-dim);font-size:1.05rem;max-width:50rem;line-height:1.7}
+.sec-sub strong{color:var(--text);font-weight:600}
+.meta-line{font-family:var(--font-mono);font-size:.8rem;color:var(--text-faint);margin-top:1.2rem}
+.diff-row{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.4rem}
+.diff{font-size:.78rem;padding:.4rem .8rem;border-radius:50px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);color:var(--amber-400);font-weight:600}
+.fw-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.6rem}
+.fw{font-family:var(--font-mono);font-size:.72rem;padding:.32rem .65rem;border-radius:6px;background:rgba(148,163,184,.08);border:1px solid rgba(148,163,184,.15);color:var(--text-dim)}
+
+section.block{position:relative;z-index:1;padding:var(--section-pad) 0}
+.case-grid{display:grid;grid-template-columns:1fr;gap:1.6rem}
+.case-card{position:relative;background:var(--glass-bg);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);border-radius:18px;padding:1.9rem 2rem;transition:border-color .35s}
+.case-card:hover{border-color:rgba(96,165,250,.4)}
+.case-card.diffcard{border-color:rgba(245,158,11,.4)}
+.case-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.6rem;align-items:center;margin-bottom:.6rem}
+.case-num{font-family:var(--font-mono);font-size:.78rem;color:var(--blue-400);letter-spacing:.06em}
+.case-badge{font-size:.72rem;font-weight:700;padding:.3rem .65rem;border-radius:50px;background:rgba(245,158,11,.15);color:var(--amber-400);border:1px solid rgba(245,158,11,.35)}
+.case-card h3{font-size:1.28rem;font-weight:700;line-height:1.3;margin-bottom:.9rem}
+.case-block{margin-bottom:1.1rem}
+.case-block .lbl{font-family:var(--font-mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-faint);margin-bottom:.4rem;display:block}
+.case-block p{font-size:.92rem;color:var(--text-dim);line-height:1.6}
+.chiprow{display:flex;flex-wrap:wrap;gap:.4rem}
+.chip{font-size:.78rem;padding:.32rem .65rem;border-radius:7px;background:rgba(96,165,250,.1);border:1px solid var(--glass-border);color:var(--text-dim)}
+.chip.sys{background:rgba(148,163,184,.08);border-color:rgba(148,163,184,.15)}
+.chip.tool{background:rgba(52,211,153,.08);border-color:rgba(52,211,153,.2);color:var(--emerald-400)}
+.case-result{display:flex;align-items:flex-start;gap:.7rem;padding:.95rem 1.1rem;border-radius:12px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);margin-top:.4rem}
+.case-result .ic{font-size:1.1rem;line-height:1.2}
+.case-result p{font-size:.9rem;color:var(--text);line-height:1.55;font-weight:500}
+
+.contact{position:relative;z-index:1;padding:var(--section-pad) 0 3rem;text-align:center}
+.contact-sub{color:var(--text-dim);max-width:34rem;margin:0 auto 2.2rem;font-size:1.05rem}
+.contact-row{display:flex;flex-wrap:wrap;justify-content:center;gap:.9rem;margin-bottom:2.4rem}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.8rem 1.5rem;border-radius:11px;font-weight:600;font-size:.92rem;transition:transform .25s var(--ease),box-shadow .25s,background .25s}
+.btn-primary{background:var(--gradient-blue);color:#fff}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(59,130,246,.4)}
+.btn-ghost{background:var(--gradient-glass);border:1px solid var(--glass-border);color:var(--text)}
+.btn-ghost:hover{transform:translateY(-3px);border-color:var(--blue-400);color:var(--blue-400)}
+.footer-meta{border-top:1px solid rgba(148,163,184,.1);padding-top:2rem;display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem;align-items:center}
+.footer-meta .who{font-weight:700}
+.footer-meta .who span{color:var(--text-faint);font-weight:400;font-size:.85rem;display:block;margin-top:.2rem}
+.copyright{font-size:.8rem;color:var(--text-faint)}
+
+@media(max-width:860px){.nav-links{display:none}}
+</style>
+</head>
+<body>
+<canvas id="particles-canvas"></canvas>
+
+<nav class="navbar" id="main-nav">
+  <div class="nav-container">
+    <div class="nav-brand">
+      <div class="brand-icon">ME</div>
+      <span class="brand-name">Mashuk Elahi <span>· Electrical Engineer</span></span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Portfolio</a>
+      <a href="index.html#projects" class="nav-link">Projects</a>
+      <a href="critical-facilities.html" class="nav-link on">Critical Facilities</a>
+      <a href="toolkit/all.html" class="nav-link">Toolkit</a>
+      <a href="index.html#contact" class="nav-link">Contact</a>
+    </div>
+    <div class="nav-cta">
+      <a href="https://www.linkedin.com/in/mashukelahi" target="_blank" rel="noopener" class="icon-link" title="LinkedIn" style="color:var(--text-dim)">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
+      </a>
+      <a href="assets/Mashuk_Elahi_Resume_Rev6_13Jun2026.pdf" target="_blank" rel="noopener" class="nav-resume">
+        <svg width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M10 3v10m0 0l-4-4m4 4l4-4M4 17h12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Résumé</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<header class="pagehead">
+  <div class="wrap">
+    <span class="sec-tag">// Portfolio Outline — Rev 3</span>
+    <h1 class="sec-title">Mission-Critical Power Systems &amp; <span class="grad">Critical Facilities</span></h1>
+    <p class="sec-sub">Six case studies, each reframed around technical content rather than original industry branding, using the <strong>Level 1–6 commissioning framework</strong>. Two pieces specifically showcase the strongest differentiators: <strong>Python EPMS automation</strong> (#5) and <strong>IEC 61850 / ABB 800xA protection-SCADA depth</strong> (#1, #2). The same engineering discipline — <strong>N+1 / 2N+1 redundancy</strong>, zero-tolerance commissioning, first-pass certification — applies whether the environment is a semiconductor fab, a heavy-industry power plant, or a Tier III/IV critical facility.</p>
+    <div class="diff-row">
+      <span class="diff">★ Differentiator — Python EPMS Automation</span>
+      <span class="diff">★ Differentiator — IEC 61850 / ABB 800xA Depth</span>
+    </div>
+    <div class="fw-row">
+      <span class="fw">L1 FAT Review</span><span class="fw">L2 Installation</span><span class="fw">L3 Energisation</span><span class="fw">L4 FPT</span><span class="fw">L5 IST</span><span class="fw">L6 Performance / Turnover</span>
+    </div>
+    <p class="meta-line">Rev 3 · 20 June 2026 · mnelahi-ai.github.io/portfolio</p>
+  </div>
+</header>
+
+<section class="block">
+  <div class="wrap">
+    <div class="case-grid">
+
+      <div class="case-card diffcard">
+        <div class="case-top"><span class="case-num">CASE STUDY 01</span><span class="case-badge">★ Differentiator</span></div>
+        <h3>MV 11kV Switchgear &amp; ABB 800xA SCADA Fire &amp; Gas Protection Commissioning</h3>
+        <div class="case-block"><span class="lbl">Challenge</span><p>Energise a large-scale heavy-industry MV/LV power system and SCADA-based fire &amp; gas protection system with zero punch-list items at handover, coordinating crews of 100+.</p></div>
+        <div class="case-block"><span class="lbl">Commissioning Role (L1–L5)</span><div class="chiprow">
+          <span class="chip">L1 — FAT review of switchgear &amp; protection panels</span>
+          <span class="chip">L2 — Installation oversight</span>
+          <span class="chip">L3 — Energisation of MV 11kV switchgear</span>
+          <span class="chip">L4 — FPT of protection-relay coordination &amp; SCADA logic</span>
+          <span class="chip">L5 — IST of integrated fire &amp; gas protection</span>
+        </div></div>
+        <div class="case-block"><span class="lbl">Systems</span><div class="chiprow"><span class="chip sys">MV 11kV switchgear</span><span class="chip sys">ABB 800xA SCADA</span><span class="chip sys">Fire &amp; gas protection logic</span></div></div>
+        <div class="case-block"><span class="lbl">Tools</span><div class="chiprow"><span class="chip tool">Protection relay test sets</span><span class="chip tool">SCADA configuration tools</span><span class="chip tool">Cause-and-effect matrices</span></div></div>
+        <div class="case-result"><span class="ic">✓</span><p>100% MV/LV uptime through turnover; zero outstanding punch-list items at handover.</p></div>
+      </div>
+
+      <div class="case-card diffcard">
+        <div class="case-top"><span class="case-num">CASE STUDY 02</span><span class="case-badge">★ Differentiator</span></div>
+        <h3>IEC 61850 Protection-Relay Commissioning for a Wind-Power Substation</h3>
+        <div class="case-block"><span class="lbl">Challenge</span><p>Bring a wind-power substation electrical system to full IEC 61850 protection-relay conformity ahead of the energisation deadline.</p></div>
+        <div class="case-block"><span class="lbl">Commissioning Role (L1–L5)</span><div class="chiprow">
+          <span class="chip">L3 — Energisation</span>
+          <span class="chip">L4 — FPT (protection-relay coordination, alarm/SCADA validation)</span>
+          <span class="chip">L5 — IST sign-off</span>
+        </div></div>
+        <div class="case-block"><span class="lbl">Systems</span><div class="chiprow"><span class="chip sys">IEC 61850 protection relays</span><span class="chip sys">SCADA alarm/monitoring</span></div></div>
+        <div class="case-block"><span class="lbl">Tools</span><div class="chiprow"><span class="chip tool">Relay test sets</span><span class="chip tool">IEC 61850 configuration/communication tools</span></div></div>
+        <div class="case-result"><span class="ic">✓</span><p>100% IEC 61850 conformity; zero punch-list items outstanding at handover.</p></div>
+      </div>
+
+      <div class="case-card">
+        <div class="case-top"><span class="case-num">CASE STUDY 03</span></div>
+        <h3>300mm Semiconductor Cleanroom Critical-Power Hook-Up &amp; Functional Performance Testing</h3>
+        <div class="case-block"><span class="lbl">Challenge</span><p>Energise critical power for a 300mm semiconductor cleanroom with zero tolerance for downtime or contamination, to IEC 60204/61511/ISO 14644.</p></div>
+        <div class="case-block"><span class="lbl">Commissioning Role (L1–L5)</span><div class="chiprow">
+          <span class="chip">L3 — Energisation / Systems Start-up</span>
+          <span class="chip">L4 — FPT of PLC/SCADA interlocks &amp; functional safety</span>
+        </div></div>
+        <div class="case-block"><span class="lbl">Systems</span><div class="chiprow"><span class="chip sys">PLC/SCADA interlocks</span><span class="chip sys">Critical power distribution</span><span class="chip sys">Cleanroom EPMS</span></div></div>
+        <div class="case-block"><span class="lbl">Tools</span><div class="chiprow"><span class="chip tool">Prefabricated power skids</span><span class="chip tool">Functional safety validation test plans</span></div></div>
+        <div class="case-result"><span class="ic">✓</span><p>Zero audit rework; 100% tool-uptime/N+1 availability targets met; ~50% reduction in on-site installation labour via prefabrication — directly transferable to critical-facility white-space fit-out.</p></div>
+      </div>
+
+      <div class="case-card">
+        <div class="case-top"><span class="case-num">CASE STUDY 04</span></div>
+        <h3>72kWh BESS &amp; EPMS Integration for a Hybrid Power Architecture</h3>
+        <div class="case-block"><span class="lbl">Challenge</span><p>Integrate a 72kWh Li-ion Battery Energy Storage System into an existing power architecture to cut peak energy draw without compromising reliability.</p></div>
+        <div class="case-block"><span class="lbl">Commissioning Role (L1–L5)</span><div class="chiprow">
+          <span class="chip">L2 — Installation</span>
+          <span class="chip">L3 — Energisation / BMS-to-EPMS interface integration</span>
+          <span class="chip">L4 — FAT acceptance</span>
+        </div></div>
+        <div class="case-block"><span class="lbl">Systems</span><div class="chiprow"><span class="chip sys">BESS</span><span class="chip sys">BMS</span><span class="chip sys">DC/DC inverters</span><span class="chip sys">EPMS interface</span></div></div>
+        <div class="case-block"><span class="lbl">Tools</span><div class="chiprow"><span class="chip tool">BMS configuration software</span><span class="chip tool">FAT test protocols</span></div></div>
+        <div class="case-result"><span class="ic">✓</span><p>Up to 50% reduction in grid/fuel energy draw during low-load operation; zero rework at FAT.</p></div>
+      </div>
+
+      <div class="case-card diffcard">
+        <div class="case-top"><span class="case-num">CASE STUDY 05</span><span class="case-badge">★ Differentiator</span></div>
+        <h3>Python-Automated EPMS Load-List &amp; Cable-Schedule Generation at Scale</h3>
+        <div class="case-block"><span class="lbl">Challenge</span><p>Manually building and cross-verifying load lists and cable schedules across a multi-site power programme was slow and error-prone.</p></div>
+        <div class="case-block"><span class="lbl">Commissioning Role</span><div class="chiprow">
+          <span class="chip">Designed &amp; deployed Python scripts to auto-generate and cross-verify load lists and cable schedules against EPMS/point-to-point data, flagging discrepancies automatically</span>
+        </div></div>
+        <div class="case-block"><span class="lbl">Systems</span><div class="chiprow"><span class="chip sys">EPMS data exports</span><span class="chip sys">Point-to-point verification logic</span></div></div>
+        <div class="case-block"><span class="lbl">Tools</span><div class="chiprow"><span class="chip tool">Python</span></div></div>
+        <div class="case-result"><span class="ic">✓</span><p>First-pass approval across four independent certification bodies with zero rework cycles; approach scales to large critical-facility EPMS point counts.</p></div>
+      </div>
+
+      <div class="case-card">
+        <div class="case-top"><span class="case-num">CASE STUDY 06</span></div>
+        <h3>Autonomous Remote Power Installation — Solar-Wind Hybrid Commissioning</h3>
+        <div class="case-block"><span class="lbl">Challenge</span><p>Commission Malaysia's first autonomous, unmanned solar-wind remote power installation with a 24V DC solar/battery bus and zero on-site operator presence.</p></div>
+        <div class="case-block"><span class="lbl">Commissioning Role (L1–L5)</span><div class="chiprow">
+          <span class="chip">L3 — Energisation through L5 — IST</span>
+          <span class="chip">Remote-operation validation</span>
+        </div></div>
+        <div class="case-block"><span class="lbl">Systems</span><div class="chiprow"><span class="chip sys">Solar-wind hybrid generation</span><span class="chip sys">24V DC battery bus</span><span class="chip sys">Remote monitoring/EPMS</span></div></div>
+        <div class="case-block"><span class="lbl">Tools</span><div class="chiprow"><span class="chip tool">Remote monitoring/SCADA</span><span class="chip tool">Battery management</span></div></div>
+        <div class="case-result"><span class="ic">✓</span><p>Eliminated routine diesel generator use; zero unplanned shutdowns at commissioning; fully remote/unmanned operation enabled.</p></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <span class="sec-tag">// Contact</span>
+    <h2 class="sec-title">Let's <span class="grad">energise</span> the next critical facility</h2>
+    <p class="contact-sub">Open to senior electrical engineering and commissioning-leadership roles across critical facilities, data centers, energy, and semiconductor sectors — Singapore, remote, or relocation.</p>
+    <div class="contact-row">
+      <a href="https://www.linkedin.com/in/mashukelahi" target="_blank" rel="noopener" class="btn btn-primary">Connect on LinkedIn</a>
+      <a href="mailto:m_nelahi@yahoo.com" class="btn btn-ghost">m_nelahi@yahoo.com</a>
+      <a href="tel:+6587885453" class="btn btn-ghost">+65 8788 5453</a>
+      <a href="index.html" class="btn btn-ghost">← Back to full portfolio</a>
+    </div>
+    <div class="footer-meta">
+      <div class="who">Mashuk Elahi<span>Electrical Engineer · Aljunied, Singapore</span></div>
+    </div>
+    <p class="copyright" style="margin-top:1.5rem">© <span id="year"></span> Mashuk Elahi · Mission-Critical Power Systems &amp; Critical Facilities — Portfolio Outline Rev 3.</p>
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('year').textContent=new Date().getFullYear();
+
+  const canvas=document.getElementById('particles-canvas');
+  const ctx=canvas.getContext('2d');
+  let particles=[];
+  function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+  class P{constructor(){this.reset();}
+    reset(){this.x=Math.random()*canvas.width;this.y=Math.random()*canvas.height;this.size=Math.random()*1.5+.5;this.sx=(Math.random()-.5)*.3;this.sy=(Math.random()-.5)*.3;this.op=Math.random()*.4+.1;this.hue=Math.random()>.7?38:217;}
+    update(){this.x+=this.sx;this.y+=this.sy;if(this.x<0||this.x>canvas.width||this.y<0||this.y>canvas.height)this.reset();}
+    draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fillStyle=`hsla(${this.hue},80%,65%,${this.op})`;ctx.fill();}}
+  function init(){particles=[];const c=Math.min(70,Math.floor((canvas.width*canvas.height)/16000));for(let i=0;i<c;i++)particles.push(new P());}
+  function lines(){
+    for(let i=0;i<particles.length;i++){
+      for(let j=i+1;j<particles.length;j++){
+        const dx=particles[i].x-particles[j].x, dy=particles[i].y-particles[j].y;
+        const dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<120){
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x,particles[i].y);
+          ctx.lineTo(particles[j].x,particles[j].y);
+          ctx.strokeStyle=`rgba(96,165,250,${(.12*(1-dist/120)).toFixed(3)})`;
+          ctx.lineWidth=1;
+          ctx.stroke();
+        }
+      }
+    }
+  }
+  function animate(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p=>{p.update();p.draw();});
+    lines();
+    requestAnimationFrame(animate);
+  }
+  resize();
+  init();
+  animate();
+  window.addEventListener('resize',()=>{resize();init();});
+
+  const nav=document.getElementById('main-nav');
+  window.addEventListener('scroll',()=>{
+    if(window.scrollY>40)nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+  });
+});
+</script>
+</body>
+</html>
