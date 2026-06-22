@@ -238,6 +238,7 @@
         <a href="#achievements" class="nav-link">Achievements</a>
         <a href="#experience" class="nav-link">Experience</a>
         <a href="#projects" class="nav-link">Projects</a>
+        <a href="critical-facilities.html" class="nav-link">Critical Facilities</a>
         <a href="toolkit/all.html" class="nav-link">Toolkit</a>
         <a href="#expertise" class="nav-link">Expertise</a>
         <a href="#education" class="nav-link">Education</a>
@@ -404,6 +405,12 @@
         <h2 class="sec-title">Assets I've <span class="grad">energised</span></h2>
         <p class="sec-sub">Thirteen asset classes — marine newbuilds, passenger Ro-Pax ferries, offshore production and drilling, offshore wind, autonomous vessels, renewables, onshore power and semiconductor. Shown by vessel / asset type rather than hull or client identity.</p>
       </div>
+      <a href="critical-facilities.html" class="proj-card feat" style="display:block;margin-bottom:1.6rem;border-color:rgba(96,165,250,.5)">
+        <div class="proj-top"><span class="proj-sector">Targeting Critical Facilities / Data Centers</span><span class="proj-status live">Rev 3</span></div>
+        <h3>Mission-Critical Power Systems &amp; Critical Facilities — Dedicated Case-Study Portfolio</h3>
+        <p>The same six engineering deliveries above, reframed around the Level 1–6 commissioning framework used in Tier III/IV critical facilities — MV switchgear &amp; ABB 800xA fire/gas energisation, IEC 61850 protection-relay commissioning, 300 mm cleanroom critical power, BESS/EPMS integration, Python-automated EPMS load-list generation, and autonomous remote power commissioning.</p>
+        <span class="read" style="color:var(--blue-400);font-weight:600;font-size:.86rem">Open the critical-facilities portfolio →</span>
+      </a>
       <div class="proj-grid">
 
         <div class="proj-card feat">
@@ -670,4 +677,74 @@
       update(){this.x+=this.sx;this.y+=this.sy;if(this.x<0||this.x>canvas.width||this.y<0||this.y>canvas.height)this.reset();}
       draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fillStyle=`hsla(${this.hue},80%,65%,${this.op})`;ctx.fill();}}
     function init(){particles=[];const c=Math.min(70,Math.floor((canvas.width*canvas.height)/16000));for(let i=0;i<c;i++)particles.push(new P());}
-    function lines(){for(let i=0;i<particles.leng
+    function lines(){
+      for(let i=0;i<particles.length;i++){
+        for(let j=i+1;j<particles.length;j++){
+          const dx=particles[i].x-particles[j].x, dy=particles[i].y-particles[j].y;
+          const dist=Math.sqrt(dx*dx+dy*dy);
+          if(dist<120){
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x,particles[i].y);
+            ctx.lineTo(particles[j].x,particles[j].y);
+            ctx.strokeStyle=`rgba(96,165,250,${(.12*(1-dist/120)).toFixed(3)})`;
+            ctx.lineWidth=1;
+            ctx.stroke();
+          }
+        }
+      }
+    }
+    function animate(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      particles.forEach(p=>{p.update();p.draw();});
+      lines();
+      requestAnimationFrame(animate);
+    }
+    resize();
+    init();
+    animate();
+    window.addEventListener('resize',()=>{resize();init();});
+
+    const nav=document.getElementById('main-nav');
+    window.addEventListener('scroll',()=>{
+      if(window.scrollY>40)nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
+    });
+
+    const counters=document.querySelectorAll('.stat-number');
+    let countersRun=false;
+    function runCounters(){
+      if(countersRun)return;
+      countersRun=true;
+      counters.forEach(el=>{
+        const target=parseFloat(el.dataset.target);
+        const suffix=el.dataset.suffix||'';
+        const dur=1400;
+        const start=performance.now();
+        function tick(now){
+          const p=Math.min((now-start)/dur,1);
+          el.textContent=Math.floor(p*target)+suffix;
+          if(p<1)requestAnimationFrame(tick);
+          else el.textContent=target+suffix;
+        }
+        requestAnimationFrame(tick);
+      });
+    }
+    const heroStats=document.querySelector('.hero-stats');
+    if(heroStats){
+      const statsObs=new IntersectionObserver(entries=>{
+        entries.forEach(e=>{if(e.isIntersecting)runCounters();});
+      },{threshold:.3});
+      statsObs.observe(heroStats);
+    }
+
+    const revealEls=document.querySelectorAll('.reveal');
+    if(revealEls.length){
+      const revealObs=new IntersectionObserver(entries=>{
+        entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+      },{threshold:.15});
+      revealEls.forEach(el=>revealObs.observe(el));
+    }
+  });
+  </script>
+</body>
+</html>
