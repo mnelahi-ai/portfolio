@@ -18,77 +18,68 @@
 <link rel="icon" href="assets/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png">
 <link rel="manifest" href="assets/site.webmanifest">
-<meta name="theme-color" content="#04070f">
+<meta name="theme-color" content="#ffffff">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ══════════════════════════════════════════════════════════
    MASHUK ELAHI — CRITICAL POWER SYSTEMS ENGINEER
-   3D Mission-Critical Portfolio · cyan/amber on deep navy
+   Clean light professional theme · blue / teal / amber
    ══════════════════════════════════════════════════════════ */
 :root{
-  --bg:#04070f; --bg-2:#070d1a; --bg-3:#0a1224;
-  --panel:rgba(13,22,44,.55); --panel-2:rgba(17,28,54,.72);
-  --line:rgba(56,189,248,.16); --line-2:rgba(56,189,248,.32);
-  --cyan:#22d3ee; --cyan-2:#67e8f9; --blue:#3b82f6;
-  --amber:#fbbf24; --amber-2:#f59e0b;
-  --green:#34d399; --red:#f87171; --violet:#a78bfa;
-  --text:#e6edf7; --dim:#8aa0bf; --faint:#5c7194;
-  --grad:linear-gradient(120deg,#22d3ee 0%,#3b82f6 45%,#fbbf24 100%);
+  --bg:#f6f8fc; --bg-2:#ffffff; --bg-3:#eef3fa;
+  --ink:#0e2038; --text:#243b55; --dim:#51617a; --faint:#7b8aa3;
+  --blue:#1d5fd6; --blue-2:#2563eb; --teal:#0e7490; --teal-2:#0891b2;
+  --amber:#b45309; --amber-2:#d97706; --green:#047857; --red:#b91c1c;
+  --line:#e2e9f4; --line-2:#c9d8ee;
+  --grad:linear-gradient(120deg,#1d5fd6 0%,#0891b2 60%,#d97706 130%);
   --sans:'Inter',-apple-system,'Segoe UI',sans-serif;
   --mono:'JetBrains Mono','Fira Code',monospace;
   --ease:cubic-bezier(.16,1,.3,1);
-  --r:18px;
+  --r:16px;
+  --shadow:0 1px 2px rgba(14,32,56,.05),0 8px 28px rgba(14,32,56,.07);
+  --shadow-lg:0 2px 6px rgba(14,32,56,.06),0 20px 50px rgba(14,32,56,.12);
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-::selection{background:rgba(34,211,238,.3)}
+::selection{background:rgba(37,99,235,.18)}
 a{color:inherit;text-decoration:none}
 img{max-width:100%}
-.wrap{max-width:1200px;margin:0 auto;padding:0 1.5rem}
+.wrap{max-width:1180px;margin:0 auto;padding:0 1.5rem}
 .mono{font-family:var(--mono)}
+.g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 
-/* scrollbar */
-::-webkit-scrollbar{width:10px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:#16233f;border-radius:5px}
-::-webkit-scrollbar-thumb:hover{background:#1e3055}
-
-/* ── ambient background layers ── */
+/* subtle background grid */
 #bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:linear-gradient(rgba(56,189,248,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(56,189,248,.045) 1px,transparent 1px);
-  background-size:56px 56px;
-  mask-image:radial-gradient(ellipse 90% 70% at 50% 30%,#000 30%,transparent 75%);
-  -webkit-mask-image:radial-gradient(ellipse 90% 70% at 50% 30%,#000 30%,transparent 75%);}
-#bg-glow{position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:radial-gradient(600px 400px at 15% 10%,rgba(34,211,238,.07),transparent 60%),
-             radial-gradient(700px 500px at 85% 85%,rgba(251,191,36,.05),transparent 60%),
-             radial-gradient(800px 600px at 60% 40%,rgba(59,130,246,.05),transparent 65%);}
+  background-image:linear-gradient(rgba(29,95,214,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(29,95,214,.05) 1px,transparent 1px);
+  background-size:52px 52px;
+  mask-image:radial-gradient(ellipse 85% 60% at 50% 0%,#000 20%,transparent 70%);
+  -webkit-mask-image:radial-gradient(ellipse 85% 60% at 50% 0%,#000 20%,transparent 70%);}
 main{position:relative;z-index:1}
 
-/* ── progress bar ── */
-#progress{position:fixed;top:0;left:0;height:2px;width:0;background:var(--grad);z-index:2000;box-shadow:0 0 12px rgba(34,211,238,.8)}
+/* progress bar */
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--grad);z-index:2000}
 
 /* ── nav ── */
-.nav{position:fixed;top:0;left:0;right:0;z-index:1000;transition:all .4s var(--ease)}
-.nav.scrolled{background:rgba(4,7,15,.82);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
-.nav-in{max-width:1200px;margin:0 auto;padding:.9rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;transition:all .35s var(--ease)}
+.nav.scrolled{background:rgba(255,255,255,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line);box-shadow:0 4px 20px rgba(14,32,56,.05)}
+.nav-in{max-width:1180px;margin:0 auto;padding:.95rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
 .nav.scrolled .nav-in{padding:.6rem 1.5rem}
 .brand{display:flex;align-items:center;gap:.65rem}
-.brand-badge{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;font-family:var(--mono);font-weight:700;font-size:.9rem;color:var(--cyan);background:linear-gradient(135deg,rgba(34,211,238,.12),rgba(59,130,246,.06));border:1px solid var(--line-2);box-shadow:0 0 18px rgba(34,211,238,.15)}
-.brand b{font-size:.98rem;letter-spacing:.04em}
-.brand small{display:block;font-family:var(--mono);font-size:.6rem;color:var(--faint);letter-spacing:.18em;text-transform:uppercase}
-.nav-links{display:flex;gap:.25rem;list-style:none}
-.nav-links a{font-size:.83rem;font-weight:500;color:var(--dim);padding:.45rem .8rem;border-radius:9px;transition:all .25s}
-.nav-links a:hover{color:var(--text);background:rgba(56,189,248,.08)}
-.nav-links a.active{color:var(--cyan);background:rgba(34,211,238,.1)}
-.nav-cta{font-family:var(--mono);font-size:.75rem;font-weight:600;color:#04121a;background:var(--cyan);padding:.5rem .95rem;border-radius:9px;letter-spacing:.03em;transition:all .25s;box-shadow:0 0 20px rgba(34,211,238,.35)}
-.nav-cta:hover{background:var(--cyan-2);transform:translateY(-1px)}
-#burger{display:none;background:none;border:1px solid var(--line-2);color:var(--cyan);width:40px;height:40px;border-radius:10px;font-size:1.1rem;cursor:pointer}
-@media(max-width:900px){
-  .nav-links{position:fixed;top:62px;right:.8rem;flex-direction:column;background:rgba(7,13,26,.97);border:1px solid var(--line-2);border-radius:14px;padding:.6rem;min-width:210px;display:none;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.brand-badge{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;font-family:var(--mono);font-weight:700;font-size:.9rem;color:#fff;background:var(--grad);flex-shrink:0}
+.brand b{font-size:.98rem;letter-spacing:.03em;color:var(--ink)}
+.brand small{display:block;font-family:var(--mono);font-size:.6rem;color:var(--faint);letter-spacing:.16em;text-transform:uppercase}
+.nav-links{display:flex;gap:.15rem;list-style:none}
+.nav-links a{font-size:.85rem;font-weight:500;color:var(--dim);padding:.45rem .75rem;border-radius:9px;transition:all .25s}
+.nav-links a:hover{color:var(--ink);background:var(--bg-3)}
+.nav-links a.active{color:var(--blue);background:rgba(37,99,235,.08)}
+.nav-cta{font-family:var(--mono);font-size:.74rem;font-weight:600;color:#fff;background:var(--blue);padding:.5rem .95rem;border-radius:9px;letter-spacing:.03em;transition:all .25s;box-shadow:0 4px 14px rgba(29,95,214,.3)}
+.nav-cta:hover{background:var(--blue-2);transform:translateY(-1px)}
+#burger{display:none;background:#fff;border:1px solid var(--line-2);color:var(--blue);width:40px;height:40px;border-radius:10px;font-size:1.1rem;cursor:pointer}
+@media(max-width:920px){
+  .nav-links{position:fixed;top:64px;right:.8rem;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:14px;padding:.6rem;min-width:210px;display:none;box-shadow:var(--shadow-lg)}
   .nav-links.open{display:flex}
   .nav-links a{padding:.65rem .9rem}
   #burger{display:grid;place-items:center}
@@ -96,179 +87,176 @@ main{position:relative;z-index:1}
 }
 
 /* ── hero ── */
-#hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden;padding:7.5rem 0 4rem}
-#hero3d{position:absolute;inset:0;z-index:0}
-#hero3d canvas{display:block}
-.hero-fade{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(4,7,15,.55) 0%,rgba(4,7,15,.15) 35%,rgba(4,7,15,.25) 70%,var(--bg) 100%)}
-.hero-in{position:relative;z-index:2;width:100%}
+#hero{position:relative;padding:8.5rem 0 3rem;background:
+  radial-gradient(700px 380px at 12% 0%,rgba(37,99,235,.08),transparent 60%),
+  radial-gradient(600px 340px at 88% 10%,rgba(8,145,178,.07),transparent 60%)}
 .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:3rem;align-items:center}
-@media(max-width:980px){.hero-grid{grid-template-columns:1fr}.hero-hud{display:none}}
-.hero-tag{display:inline-flex;align-items:center;gap:.55rem;font-family:var(--mono);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);border:1px solid var(--line-2);border-radius:999px;padding:.45rem 1rem;background:rgba(34,211,238,.06);margin-bottom:1.4rem}
-.hero-tag .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 2s infinite}
+@media(max-width:960px){.hero-grid{grid-template-columns:1fr}}
+.hero-tag{display:inline-flex;align-items:center;gap:.55rem;font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);border:1px solid rgba(8,145,178,.3);border-radius:999px;padding:.45rem 1rem;background:rgba(8,145,178,.06);margin-bottom:1.4rem}
+.hero-tag .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-h1{font-size:clamp(2.5rem,6vw,4.4rem);line-height:1.04;font-weight:900;letter-spacing:-.02em;margin-bottom:1.3rem}
-h1 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero-sub{font-size:clamp(1rem,1.6vw,1.16rem);color:var(--dim);max-width:36rem;margin-bottom:2.1rem}
-.hero-sub b{color:var(--text);font-weight:600}
-.hero-ctas{display:flex;gap:.85rem;flex-wrap:wrap;margin-bottom:2.4rem}
-.btn{display:inline-flex;align-items:center;gap:.5rem;font-weight:600;font-size:.92rem;padding:.85rem 1.5rem;border-radius:12px;transition:all .3s var(--ease);cursor:pointer;border:1px solid transparent}
-.btn-p{background:var(--grad);color:#04121a;box-shadow:0 8px 30px rgba(34,211,238,.35)}
-.btn-p:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(34,211,238,.5)}
-.btn-o{border-color:var(--line-2);color:var(--text);background:rgba(13,22,44,.4);backdrop-filter:blur(8px)}
-.btn-o:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-2px)}
-.hero-ticker{display:flex;gap:1.6rem;flex-wrap:wrap;font-family:var(--mono);font-size:.72rem;color:var(--faint);letter-spacing:.08em}
-.hero-ticker span b{color:var(--cyan);font-weight:600}
+h1{font-size:clamp(2.4rem,5.6vw,4rem);line-height:1.06;font-weight:900;letter-spacing:-.02em;color:var(--ink);margin-bottom:1.3rem}
+.hero-sub{font-size:clamp(1rem,1.5vw,1.13rem);color:var(--dim);max-width:36rem;margin-bottom:2rem}
+.hero-sub b{color:var(--ink);font-weight:600}
+.hero-ctas{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:2.2rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;font-weight:600;font-size:.92rem;padding:.8rem 1.5rem;border-radius:11px;transition:all .3s var(--ease);cursor:pointer;border:1px solid transparent}
+.btn-p{background:var(--blue);color:#fff;box-shadow:0 6px 20px rgba(29,95,214,.3)}
+.btn-p:hover{background:var(--blue-2);transform:translateY(-2px);box-shadow:0 10px 28px rgba(29,95,214,.4)}
+.btn-o{border-color:var(--line-2);color:var(--ink);background:#fff}
+.btn-o:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-2px);box-shadow:var(--shadow)}
+.hero-ticker{display:flex;gap:1.5rem;flex-wrap:wrap;font-family:var(--mono);font-size:.72rem;color:var(--faint);letter-spacing:.06em}
+.hero-ticker span b{color:var(--blue);font-weight:600}
 
-/* hero HUD panel */
-.hero-hud{background:rgba(7,13,26,.55);border:1px solid var(--line);border-radius:var(--r);padding:1.3rem 1.4rem;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);font-family:var(--mono);box-shadow:0 24px 70px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.04)}
-.hud-head{display:flex;justify-content:space-between;align-items:center;font-size:.68rem;letter-spacing:.14em;color:var(--faint);text-transform:uppercase;border-bottom:1px solid var(--line);padding-bottom:.7rem;margin-bottom:.9rem}
+/* hero status panel */
+.hero-hud{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:1.3rem 1.4rem;font-family:var(--mono);box-shadow:var(--shadow-lg)}
+.hud-head{display:flex;justify-content:space-between;align-items:center;font-size:.66rem;letter-spacing:.14em;color:var(--faint);text-transform:uppercase;border-bottom:1px solid var(--line);padding-bottom:.7rem;margin-bottom:.9rem}
 .hud-head .lights{display:flex;gap:.35rem}
 .hud-head .lights i{width:8px;height:8px;border-radius:50%;display:block}
-.hud-row{display:flex;justify-content:space-between;font-size:.78rem;padding:.42rem 0;border-bottom:1px dashed rgba(56,189,248,.08)}
+.hud-row{display:flex;justify-content:space-between;font-size:.78rem;padding:.42rem 0;border-bottom:1px dashed var(--line)}
 .hud-row:last-child{border-bottom:none}
 .hud-row .k{color:var(--dim)}
-.hud-row .v{color:var(--cyan);font-weight:600}
+.hud-row .v{color:var(--blue);font-weight:600}
 .hud-row .v.ok{color:var(--green)}
-.hud-bar{height:6px;border-radius:3px;background:#0d1830;overflow:hidden;margin-top:.35rem}
+.hud-bar{height:6px;border-radius:3px;background:var(--bg-3);overflow:hidden;margin-top:.35rem}
 .hud-bar i{display:block;height:100%;border-radius:3px;background:var(--grad);width:0;transition:width 1.6s var(--ease)}
 
-/* scroll cue */
-.scroll-cue{position:absolute;bottom:1.6rem;left:50%;transform:translateX(-50%);z-index:2;font-family:var(--mono);font-size:.62rem;letter-spacing:.3em;color:var(--faint);text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:.5rem}
-.scroll-cue::after{content:'';width:1px;height:34px;background:linear-gradient(180deg,var(--cyan),transparent);animation:drop 1.8s infinite}
-@keyframes drop{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+/* ── SLD diagram strip ── */
+#sld{padding:1.5rem 0 0}
+.sld-card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:1.6rem 1.6rem 1rem;box-shadow:var(--shadow)}
+.sld-title{font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);margin-bottom:.6rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.4rem}
+.sld-title b{color:var(--teal)}
+.sld-card svg{width:100%;height:auto;display:block}
+.flow{stroke-dasharray:7 6;animation:flow 1.2s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-13}}
+@media(prefers-reduced-motion:reduce){.flow{animation:none}}
 
 /* ── sections ── */
-section{position:relative;padding:clamp(4rem,8vw,7rem) 0}
-.sec-tag{font-family:var(--mono);font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;color:var(--amber);display:flex;align-items:center;gap:.8rem;margin-bottom:1rem}
-.sec-tag::before{content:'';width:34px;height:1px;background:var(--amber)}
-h2{font-size:clamp(1.7rem,3.6vw,2.6rem);font-weight:800;letter-spacing:-.015em;margin-bottom:1rem}
-.sec-sub{color:var(--dim);max-width:46rem;margin-bottom:3rem;font-size:1.02rem}
+section{position:relative;padding:clamp(3.6rem,7vw,6rem) 0}
+.sec-tag{font-family:var(--mono);font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;color:var(--amber-2);display:flex;align-items:center;gap:.8rem;margin-bottom:1rem}
+.sec-tag::before{content:'';width:34px;height:2px;background:var(--amber-2);border-radius:1px}
+h2{font-size:clamp(1.6rem,3.4vw,2.4rem);font-weight:800;letter-spacing:-.015em;color:var(--ink);margin-bottom:.9rem}
+.sec-sub{color:var(--dim);max-width:46rem;margin-bottom:2.6rem;font-size:1rem}
 
 /* reveal */
-.rv{opacity:0;transform:translateY(34px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.rv{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .rv.on{opacity:1;transform:none}
-.rv-d1{transition-delay:.08s}.rv-d2{transition-delay:.16s}.rv-d3{transition-delay:.24s}.rv-d4{transition-delay:.32s}.rv-d5{transition-delay:.4s}
+.rv-d1{transition-delay:.07s}.rv-d2{transition-delay:.14s}.rv-d3{transition-delay:.21s}.rv-d4{transition-delay:.28s}.rv-d5{transition-delay:.35s}
+@media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
 
 /* ── stats band ── */
-#stats{padding:0}
-.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;transform:translateY(-3.2rem);box-shadow:0 30px 80px rgba(0,0,0,.5)}
-@media(max-width:980px){.stats{grid-template-columns:repeat(3,1fr)}}
+#stats{padding:2.2rem 0 0}
+.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
+@media(max-width:960px){.stats{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:560px){.stats{grid-template-columns:repeat(2,1fr)}}
-.stat{background:rgba(7,13,26,.92);padding:1.5rem 1rem;text-align:center;transition:background .3s}
-.stat:hover{background:rgba(13,25,48,.95)}
-.stat .n{font-family:var(--mono);font-size:clamp(1.5rem,2.6vw,2.1rem);font-weight:700;color:var(--cyan);text-shadow:0 0 24px rgba(34,211,238,.4)}
-.stat .l{font-size:.72rem;color:var(--faint);letter-spacing:.1em;text-transform:uppercase;margin-top:.3rem}
+.stat{background:#fff;padding:1.4rem 1rem;text-align:center;transition:background .3s}
+.stat:hover{background:var(--bg-3)}
+.stat .n{font-family:var(--mono);font-size:clamp(1.4rem,2.4vw,1.9rem);font-weight:700;color:var(--blue)}
+.stat .l{font-size:.7rem;color:var(--faint);letter-spacing:.09em;text-transform:uppercase;margin-top:.3rem}
 
-/* ── 3D tilt cards ── */
-.tilt-wrap{perspective:1100px}
-.card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:1.7rem;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:transform .18s ease-out,border-color .3s,box-shadow .3s;transform-style:preserve-3d;will-change:transform;height:100%}
-.card::before{content:'';position:absolute;inset:0;border-radius:var(--r);background:radial-gradient(500px circle at var(--mx,50%) var(--my,50%),rgba(34,211,238,.1),transparent 45%);opacity:0;transition:opacity .3s;pointer-events:none}
-.card:hover::before{opacity:1}
-.card:hover{border-color:var(--line-2);box-shadow:0 24px 60px rgba(0,0,0,.5),0 0 0 1px rgba(34,211,238,.12)}
-.card .lift{transform:translateZ(28px)}
+/* ── cards ── */
+.card{position:relative;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:1.6rem;transition:transform .3s var(--ease),box-shadow .3s,border-color .3s;height:100%;box-shadow:var(--shadow)}
+.card:hover{transform:translateY(-4px);border-color:var(--line-2);box-shadow:var(--shadow-lg)}
+.card h3{font-size:1.05rem;font-weight:700;color:var(--ink);margin-bottom:.85rem}
 
 /* competencies */
 .comp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem}
 @media(max-width:1020px){.comp-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.comp-grid{grid-template-columns:1fr}}
-.comp-ico{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;margin-bottom:1rem;font-size:1.25rem;background:linear-gradient(135deg,rgba(34,211,238,.14),rgba(59,130,246,.07));border:1px solid var(--line-2);box-shadow:0 0 22px rgba(34,211,238,.14)}
-.card h3{font-size:1.05rem;font-weight:700;margin-bottom:.85rem}
+.comp-ico{width:44px;height:44px;border-radius:11px;display:grid;place-items:center;margin-bottom:1rem;font-size:1.2rem;background:linear-gradient(135deg,rgba(29,95,214,.1),rgba(8,145,178,.08));border:1px solid var(--line)}
 .chips{display:flex;flex-wrap:wrap;gap:.42rem}
-.chip{font-family:var(--mono);font-size:.68rem;color:var(--dim);border:1px solid rgba(56,189,248,.14);background:rgba(13,22,44,.5);border-radius:7px;padding:.28rem .55rem;transition:all .25s}
-.chip:hover{color:var(--cyan);border-color:var(--cyan);box-shadow:0 0 14px rgba(34,211,238,.25)}
+.chip{font-family:var(--mono);font-size:.68rem;color:#33507a;border:1px solid var(--line);background:var(--bg);border-radius:7px;padding:.28rem .55rem;transition:all .25s}
+.chip:hover{color:var(--blue);border-color:var(--blue);background:rgba(37,99,235,.05)}
 
-/* ── projects ── */
+/* projects */
 .proj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.4rem}
-@media(max-width:900px){.proj-grid{grid-template-columns:1fr}}
-.proj{overflow:hidden}
+@media(max-width:880px){.proj-grid{grid-template-columns:1fr}}
 .proj-top{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:.9rem}
-.proj-num{font-family:var(--mono);font-size:2.4rem;font-weight:700;line-height:1;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;opacity:.85}
-.proj-sector{font-family:var(--mono);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);border:1px solid rgba(251,191,36,.3);background:rgba(251,191,36,.07);padding:.3rem .6rem;border-radius:7px;white-space:nowrap}
-.proj h3{font-size:1.22rem;line-height:1.3;margin-bottom:.45rem}
+.proj-num{font-family:var(--mono);font-size:2.2rem;font-weight:700;line-height:1;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.proj-sector{font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);border:1px solid rgba(217,119,6,.35);background:rgba(217,119,6,.06);padding:.3rem .6rem;border-radius:7px;white-space:nowrap}
+.proj h3{font-size:1.18rem;line-height:1.3;margin-bottom:.45rem}
 .proj-meta{font-family:var(--mono);font-size:.72rem;color:var(--faint);margin-bottom:.85rem}
 .proj-meta b{color:var(--dim);font-weight:500}
 .proj p{font-size:.9rem;color:var(--dim);margin-bottom:1.1rem}
 .proj-line{height:1px;background:linear-gradient(90deg,var(--line-2),transparent);margin:1rem 0}
 
-/* ── bridge ── */
+/* bridge */
+#bridge-sec{background:linear-gradient(180deg,var(--bg) 0%,var(--bg-3) 50%,var(--bg) 100%)}
 .bridge{display:flex;flex-direction:column;gap:.9rem}
 .bridge-row{display:grid;grid-template-columns:1fr 52px 1fr;gap:.9rem;align-items:stretch}
 @media(max-width:760px){.bridge-row{grid-template-columns:1fr}.bridge-mid{transform:rotate(90deg);margin:-.4rem auto}}
-.bridge-cell{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:1.05rem 1.2rem;font-size:.88rem;color:var(--dim);backdrop-filter:blur(10px)}
-.bridge-cell b{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.4rem}
-.bridge-cell.m b{color:var(--cyan)}
-.bridge-cell.d{border-color:rgba(251,191,36,.22)}
+.bridge-cell{background:#fff;border:1px solid var(--line);border-radius:13px;padding:1.05rem 1.2rem;font-size:.88rem;color:var(--dim);box-shadow:var(--shadow)}
+.bridge-cell b{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;margin-bottom:.4rem}
+.bridge-cell.m b{color:var(--teal)}
+.bridge-cell.d{border-color:rgba(217,119,6,.3)}
 .bridge-cell.d b{color:var(--amber)}
-.bridge-mid{display:grid;place-items:center;color:var(--cyan);font-size:1.15rem;opacity:.9}
-.bridge-mid svg{filter:drop-shadow(0 0 8px rgba(34,211,238,.5))}
+.bridge-mid{display:grid;place-items:center;color:var(--blue);font-size:1.15rem}
 
-/* ── philosophy ── */
+/* philosophy */
 .phil-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1.1rem}
 @media(max-width:1080px){.phil-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:640px){.phil-grid{grid-template-columns:1fr}}
-.phil .big{font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;color:var(--amber);text-transform:uppercase;margin-bottom:.7rem}
-.phil h3{font-size:1.02rem;margin-bottom:.6rem}
+.phil .big{font-family:var(--mono);font-size:.64rem;letter-spacing:.18em;color:var(--amber);text-transform:uppercase;margin-bottom:.7rem}
+.phil h3{font-size:1rem;margin-bottom:.55rem}
 .phil p{font-size:.82rem;color:var(--dim)}
 
-/* ── credentials ── */
-.cred-cols{display:grid;grid-template-columns:1fr 1fr;gap:2.6rem;align-items:start}
+/* credentials */
+.cred-cols{display:grid;grid-template-columns:1fr 1fr;gap:2.4rem;align-items:start}
 @media(max-width:900px){.cred-cols{grid-template-columns:1fr}}
 .cert-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 @media(max-width:560px){.cert-grid{grid-template-columns:1fr}}
 .cert{padding:1.15rem 1.25rem}
-.cert h4{font-size:.92rem;margin-bottom:.25rem}
+.cert h4{font-size:.92rem;color:var(--ink);margin-bottom:.25rem}
 .cert .by{font-size:.75rem;color:var(--faint)}
 .badge{display:inline-block;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;border-radius:6px;padding:.22rem .5rem;margin-top:.6rem}
-.badge.ok{color:var(--green);border:1px solid rgba(52,211,153,.35);background:rgba(52,211,153,.08)}
-.badge.ip{color:var(--amber);border:1px solid rgba(251,191,36,.35);background:rgba(251,191,36,.08)}
+.badge.ok{color:var(--green);border:1px solid rgba(4,120,87,.3);background:rgba(4,120,87,.06)}
+.badge.ip{color:var(--amber);border:1px solid rgba(217,119,6,.35);background:rgba(217,119,6,.06)}
 .timeline{position:relative;padding-left:1.6rem}
-.timeline::before{content:'';position:absolute;left:6px;top:6px;bottom:6px;width:1px;background:linear-gradient(180deg,var(--cyan),rgba(56,189,248,.08))}
+.timeline::before{content:'';position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:linear-gradient(180deg,var(--blue),rgba(29,95,214,.1));border-radius:1px}
 .tl{position:relative;padding-bottom:1.5rem}
 .tl:last-child{padding-bottom:0}
-.tl::before{content:'';position:absolute;left:-1.6rem;top:.42rem;width:13px;height:13px;border-radius:50%;background:var(--bg);border:2px solid var(--cyan);box-shadow:0 0 12px rgba(34,211,238,.6)}
-.tl .yr{font-family:var(--mono);font-size:.68rem;color:var(--cyan);letter-spacing:.14em}
-.tl h4{font-size:.98rem;margin:.2rem 0}
+.tl::before{content:'';position:absolute;left:-1.6rem;top:.42rem;width:13px;height:13px;border-radius:50%;background:#fff;border:3px solid var(--blue)}
+.tl .yr{font-family:var(--mono);font-size:.68rem;color:var(--blue);letter-spacing:.14em;font-weight:600}
+.tl h4{font-size:.98rem;color:var(--ink);margin:.2rem 0}
 .tl .sch{font-size:.8rem;color:var(--dim)}
 .tl .nt{font-size:.78rem;color:var(--faint);margin-top:.2rem}
 
-/* ── resumes ── */
+/* resumes */
+#resumes{background:linear-gradient(180deg,var(--bg) 0%,var(--bg-3) 50%,var(--bg) 100%)}
 .res-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem}
-@media(max-width:900px){.res-grid{grid-template-columns:1fr}}
-.res .fmt{font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;color:#04121a;background:var(--cyan);display:inline-block;border-radius:6px;padding:.25rem .55rem;font-weight:700;margin-bottom:.9rem}
-.res .fmt.pdf{background:var(--amber)}
-.res h3{font-size:1.05rem}
-.res .mk{font-family:var(--mono);font-size:.66rem;color:var(--amber);letter-spacing:.1em;margin:.35rem 0 .7rem}
-.res p{font-size:.83rem;color:var(--dim);margin-bottom:1.2rem}
-.res .btn{width:100%;justify-content:center;font-size:.85rem;padding:.7rem 1rem}
+@media(max-width:960px){.res-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){.res-grid{grid-template-columns:1fr}}
+.res .fmt{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;color:#fff;background:var(--blue);display:inline-block;border-radius:6px;padding:.25rem .55rem;font-weight:700;margin-bottom:.9rem}
+.res .fmt.pdf{background:var(--amber-2)}
+.res .fmt.cert{background:var(--teal-2)}
+.res h3{font-size:1.02rem}
+.res .mk{font-family:var(--mono);font-size:.64rem;color:var(--amber);letter-spacing:.08em;margin:.3rem 0 .7rem}
+.res p{font-size:.83rem;color:var(--dim);margin-bottom:1.1rem}
+.res .btn{width:100%;font-size:.85rem;padding:.68rem 1rem}
+.res .btn + .btn{margin-top:.55rem}
 
-/* ── contact ── */
-#contact .card{padding:clamp(1.8rem,4vw,3rem)}
+/* contact */
+#contact .card{padding:clamp(1.8rem,4vw,2.8rem)}
+#contact .card:hover{transform:none}
 .con-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:2.4rem;align-items:start}
 @media(max-width:900px){.con-grid{grid-template-columns:1fr}}
-.con-links{display:flex;flex-direction:column;gap:.85rem;margin-top:1.6rem}
-.con-link{display:flex;align-items:center;gap:.95rem;border:1px solid var(--line);border-radius:13px;padding:.9rem 1.1rem;background:rgba(7,13,26,.5);transition:all .3s}
-.con-link:hover{border-color:var(--cyan);transform:translateX(5px);box-shadow:0 0 24px rgba(34,211,238,.15)}
-.con-link .ic{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;background:rgba(34,211,238,.1);border:1px solid var(--line-2);color:var(--cyan);flex-shrink:0}
-.con-link b{display:block;font-size:.88rem}
+.con-links{display:flex;flex-direction:column;gap:.85rem;margin-top:1.5rem}
+.con-link{display:flex;align-items:center;gap:.95rem;border:1px solid var(--line);border-radius:13px;padding:.85rem 1.1rem;background:var(--bg);transition:all .3s}
+.con-link:hover{border-color:var(--blue);transform:translateX(5px);box-shadow:var(--shadow)}
+.con-link .ic{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;background:rgba(29,95,214,.08);border:1px solid var(--line);color:var(--blue);flex-shrink:0;font-weight:700}
+.con-link b{display:block;font-size:.88rem;color:var(--ink)}
 .con-link small{font-size:.74rem;color:var(--faint)}
-.tag-title{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;color:var(--faint);text-transform:uppercase;margin:1.4rem 0 .6rem}
+.tag-title{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;color:var(--faint);text-transform:uppercase;margin:1.3rem 0 .6rem}
 .tags{display:flex;flex-wrap:wrap;gap:.45rem}
 
-/* ── footer ── */
-footer{border-top:1px solid var(--line);padding:2rem 0;position:relative;z-index:1}
+/* footer */
+footer{border-top:1px solid var(--line);padding:2rem 0;background:#fff;position:relative;z-index:1}
 .foot{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;font-size:.8rem;color:var(--faint)}
-.foot a:hover{color:var(--cyan)}
-
-@media(prefers-reduced-motion:reduce){
-  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
-  .rv{opacity:1;transform:none}
-}
+.foot a:hover{color:var(--blue)}
 </style>
 </head>
 <body>
 <div id="progress"></div>
 <div id="bg-grid"></div>
-<div id="bg-glow"></div>
 
 <nav class="nav" id="nav">
   <div class="nav-in">
@@ -293,12 +281,10 @@ footer{border-top:1px solid var(--line);padding:2rem 0;position:relative;z-index
 <main>
 <!-- ═══════════ HERO ═══════════ -->
 <section id="hero">
-  <div id="hero3d" aria-hidden="true"></div>
-  <div class="hero-fade"></div>
-  <div class="wrap hero-in">
+  <div class="wrap">
     <div class="hero-grid">
       <div>
-        <span class="hero-tag"><span class="dot"></span>SYSTEM ONLINE · AVAILABLE FOR MISSION-CRITICAL ROLES</span>
+        <span class="hero-tag"><span class="dot"></span>Available for Mission-Critical Roles</span>
         <h1>Critical Power<br><span class="g">Systems Engineer</span></h1>
         <p class="hero-sub">16 years designing and commissioning <b>mission-critical LV / MV / HV power systems</b> for continuous-operation environments — the same resilience, redundancy, and fault-tolerant architecture that <b>Tier III / IV data centers</b> demand.</p>
         <div class="hero-ctas">
@@ -316,8 +302,8 @@ footer{border-top:1px solid var(--line);padding:2rem 0;position:relative;z-index
       </div>
       <div class="hero-hud rv">
         <div class="hud-head">
-          <span>SYS : CRITICAL-POWER-V2</span>
-          <span class="lights"><i style="background:var(--red)"></i><i style="background:var(--amber)"></i><i style="background:var(--green)"></i></span>
+          <span>SYS : CRITICAL-POWER-V3</span>
+          <span class="lights"><i style="background:#ef4444"></i><i style="background:#f59e0b"></i><i style="background:#10b981"></i></span>
         </div>
         <div class="hud-row"><span class="k">POWER PATH</span><span class="v ok">● ENERGISED</span></div>
         <div class="hud-row"><span class="k">REDUNDANCY</span><span class="v">N+1 / 2N</span></div>
@@ -331,7 +317,61 @@ footer{border-top:1px solid var(--line);padding:2rem 0;position:relative;z-index
       </div>
     </div>
   </div>
-  <div class="scroll-cue">Scroll</div>
+</section>
+
+<!-- ═══════════ SINGLE-LINE DIAGRAM ═══════════ -->
+<section id="sld" aria-label="Critical power path diagram">
+  <div class="wrap">
+    <div class="sld-card rv">
+      <div class="sld-title"><span><b>CRITICAL POWER PATH</b> — SAME DESIGN LOGIC AS MARINE MISSION-CRITICAL SYSTEMS</span><span>REDUNDANCY: N+1 / 2N · TARGET: 99.999%</span></div>
+      <svg viewBox="0 0 1120 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Power flow: utility intake, transformer, switchgear, UPS and standby generator, EPMS SCADA, critical load">
+        <defs>
+          <marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#1d5fd6"/></marker>
+        </defs>
+        <!-- connections -->
+        <line class="flow" x1="170" y1="65" x2="205" y2="65" stroke="#1d5fd6" stroke-width="2.5" marker-end="url(#arr)"/>
+        <line class="flow" x1="360" y1="65" x2="395" y2="65" stroke="#1d5fd6" stroke-width="2.5" marker-end="url(#arr)"/>
+        <line class="flow" x1="550" y1="45" x2="590" y2="30" stroke="#0e7490" stroke-width="2.5" marker-end="url(#arr)"/>
+        <line class="flow" x1="550" y1="85" x2="590" y2="105" stroke="#b45309" stroke-width="2.5" marker-end="url(#arr)"/>
+        <line class="flow" x1="745" y1="30" x2="790" y2="52" stroke="#0e7490" stroke-width="2.5" marker-end="url(#arr)"/>
+        <line class="flow" x1="745" y1="105" x2="790" y2="80" stroke="#b45309" stroke-width="2.5" marker-end="url(#arr)"/>
+        <line class="flow" x1="945" y1="65" x2="975" y2="65" stroke="#1d5fd6" stroke-width="2.5" marker-end="url(#arr)"/>
+        <!-- boxes -->
+        <g font-family="JetBrains Mono,monospace">
+          <rect x="20" y="35" width="150" height="60" rx="10" fill="#eef4fd" stroke="#1d5fd6" stroke-width="1.6"/>
+          <text x="95" y="60" text-anchor="middle" font-size="12" font-weight="700" fill="#0e2038">UTILITY INTAKE</text>
+          <text x="95" y="78" text-anchor="middle" font-size="10" fill="#51617a">11kV MV Supply</text>
+
+          <rect x="210" y="35" width="150" height="60" rx="10" fill="#eef4fd" stroke="#1d5fd6" stroke-width="1.6"/>
+          <text x="285" y="60" text-anchor="middle" font-size="12" font-weight="700" fill="#0e2038">TRANSFORMER</text>
+          <text x="285" y="78" text-anchor="middle" font-size="10" fill="#51617a">MV → LV Step-Down</text>
+
+          <rect x="400" y="35" width="150" height="60" rx="10" fill="#e8f7fb" stroke="#0e7490" stroke-width="1.6"/>
+          <text x="475" y="60" text-anchor="middle" font-size="12" font-weight="700" fill="#0e2038">MV/LV SWGR</text>
+          <text x="475" y="78" text-anchor="middle" font-size="10" fill="#51617a">Main Distribution</text>
+
+          <rect x="595" y="5" width="150" height="52" rx="10" fill="#e8f7fb" stroke="#0e7490" stroke-width="1.6"/>
+          <text x="670" y="27" text-anchor="middle" font-size="12" font-weight="700" fill="#0e2038">UPS SYSTEM</text>
+          <text x="670" y="44" text-anchor="middle" font-size="10" fill="#51617a">400kVA Protected</text>
+
+          <rect x="595" y="82" width="150" height="52" rx="10" fill="#fdf3e6" stroke="#b45309" stroke-width="1.6"/>
+          <text x="670" y="104" text-anchor="middle" font-size="12" font-weight="700" fill="#0e2038">STANDBY GEN</text>
+          <text x="670" y="121" text-anchor="middle" font-size="10" fill="#51617a">N+1 Redundancy</text>
+
+          <rect x="795" y="35" width="150" height="60" rx="10" fill="#eef4fd" stroke="#1d5fd6" stroke-width="1.6"/>
+          <text x="870" y="60" text-anchor="middle" font-size="12" font-weight="700" fill="#0e2038">EPMS / SCADA</text>
+          <text x="870" y="78" text-anchor="middle" font-size="10" fill="#51617a">IEC 61850 Monitoring</text>
+
+          <rect x="980" y="35" width="125" height="60" rx="10" fill="#fdf3e6" stroke="#b45309" stroke-width="1.6"/>
+          <text x="1042" y="60" text-anchor="middle" font-size="12" font-weight="700" fill="#0e2038">CRITICAL LOAD</text>
+          <text x="1042" y="78" text-anchor="middle" font-size="10" fill="#51617a">IT / Process</text>
+
+          <text x="20" y="170" font-size="10" fill="#7b8aa3">STATUS: OPERATIONAL · CLEAN POWER · SYNC · MONITORED</text>
+          <text x="1105" y="170" text-anchor="end" font-size="10" fill="#7b8aa3">SYS: CRITICAL-POWER-V3</text>
+        </g>
+      </svg>
+    </div>
+  </div>
 </section>
 
 <!-- ═══════════ STATS ═══════════ -->
@@ -351,29 +391,29 @@ footer{border-top:1px solid var(--line);padding:2rem 0;position:relative;z-index
 <section id="capabilities">
   <div class="wrap">
     <div class="sec-tag rv">SECTION 01 — TECHNICAL COMPETENCIES</div>
-    <h2 class="rv">Core Technical <span style="background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent">Competencies</span></h2>
+    <h2 class="rv">Core Technical <span class="g">Competencies</span></h2>
     <p class="sec-sub rv">Across 16 years of mission-critical delivery, these are the systems, standards, and tools that define my daily engineering practice.</p>
     <div class="comp-grid">
-      <div class="tilt-wrap rv"><div class="card tilt">
-        <div class="lift"><div class="comp-ico">⚡</div>
+      <div class="card rv">
+        <div class="comp-ico">⚡</div>
         <h3>Power Systems</h3>
-        <div class="chips"><span class="chip">MV/LV Distribution</span><span class="chip">MV 11kV Switchgear</span><span class="chip">Transformers</span><span class="chip">UPS (400kVA)</span><span class="chip">BESS (72kWh Li-ion)</span><span class="chip">Standby Generators</span><span class="chip">Chillers / CRAH</span></div></div>
-      </div></div>
-      <div class="tilt-wrap rv rv-d1"><div class="card tilt">
-        <div class="lift"><div class="comp-ico">🧪</div>
+        <div class="chips"><span class="chip">MV/LV Distribution</span><span class="chip">MV 11kV Switchgear</span><span class="chip">Transformers</span><span class="chip">UPS (400kVA)</span><span class="chip">BESS (72kWh Li-ion)</span><span class="chip">Standby Generators</span><span class="chip">Chillers / CRAH</span></div>
+      </div>
+      <div class="card rv rv-d1">
+        <div class="comp-ico">🧪</div>
         <h3>Commissioning &amp; Testing</h3>
-        <div class="chips"><span class="chip">IST</span><span class="chip">FAT / SAT / FWT</span><span class="chip">FPT</span><span class="chip">Energisation</span><span class="chip">Protection Relay Testing</span><span class="chip">MOP / SOP / EOP</span><span class="chip">NETA Testing</span></div></div>
-      </div></div>
-      <div class="tilt-wrap rv rv-d2"><div class="card tilt">
-        <div class="lift"><div class="comp-ico">🖥️</div>
+        <div class="chips"><span class="chip">IST</span><span class="chip">FAT / SAT / FWT</span><span class="chip">FPT</span><span class="chip">Energisation</span><span class="chip">Protection Relay Testing</span><span class="chip">MOP / SOP / EOP</span><span class="chip">NETA Testing</span></div>
+      </div>
+      <div class="card rv rv-d2">
+        <div class="comp-ico">🖥️</div>
         <h3>Controls &amp; Monitoring</h3>
-        <div class="chips"><span class="chip">EPMS</span><span class="chip">BMS / BAS</span><span class="chip">SCADA (ABB 800xA)</span><span class="chip">IEC 61850</span><span class="chip">PLC</span><span class="chip">BACnet / Modbus</span><span class="chip">Point-to-Point Verification</span></div></div>
-      </div></div>
-      <div class="tilt-wrap rv rv-d3"><div class="card tilt">
-        <div class="lift"><div class="comp-ico">📐</div>
+        <div class="chips"><span class="chip">EPMS</span><span class="chip">BMS / BAS</span><span class="chip">SCADA (ABB 800xA)</span><span class="chip">IEC 61850</span><span class="chip">PLC</span><span class="chip">BACnet / Modbus</span><span class="chip">Point-to-Point Verification</span></div>
+      </div>
+      <div class="card rv rv-d3">
+        <div class="comp-ico">📐</div>
         <h3>Standards &amp; Tools</h3>
-        <div class="chips"><span class="chip">Tier III/IV Design</span><span class="chip">N+1 / 2N+1</span><span class="chip">ISO 9001 Lead Auditor</span><span class="chip">ISO 50001 Lead Auditor</span><span class="chip">IECEx</span><span class="chip">Python Automation</span><span class="chip">FMEA / Risk Assessment</span></div></div>
-      </div></div>
+        <div class="chips"><span class="chip">Tier III/IV Design</span><span class="chip">N+1 / 2N+1</span><span class="chip">ISO 9001 Lead Auditor</span><span class="chip">ISO 50001 Lead Auditor</span><span class="chip">IECEx</span><span class="chip">Python Automation</span><span class="chip">FMEA / Risk Assessment</span></div>
+      </div>
     </div>
   </div>
 </section>
@@ -382,49 +422,41 @@ footer{border-top:1px solid var(--line);padding:2rem 0;position:relative;z-index
 <section id="projects">
   <div class="wrap">
     <div class="sec-tag rv">SECTION 02 — FLAGSHIP PROJECTS</div>
-    <h2 class="rv">Mission-Critical <span style="background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent">Project Portfolio</span></h2>
+    <h2 class="rv">Mission-Critical <span class="g">Project Portfolio</span></h2>
     <p class="sec-sub rv">Each project demonstrates protected load distribution, electrical resilience, switching philosophy, and commissioning readiness — the same competencies that govern data center critical power infrastructure.</p>
     <div class="proj-grid">
-      <div class="tilt-wrap rv"><div class="card tilt proj">
-        <div class="lift">
+      <div class="card proj rv">
         <div class="proj-top"><span class="proj-num">01</span><span class="proj-sector">Heavy-Industry Power</span></div>
         <h3>Multi-Generator Heavy-Industry Power Plant</h3>
         <div class="proj-meta"><b>Strategic Marine Pte. Ltd.</b> · Jul 2024 — Present</div>
         <p>Generator plant architecture, LV distribution design, BESS integration, and EPMS monitoring for continuous-operation heavy-industry vessels — protected load segmentation under constrained fault conditions.</p>
         <div class="proj-line"></div>
         <div class="chips"><span class="chip">LV Distribution</span><span class="chip">BESS Integration</span><span class="chip">Generator Design</span><span class="chip">EPMS</span></div>
-        </div>
-      </div></div>
-      <div class="tilt-wrap rv rv-d1"><div class="card tilt proj">
-        <div class="lift">
+      </div>
+      <div class="card proj rv rv-d1">
         <div class="proj-top"><span class="proj-num">02</span><span class="proj-sector">Semiconductor / Critical Facilities</span></div>
         <h3>300mm Semiconductor Cleanroom Critical-Power Hook-Up</h3>
         <div class="proj-meta"><b>Exyte</b> · Feb 2023 — Jul 2024</div>
         <p>N+1 availability design and IST/FPT commissioning of critical-power distribution for a 300mm wafer fab cleanroom — PLC/SCADA integration under ISO 14644 cleanroom discipline.</p>
         <div class="proj-line"></div>
         <div class="chips"><span class="chip">N+1 Availability</span><span class="chip">IST / FPT</span><span class="chip">PLC / SCADA</span><span class="chip">ISO 14644</span></div>
-        </div>
-      </div></div>
-      <div class="tilt-wrap rv"><div class="card tilt proj">
-        <div class="lift">
+      </div>
+      <div class="card proj rv">
         <div class="proj-top"><span class="proj-num">03</span><span class="proj-sector">Heavy-Industry Power</span></div>
         <h3>MV 11kV Switchgear &amp; SCADA Commissioning</h3>
         <div class="proj-meta"><b>Keppel FELS</b> · Nov 2012 — Dec 2020</div>
         <p>Eight years of MV 11kV switchgear commissioning, IEC 61850 protection schemes, and ABB 800xA SCADA integration — FMEA-driven fault containment for high-consequence offshore platforms.</p>
         <div class="proj-line"></div>
         <div class="chips"><span class="chip">MV 11kV</span><span class="chip">IEC 61850</span><span class="chip">ABB 800xA</span><span class="chip">FMEA</span></div>
-        </div>
-      </div></div>
-      <div class="tilt-wrap rv rv-d1"><div class="card tilt proj">
-        <div class="lift">
+      </div>
+      <div class="card proj rv rv-d1">
         <div class="proj-top"><span class="proj-num">04</span><span class="proj-sector">Industrial Power</span></div>
         <h3>Autonomous Solar-Wind Remote Power &amp; Cogeneration Plant</h3>
         <div class="proj-meta"><b>Phoenix Mecano (S.E.A.) Pte Ltd</b> · Jan 2021 — Jan 2023</div>
         <p>Hybrid solar-wind generation with 400kVA UPS backbone and SCADA supervision for autonomous remote operation — IECEx/ATEX hazardous-area compliance throughout.</p>
         <div class="proj-line"></div>
         <div class="chips"><span class="chip">Solar-Wind Hybrid</span><span class="chip">IECEx / ATEX</span><span class="chip">400kVA UPS</span><span class="chip">SCADA</span></div>
-        </div>
-      </div></div>
+      </div>
     </div>
     <p class="rv" style="margin-top:2rem;text-align:center">
       <a class="btn btn-o" href="critical-facilities.html">Deep-Dive: Critical Facilities Case Study →</a>
@@ -437,7 +469,7 @@ footer{border-top:1px solid var(--line);padding:2rem 0;position:relative;z-index
 <section id="bridge-sec">
   <div class="wrap">
     <div class="sec-tag rv">SECTION 03 — CAPABILITY BRIDGE</div>
-    <h2 class="rv">Marine-to-Data-Center <span style="background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent">Transferable Capabilities</span></h2>
+    <h2 class="rv">Marine-to-Data-Center <span class="g">Transferable Capabilities</span></h2>
     <p class="sec-sub rv">The same design logic that governs continuous-operation marine power systems — protected distribution, redundancy, selective coordination, and controlled failure response — is exactly what data center mission-critical infrastructure demands.</p>
     <div class="bridge">
       <div class="bridge-row rv"><div class="bridge-cell m"><b>Marine / Offshore Capability</b>Switchboard and bus-tie logic design for complex power distribution</div><div class="bridge-mid"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div><div class="bridge-cell d"><b>Data Center Relevance</b>Main distribution and resilient switching strategy for Tier III/IV facilities</div></div>
@@ -454,14 +486,14 @@ footer{border-top:1px solid var(--line);padding:2rem 0;position:relative;z-index
 <section id="philosophy">
   <div class="wrap">
     <div class="sec-tag rv">SECTION 04 — DESIGN PHILOSOPHY</div>
-    <h2 class="rv">Mission-Critical <span style="background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent">Design Principles</span></h2>
+    <h2 class="rv">Mission-Critical <span class="g">Design Principles</span></h2>
     <p class="sec-sub rv">Five pillars that govern every power system I design — whether for a marine platform, semiconductor fab, or data center hall. These are not abstract ideals; they are engineering disciplines applied daily.</p>
     <div class="phil-grid">
-      <div class="tilt-wrap rv"><div class="card tilt phil"><div class="lift"><div class="big">01 · Availability</div><h3>99.999%+ Uptime</h3><p>N+1 and 2N redundancy architectures eliminating single points of failure in the power path from utility intake to critical load.</p></div></div></div>
-      <div class="tilt-wrap rv rv-d1"><div class="card tilt phil"><div class="lift"><div class="big">02 · Reliability</div><h3>Fault Containment</h3><p>Selective coordination and protection philosophy ensuring failure in any subsystem does not propagate beyond its zone of influence.</p></div></div></div>
-      <div class="tilt-wrap rv rv-d2"><div class="card tilt phil"><div class="lift"><div class="big">03 · Maintainability</div><h3>Concurrent Service</h3><p>Bus-tie switching, draw-out breakers, and isolation procedures that keep critical loads running during maintenance.</p></div></div></div>
-      <div class="tilt-wrap rv rv-d3"><div class="card tilt phil"><div class="lift"><div class="big">04 · Resilience</div><h3>Graceful Recovery</h3><p>Layered defense — UPS ride-through, generator backup, BESS bridging, and switching philosophies that hold power continuity under adverse conditions.</p></div></div></div>
-      <div class="tilt-wrap rv rv-d4"><div class="card tilt phil"><div class="lift"><div class="big">05 · Rigor</div><h3>L1 → L6 Commissioning</h3><p>Full lifecycle from Factory Testing through Integrated Systems Testing to Closeout — every interlock and relay verified before handover.</p></div></div></div>
+      <div class="card phil rv"><div class="big">01 · Availability</div><h3>99.999%+ Uptime</h3><p>N+1 and 2N redundancy architectures eliminating single points of failure in the power path from utility intake to critical load.</p></div>
+      <div class="card phil rv rv-d1"><div class="big">02 · Reliability</div><h3>Fault Containment</h3><p>Selective coordination and protection philosophy ensuring failure in any subsystem does not propagate beyond its zone of influence.</p></div>
+      <div class="card phil rv rv-d2"><div class="big">03 · Maintainability</div><h3>Concurrent Service</h3><p>Bus-tie switching, draw-out breakers, and isolation procedures that keep critical loads running during maintenance.</p></div>
+      <div class="card phil rv rv-d3"><div class="big">04 · Resilience</div><h3>Graceful Recovery</h3><p>Layered defense — UPS ride-through, generator backup, BESS bridging, and switching philosophies that hold power continuity under adverse conditions.</p></div>
+      <div class="card phil rv rv-d4"><div class="big">05 · Rigor</div><h3>L1 → L6 Commissioning</h3><p>Full lifecycle from Factory Testing through Integrated Systems Testing to Closeout — every interlock and relay verified before handover.</p></div>
     </div>
   </div>
 </section>
@@ -470,7 +502,7 @@ footer{border-top:1px solid var(--line);padding:2rem 0;position:relative;z-index
 <section id="credentials">
   <div class="wrap">
     <div class="sec-tag rv">SECTION 05 — CREDENTIALS &amp; TRANSITION ROADMAP</div>
-    <h2 class="rv">Education, Certifications &amp; <span style="background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent">Development</span></h2>
+    <h2 class="rv">Education, Certifications &amp; <span class="g">Development</span></h2>
     <p class="sec-sub rv">A deliberate combination of advanced education, professional certifications, and targeted data center qualifications demonstrating a structured transition into mission-critical facilities engineering.</p>
     <div class="cred-cols">
       <div>
@@ -494,37 +526,50 @@ footer{border-top:1px solid var(--line);padding:2rem 0;position:relative;z-index
   </div>
 </section>
 
-<!-- ═══════════ RESUMES ═══════════ -->
+<!-- ═══════════ RESUMES & CERTIFICATES ═══════════ -->
 <section id="resumes">
   <div class="wrap">
-    <div class="sec-tag rv">SECTION 06 — DOWNLOAD CV</div>
-    <h2 class="rv">Resume <span style="background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent">Versions</span></h2>
-    <p class="sec-sub rv">Targeted resume versions for different sectors and markets — each tailored with sector-specific keywords and emphasis while maintaining consistent core competencies.</p>
+    <div class="sec-tag rv">SECTION 06 — DOWNLOAD CV &amp; CERTIFICATES</div>
+    <h2 class="rv">Resume <span class="g">Versions</span></h2>
+    <p class="sec-sub rv">Targeted resume versions for different sectors and markets, plus consolidated certificate packages for verification.</p>
     <div class="res-grid">
-      <div class="tilt-wrap rv"><div class="card tilt res"><div class="lift">
-        <span class="fmt pdf">PDF</span>
-        <h3>Industrial / Mission-Critical</h3>
+      <div class="card res rv">
+        <span class="fmt">DOCX</span>
+        <h3>Marine Related Resume</h3>
+        <div class="mk">MARINE · OFFSHORE · HEAVY INDUSTRY · OIL &amp; GAS</div>
+        <p>Framed around heavy-industry power systems, marine electrical design, and offshore platform commissioning — MV 11kV switchgear, SCADA, multi-generator plants. Rev 6, 28 Jun 2026.</p>
+        <a class="btn btn-p" href="assets/Mashuk_Elahi_Resume_Marine_Rev6_28Jun2026.docx" download>Download DOCX</a>
+      </div>
+      <div class="card res rv rv-d1">
+        <span class="fmt pdf">PDF + DOCX</span>
+        <h3>Industrial Related Resume</h3>
         <div class="mk">DATA CENTER · CRITICAL FACILITIES · SEMICONDUCTOR</div>
         <p>Optimised for data center, critical facilities, semiconductor, and industrial infrastructure roles. Emphasises MV/LV distribution, UPS, BESS, EPMS, and L1–L6 commissioning.</p>
         <a class="btn btn-p" href="assets/Mashuk_Elahi_Resume_Rev3_20Jun2026.pdf" download>Download PDF</a>
-        <a class="btn btn-o" style="width:100%;justify-content:center;margin-top:.6rem;font-size:.85rem;padding:.7rem 1rem" href="assets/Mashuk_Elahi_Resume_Rev3_20Jun2026.docx" download>Download DOCX</a>
-      </div></div></div>
-      <div class="tilt-wrap rv rv-d1"><div class="card tilt res"><div class="lift">
-        <span class="fmt pdf">PDF</span>
-        <h3>Europass (EU Standard)</h3>
+        <a class="btn btn-o" href="assets/Mashuk_Elahi_Resume_Rev3_20Jun2026.docx" download>Download DOCX</a>
+      </div>
+      <div class="card res rv rv-d2">
+        <span class="fmt pdf">PDF + DOCX</span>
+        <h3>Europass Related Resume</h3>
         <div class="mk">EU MARKETS · FRANKFURT · AMSTERDAM · DUBLIN</div>
         <p>European-standard CV complying with Europass conventions — ideal for applications in Germany, Netherlands, Ireland, Nordics, and EU-wide critical facilities roles.</p>
         <a class="btn btn-p" href="assets/Mashuk_Elahi_Resume_Europass_Rev3_20Jun2026.pdf" download>Download PDF</a>
-        <a class="btn btn-o" style="width:100%;justify-content:center;margin-top:.6rem;font-size:.85rem;padding:.7rem 1rem" href="assets/Mashuk_Elahi_Resume_Europass_Rev3_20Jun2026.docx" download>Download DOCX</a>
-      </div></div></div>
-      <div class="tilt-wrap rv rv-d2"><div class="card tilt res"><div class="lift">
-        <span class="fmt">CERT</span>
-        <h3>Supporting Certificates</h3>
-        <div class="mk">EDUCATION · PROFESSIONAL · VERIFICATION</div>
-        <p>Consolidated educational and professional certificate packages — degrees, lead-auditor certifications, IECEx competence, and training records for verification.</p>
-        <a class="btn btn-p" href="assets/Educational_Certificate.pdf" download>Educational Certificates</a>
-        <a class="btn btn-o" style="width:100%;justify-content:center;margin-top:.6rem;font-size:.85rem;padding:.7rem 1rem" href="assets/Professional_Certificate.pdf" download>Professional Certificates</a>
-      </div></div></div>
+        <a class="btn btn-o" href="assets/Mashuk_Elahi_Resume_Europass_Rev3_20Jun2026.docx" download>Download DOCX</a>
+      </div>
+      <div class="card res rv rv-d3">
+        <span class="fmt cert">PDF</span>
+        <h3>Education Certificate</h3>
+        <div class="mk">DEGREES · ACADEMIC TRANSCRIPTS · UPDATED 20 JUN 2026</div>
+        <p>Consolidated educational certificate package — MSc, MBA, BSc, and diploma qualifications for academic verification.</p>
+        <a class="btn btn-p" href="assets/Educational_Certificate.pdf" download>Download PDF</a>
+      </div>
+      <div class="card res rv rv-d4">
+        <span class="fmt cert">PDF</span>
+        <h3>Professional Certificate</h3>
+        <div class="mk">LEAD AUDITOR · IECEx · TRAINING RECORDS</div>
+        <p>Consolidated professional certificate package — ISO 9001/50001 Lead Auditor, IECEx Ex 001 competence, and professional training records.</p>
+        <a class="btn btn-p" href="assets/Professional_Certificate.pdf" download>Download PDF</a>
+      </div>
     </div>
   </div>
 </section>
@@ -536,7 +581,7 @@ footer{border-top:1px solid var(--line);padding:2rem 0;position:relative;z-index
       <div class="con-grid">
         <div>
           <div class="sec-tag">SECTION 07 — GET IN TOUCH</div>
-          <h2>Available for <span style="background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent">Mission-Critical Roles</span></h2>
+          <h2>Available for <span class="g">Mission-Critical Roles</span></h2>
           <p style="color:var(--dim);font-size:.95rem">Actively seeking Senior Critical Facilities Engineer, Mission-Critical Commissioning Engineer, and Critical Power Systems Engineer positions in data center and critical infrastructure environments. Open to Singapore, Europe (Frankfurt, Amsterdam, Dublin), Middle East, and remote arrangements.</p>
           <div class="con-links">
             <a class="con-link" href="mailto:m_nelahi@yahoo.com"><span class="ic">✉</span><span><b>Email</b><small>m_nelahi@yahoo.com</small></span></a>
@@ -565,9 +610,7 @@ footer{border-top:1px solid var(--line);padding:2rem 0;position:relative;z-index
   </div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-/* ══════════ interactions ══════════ */
 (function(){
   var nav=document.getElementById('nav'),prog=document.getElementById('progress');
   var burger=document.getElementById('burger'),links=document.getElementById('navLinks');
@@ -618,148 +661,9 @@ footer{border-top:1px solid var(--line);padding:2rem 0;position:relative;z-index
   setTimeout(function(){
     var bar=document.getElementById('hudBar'),pct=document.getElementById('hudPct');
     if(bar){bar.style.width='68%';var v=0,iv=setInterval(function(){v+=2;if(v>=68){v=68;clearInterval(iv)}pct.textContent=v+'%'},40);}
-  },800);
-
-  /* 3D tilt cards */
-  var fine=window.matchMedia('(pointer:fine)').matches;
-  var noMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(fine&&!noMotion){
-    document.querySelectorAll('.tilt').forEach(function(card){
-      var wrap=card.parentElement;
-      wrap.addEventListener('mousemove',function(ev){
-        var r=card.getBoundingClientRect();
-        var x=(ev.clientX-r.left)/r.width,y=(ev.clientY-r.top)/r.height;
-        card.style.transform='rotateY('+((x-.5)*10)+'deg) rotateX('+((.5-y)*10)+'deg) translateZ(0)';
-        card.style.setProperty('--mx',(x*100)+'%');
-        card.style.setProperty('--my',(y*100)+'%');
-      });
-      wrap.addEventListener('mouseleave',function(){card.style.transform='rotateY(0) rotateX(0)'});
-    });
-  }
-})();
-
-/* ══════════ THREE.JS — 3D critical power path ══════════ */
-(function(){
-  if(typeof THREE==='undefined')return;
-  var host=document.getElementById('hero3d');
-  var noMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var renderer;
-  try{renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:'high-performance'});}
-  catch(e){return}
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-  renderer.setSize(host.clientWidth,host.clientHeight);
-  host.appendChild(renderer.domElement);
-
-  var scene=new THREE.Scene();
-  scene.fog=new THREE.FogExp2(0x04070f,0.045);
-  var camera=new THREE.PerspectiveCamera(50,host.clientWidth/host.clientHeight,.1,100);
-  camera.position.set(0,2.4,11);
-
-  var CYAN=0x22d3ee,AMBER=0xfbbf24,BLUE=0x3b82f6,GREEN=0x34d399;
-
-  /* ground grid */
-  var grid=new THREE.GridHelper(60,48,0x123a52,0x0a1d33);
-  grid.position.y=-2.6;scene.add(grid);
-
-  /* node factory: wireframe box + glow core */
-  var group=new THREE.Group();scene.add(group);
-  function node(x,y,z,w,h,d,color){
-    var g=new THREE.Group();
-    var geo=new THREE.BoxGeometry(w,h,d);
-    var edges=new THREE.LineSegments(new THREE.EdgesGeometry(geo),new THREE.LineBasicMaterial({color:color,transparent:true,opacity:.95}));
-    var fill=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:color,transparent:true,opacity:.06}));
-    var core=new THREE.Mesh(new THREE.SphereGeometry(Math.min(w,h,d)*.16,12,12),new THREE.MeshBasicMaterial({color:color,transparent:true,opacity:.9}));
-    g.add(edges);g.add(fill);g.add(core);
-    g.position.set(x,y,z);group.add(g);
-    g.userData.core=core;
-    return g;
-  }
-  /* power path layout: utility → transformer → switchgear → {UPS, GEN, BESS} → load */
-  var utility=node(-7.2,0,0,1.5,2.0,1.5,CYAN);
-  var xfmr  =node(-4.2,0,0,1.3,1.5,1.3,BLUE);
-  var swgr  =node(-1.2,0,0,1.8,2.2,1.4,CYAN);
-  var ups   =node(1.9,1.7,-.4,1.2,1.1,1.1,GREEN);
-  var gen   =node(1.9,-1.6,.5,1.4,1.1,1.2,AMBER);
-  var bess  =node(1.9,.1,1.8,1.1,.9,1.0,BLUE);
-  var load  =node(5.2,0,0,1.7,2.4,1.7,AMBER);
-
-  /* connections + flowing particles */
-  var flows=[];
-  function link(a,b,color){
-    var p1=a.position,p2=b.position;
-    var pts=[p1.clone(),p2.clone()];
-    var line=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineBasicMaterial({color:color,transparent:true,opacity:.35}));
-    group.add(line);
-    var n=5;
-    var pgeo=new THREE.BufferGeometry();
-    var pos=new Float32Array(n*3);
-    pgeo.setAttribute('position',new THREE.BufferAttribute(pos,3));
-    var pts2=new THREE.Points(pgeo,new THREE.PointsMaterial({color:color,size:.14,transparent:true,opacity:.95,sizeAttenuation:true}));
-    group.add(pts2);
-    flows.push({a:p1,b:p2,pos:pos,geo:pgeo,n:n,off:Math.random()});
-  }
-  link(utility,xfmr,CYAN);
-  link(xfmr,swgr,CYAN);
-  link(swgr,ups,GREEN);
-  link(swgr,gen,AMBER);
-  link(swgr,bess,BLUE);
-  link(ups,load,GREEN);
-  link(gen,load,AMBER);
-  link(bess,load,BLUE);
-
-  /* ambient particle field */
-  var N=420,fp=new Float32Array(N*3);
-  for(var i=0;i<N;i++){fp[i*3]=(Math.random()-.5)*46;fp[i*3+1]=(Math.random()-.5)*22;fp[i*3+2]=(Math.random()-.5)*30-4}
-  var field=new THREE.Points(new THREE.BufferGeometry(),new THREE.PointsMaterial({color:0x2a6a8f,size:.06,transparent:true,opacity:.7}));
-  field.geometry.setAttribute('position',new THREE.BufferAttribute(fp,3));
-  scene.add(field);
-
-  /* mouse parallax */
-  var mx=0,my=0,tx=0,ty=0;
-  window.addEventListener('mousemove',function(e){
-    tx=(e.clientX/window.innerWidth-.5);ty=(e.clientY/window.innerHeight-.5);
-  },{passive:true});
-
-  var clock=new THREE.Clock(),running=true,t=0;
-  var vis=new IntersectionObserver(function(es){running=es[0].isIntersecting},{threshold:.02});
-  vis.observe(host);
-
-  function frame(){
-    requestAnimationFrame(frame);
-    if(!running)return;
-    var dt=Math.min(clock.getDelta(),.05);t+=dt;
-    mx+=(tx-mx)*.04;my+=(ty-my)*.04;
-    group.rotation.y=Math.sin(t*.12)*.16+mx*.35;
-    group.rotation.x=my*.15;
-    camera.position.y=2.4+Math.sin(t*.4)*.12-my*.6;
-    camera.lookAt(0,0,0);
-    /* pulse node cores */
-    [utility,xfmr,swgr,ups,gen,bess,load].forEach(function(nd,i){
-      var s=1+Math.sin(t*2.4+i*1.1)*.3;
-      nd.userData.core.scale.setScalar(s);
-      nd.position.y+=Math.sin(t*.9+i*2)*.0012;
-    });
-    /* flow particles along links */
-    flows.forEach(function(f){
-      for(var i=0;i<f.n;i++){
-        var p=((t*.28)+f.off+i/f.n)%1;
-        f.pos[i*3]  =f.a.x+(f.b.x-f.a.x)*p;
-        f.pos[i*3+1]=f.a.y+(f.b.y-f.a.y)*p;
-        f.pos[i*3+2]=f.a.z+(f.b.z-f.a.z)*p;
-      }
-      f.geo.attributes.position.needsUpdate=true;
-    });
-    field.rotation.y=t*.008;
-    renderer.render(scene,camera);
-  }
-  if(noMotion){renderer.render(scene,camera);}else{frame();}
-
-  window.addEventListener('resize',function(){
-    var w=host.clientWidth,h=host.clientHeight;
-    camera.aspect=w/h;camera.updateProjectionMatrix();
-    renderer.setSize(w,h);
-  });
+  },700);
 })();
 </script>
 </body>
 </html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    

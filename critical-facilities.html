@@ -15,24 +15,24 @@
 <link rel="icon" href="assets/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
 <link rel="manifest" href="assets/site.webmanifest">
-<meta name="theme-color" content="#0f172a">
+<meta name="theme-color" content="#ffffff">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --navy-950:#04070f; --navy-900:#070d1a; --navy-800:#0f172a;
-  --blue-400:#22d3ee; --blue-500:#3b82f6; --blue-600:#2563EB;
-  --amber-400:#FBBF24; --amber-500:#F59E0B;
-  --emerald-400:#34D399; --emerald-500:#10B981;
-  --text:#e2e8f0; --text-dim:#94a3b8; --text-faint:#64748b;
+  --navy-950:#f6f8fc; --navy-900:#ffffff; --navy-800:#eef3fa;
+  --blue-400:#1d5fd6; --blue-500:#3b82f6; --blue-600:#2563EB;
+  --amber-400:#b45309; --amber-500:#d97706;
+  --emerald-400:#059669; --emerald-500:#047857;
+  --text:#243b55; --text-dim:#51617a; --text-faint:#7b8aa3;
   --gradient-primary:linear-gradient(135deg,var(--blue-400),var(--amber-500));
-  --gradient-blue:linear-gradient(135deg,#3b82f6,#22d3ee);
-  --gradient-glass:linear-gradient(135deg,rgba(255,255,255,0.07),rgba(255,255,255,0.02));
+  --gradient-blue:linear-gradient(135deg,#3b82f6,#1d5fd6);
+  --gradient-glass:linear-gradient(135deg,rgba(29,95,214,0.05),rgba(29,95,214,0.02));
   --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   --font-mono:'JetBrains Mono','Fira Code',monospace;
   --section-pad:clamp(3.5rem,7vw,6.5rem);
-  --glass-bg:rgba(15,23,42,0.6); --glass-border:rgba(56,189,248,0.15);
+  --glass-bg:rgba(255,255,255,0.9); --glass-border:rgba(29,95,214,0.18);
   --glass-blur:blur(20px);
   --ease:cubic-bezier(0.16,1,0.3,1);
 }
@@ -44,7 +44,7 @@ a{color:inherit;text-decoration:none}
 .wrap{max-width:1180px;margin:0 auto;padding:0 1.5rem}
 
 .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;padding:1rem 0;transition:all .4s var(--ease)}
-.navbar.scrolled{background:rgba(10,15,30,.85);backdrop-filter:var(--glass-blur);border-bottom:1px solid var(--glass-border);padding:.55rem 0}
+.navbar.scrolled{background:rgba(255,255,255,.85);backdrop-filter:var(--glass-blur);border-bottom:1px solid var(--glass-border);padding:.55rem 0}
 .nav-container{max-width:1180px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
 .nav-brand{display:flex;align-items:center;gap:.7rem}
 .brand-icon{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:var(--gradient-glass);border:1px solid var(--glass-border);font-family:var(--font-mono);font-weight:700;color:var(--blue-400);font-size:.95rem;flex-shrink:0}
@@ -74,7 +74,7 @@ a{color:inherit;text-decoration:none}
 section.block{position:relative;z-index:1;padding:var(--section-pad) 0}
 .case-grid{display:grid;grid-template-columns:1fr;gap:1.6rem}
 .case-card{position:relative;background:var(--glass-bg);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);border-radius:18px;padding:1.9rem 2rem;transition:border-color .35s}
-.case-card:hover{border-color:rgba(56,189,248,.4)}
+.case-card:hover{border-color:rgba(29,95,214,.4)}
 .case-card.diffcard{border-color:rgba(245,158,11,.4)}
 .case-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.6rem;align-items:center;margin-bottom:.6rem}
 .case-num{font-family:var(--font-mono);font-size:.78rem;color:var(--blue-400);letter-spacing:.06em}
@@ -84,7 +84,7 @@ section.block{position:relative;z-index:1;padding:var(--section-pad) 0}
 .case-block .lbl{font-family:var(--font-mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-faint);margin-bottom:.4rem;display:block}
 .case-block p{font-size:.92rem;color:var(--text-dim);line-height:1.6}
 .chiprow{display:flex;flex-wrap:wrap;gap:.4rem}
-.chip{font-size:.78rem;padding:.32rem .65rem;border-radius:7px;background:rgba(56,189,248,.1);border:1px solid var(--glass-border);color:var(--text-dim)}
+.chip{font-size:.78rem;padding:.32rem .65rem;border-radius:7px;background:rgba(29,95,214,.1);border:1px solid var(--glass-border);color:var(--text-dim)}
 .chip.sys{background:rgba(148,163,184,.08);border-color:rgba(148,163,184,.15)}
 .chip.tool{background:rgba(52,211,153,.08);border-color:rgba(52,211,153,.2);color:var(--emerald-400)}
 .case-result{display:flex;align-items:flex-start;gap:.7rem;padding:.95rem 1.1rem;border-radius:12px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);margin-top:.4rem}
@@ -281,7 +281,7 @@ document.addEventListener('DOMContentLoaded',()=>{
           ctx.beginPath();
           ctx.moveTo(particles[i].x,particles[i].y);
           ctx.lineTo(particles[j].x,particles[j].y);
-          ctx.strokeStyle=`rgba(56,189,248,${(.12*(1-dist/120)).toFixed(3)})`;
+          ctx.strokeStyle=`rgba(29,95,214,${(.12*(1-dist/120)).toFixed(3)})`;
           ctx.lineWidth=1;
           ctx.stroke();
         }
