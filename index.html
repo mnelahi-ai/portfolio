@@ -18,45 +18,39 @@
 <link rel="icon" href="assets/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png">
 <link rel="manifest" href="assets/site.webmanifest">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#4f46e5">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ══════════════════════════════════════════════════════════
    MASHUK ELAHI — CRITICAL POWER SYSTEMS ENGINEER
-   Clean light professional theme · blue / teal / amber
+   Modern light theme · indigo / violet · Emergent-inspired
    ══════════════════════════════════════════════════════════ */
 :root{
-  --bg:#f6f8fc; --bg-2:#ffffff; --bg-3:#eef3fa;
-  --ink:#0e2038; --text:#243b55; --dim:#51617a; --faint:#7b8aa3;
-  --blue:#1d5fd6; --blue-2:#2563eb; --teal:#0e7490; --teal-2:#0891b2;
-  --amber:#b45309; --amber-2:#d97706; --green:#047857; --red:#b91c1c;
-  --line:#e2e9f4; --line-2:#c9d8ee;
-  --grad:linear-gradient(120deg,#1d5fd6 0%,#0891b2 60%,#d97706 130%);
+  --bg:#ffffff; --bg-soft:#f7f8ff; --bg-2:#ffffff; --bg-3:#eef1fb;
+  --ink:#0f172a; --text:#334155; --dim:#475569; --faint:#94a3b8;
+  --indigo:#4f46e5; --indigo-2:#6366f1; --violet:#7c3aed;
+  --green:#059669; --green-2:#10b981; --amber:#d97706;
+  --line:#e6e8f2; --line-2:#d5d9ee;
+  --grad:linear-gradient(120deg,#6366f1 0%,#4f46e5 55%,#7c3aed 120%);
+  --grad-soft:linear-gradient(180deg,#f7f8ff 0%,#eef1fb 100%);
   --sans:'Inter',-apple-system,'Segoe UI',sans-serif;
   --mono:'JetBrains Mono','Fira Code',monospace;
   --ease:cubic-bezier(.16,1,.3,1);
-  --r:16px;
-  --shadow:0 1px 2px rgba(14,32,56,.05),0 8px 28px rgba(14,32,56,.07);
-  --shadow-lg:0 2px 6px rgba(14,32,56,.06),0 20px 50px rgba(14,32,56,.12);
+  --r:18px;
+  --shadow:0 1px 2px rgba(15,23,42,.05),0 10px 30px rgba(79,70,229,.07);
+  --shadow-lg:0 4px 10px rgba(15,23,42,.06),0 24px 60px rgba(79,70,229,.14);
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-::selection{background:rgba(37,99,235,.18)}
+::selection{background:rgba(99,102,241,.2)}
 a{color:inherit;text-decoration:none}
-img{max-width:100%}
+img{max-width:100%;display:block}
 .wrap{max-width:1180px;margin:0 auto;padding:0 1.5rem}
 .mono{font-family:var(--mono)}
 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-
-/* subtle background grid */
-#bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:linear-gradient(rgba(29,95,214,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(29,95,214,.05) 1px,transparent 1px);
-  background-size:52px 52px;
-  mask-image:radial-gradient(ellipse 85% 60% at 50% 0%,#000 20%,transparent 70%);
-  -webkit-mask-image:radial-gradient(ellipse 85% 60% at 50% 0%,#000 20%,transparent 70%);}
 main{position:relative;z-index:1}
 
 /* progress bar */
@@ -64,78 +58,75 @@ main{position:relative;z-index:1}
 
 /* ── nav ── */
 .nav{position:fixed;top:0;left:0;right:0;z-index:1000;transition:all .35s var(--ease)}
-.nav.scrolled{background:rgba(255,255,255,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line);box-shadow:0 4px 20px rgba(14,32,56,.05)}
-.nav-in{max-width:1180px;margin:0 auto;padding:.95rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
-.nav.scrolled .nav-in{padding:.6rem 1.5rem}
-.brand{display:flex;align-items:center;gap:.65rem}
-.brand-badge{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;font-family:var(--mono);font-weight:700;font-size:.9rem;color:#fff;background:var(--grad);flex-shrink:0}
-.brand b{font-size:.98rem;letter-spacing:.03em;color:var(--ink)}
-.brand small{display:block;font-family:var(--mono);font-size:.6rem;color:var(--faint);letter-spacing:.16em;text-transform:uppercase}
-.nav-links{display:flex;gap:.15rem;list-style:none}
-.nav-links a{font-size:.85rem;font-weight:500;color:var(--dim);padding:.45rem .75rem;border-radius:9px;transition:all .25s}
-.nav-links a:hover{color:var(--ink);background:var(--bg-3)}
-.nav-links a.active{color:var(--blue);background:rgba(37,99,235,.08)}
-.nav-cta{font-family:var(--mono);font-size:.74rem;font-weight:600;color:#fff;background:var(--blue);padding:.5rem .95rem;border-radius:9px;letter-spacing:.03em;transition:all .25s;box-shadow:0 4px 14px rgba(29,95,214,.3)}
-.nav-cta:hover{background:var(--blue-2);transform:translateY(-1px)}
-#burger{display:none;background:#fff;border:1px solid var(--line-2);color:var(--blue);width:40px;height:40px;border-radius:10px;font-size:1.1rem;cursor:pointer}
-@media(max-width:920px){
-  .nav-links{position:fixed;top:64px;right:.8rem;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:14px;padding:.6rem;min-width:210px;display:none;box-shadow:var(--shadow-lg)}
+.nav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line);box-shadow:0 4px 22px rgba(15,23,42,.06)}
+.nav-in{max-width:1180px;margin:0 auto;padding:1.1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.nav.scrolled .nav-in{padding:.75rem 1.5rem}
+.brand{display:flex;align-items:center;gap:.6rem;font-weight:800;font-size:1.25rem;letter-spacing:-.02em;color:var(--ink)}
+.brand .dotmark{width:11px;height:11px;border-radius:50%;background:var(--grad);box-shadow:0 0 0 4px rgba(99,102,241,.14)}
+.nav-links{display:flex;gap:.1rem;list-style:none}
+.nav-links a{font-size:.92rem;font-weight:500;color:var(--dim);padding:.5rem .85rem;border-radius:10px;transition:all .25s}
+.nav-links a:hover{color:var(--ink)}
+.nav-links a.active{color:var(--indigo)}
+.nav-cta{font-size:.9rem;font-weight:600;color:#fff;background:var(--indigo);padding:.6rem 1.25rem;border-radius:11px;transition:all .25s;box-shadow:0 8px 20px rgba(79,70,229,.32)}
+.nav-cta:hover{background:var(--indigo-2);transform:translateY(-1px);box-shadow:0 12px 26px rgba(79,70,229,.4)}
+#burger{display:none;background:#fff;border:1px solid var(--line-2);color:var(--indigo);width:42px;height:42px;border-radius:11px;font-size:1.15rem;cursor:pointer}
+@media(max-width:980px){
+  .nav-links{position:fixed;top:70px;right:.8rem;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:16px;padding:.6rem;min-width:220px;display:none;box-shadow:var(--shadow-lg)}
   .nav-links.open{display:flex}
-  .nav-links a{padding:.65rem .9rem}
+  .nav-links a{padding:.7rem .95rem}
   #burger{display:grid;place-items:center}
   .nav-cta{display:none}
 }
 
 /* ── hero ── */
-#hero{position:relative;padding:8.5rem 0 3rem;background:
-  radial-gradient(700px 380px at 12% 0%,rgba(37,99,235,.08),transparent 60%),
-  radial-gradient(600px 340px at 88% 10%,rgba(8,145,178,.07),transparent 60%)}
-.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:3rem;align-items:center}
-@media(max-width:960px){.hero-grid{grid-template-columns:1fr}}
-.hero-tag{display:inline-flex;align-items:center;gap:.55rem;font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);border:1px solid rgba(8,145,178,.3);border-radius:999px;padding:.45rem 1rem;background:rgba(8,145,178,.06);margin-bottom:1.4rem}
-.hero-tag .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-h1{font-size:clamp(2.4rem,5.6vw,4rem);line-height:1.06;font-weight:900;letter-spacing:-.02em;color:var(--ink);margin-bottom:1.3rem}
-.hero-sub{font-size:clamp(1rem,1.5vw,1.13rem);color:var(--dim);max-width:36rem;margin-bottom:2rem}
+#hero{position:relative;padding:9rem 0 4.5rem;background:
+  radial-gradient(760px 460px at 8% -5%,rgba(99,102,241,.14),transparent 60%),
+  radial-gradient(680px 460px at 100% 8%,rgba(124,58,237,.12),transparent 60%),
+  linear-gradient(180deg,#f7f8ff 0%,#ffffff 70%)}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:3.4rem;align-items:center}
+@media(max-width:980px){.hero-grid{grid-template-columns:1fr;gap:2.6rem}}
+.hero-tag{display:inline-flex;align-items:center;gap:.55rem;font-size:.82rem;font-weight:600;color:#fff;border-radius:999px;padding:.5rem 1.1rem;background:var(--grad);box-shadow:0 8px 22px rgba(79,70,229,.28);margin-bottom:1.6rem}
+.hero-tag .dot{width:8px;height:8px;border-radius:50%;background:#fff;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+h1.name{font-size:clamp(2.8rem,6.5vw,4.8rem);line-height:1;font-weight:900;letter-spacing:-.03em;color:var(--ink);margin-bottom:.5rem}
+.hero-role{font-size:clamp(1.4rem,3vw,2.05rem);font-weight:700;letter-spacing:-.01em;margin-bottom:1.4rem}
+.hero-sub{font-size:clamp(1rem,1.5vw,1.14rem);color:var(--dim);max-width:36rem;margin-bottom:2rem}
 .hero-sub b{color:var(--ink);font-weight:600}
-.hero-ctas{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:2.2rem}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;font-weight:600;font-size:.92rem;padding:.8rem 1.5rem;border-radius:11px;transition:all .3s var(--ease);cursor:pointer;border:1px solid transparent}
-.btn-p{background:var(--blue);color:#fff;box-shadow:0 6px 20px rgba(29,95,214,.3)}
-.btn-p:hover{background:var(--blue-2);transform:translateY(-2px);box-shadow:0 10px 28px rgba(29,95,214,.4)}
+.hero-stats{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:2.1rem}
+.hero-stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:.85rem 1.3rem;box-shadow:var(--shadow);min-width:130px}
+.hero-stat .n{font-size:1.5rem;font-weight:800;color:var(--indigo);line-height:1}
+.hero-stat .n.green{color:var(--green)}
+.hero-stat .l{font-size:.76rem;color:var(--faint);margin-top:.25rem}
+.hero-ctas{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:2rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;font-weight:600;font-size:.95rem;padding:.85rem 1.6rem;border-radius:12px;transition:all .3s var(--ease);cursor:pointer;border:1px solid transparent}
+.btn-p{background:var(--indigo);color:#fff;box-shadow:0 10px 26px rgba(79,70,229,.32)}
+.btn-p:hover{background:var(--indigo-2);transform:translateY(-2px);box-shadow:0 14px 32px rgba(79,70,229,.42)}
 .btn-o{border-color:var(--line-2);color:var(--ink);background:#fff}
-.btn-o:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-2px);box-shadow:var(--shadow)}
-.hero-ticker{display:flex;gap:1.5rem;flex-wrap:wrap;font-family:var(--mono);font-size:.72rem;color:var(--faint);letter-spacing:.06em}
-.hero-ticker span b{color:var(--blue);font-weight:600}
+.btn-o:hover{border-color:var(--indigo);color:var(--indigo);transform:translateY(-2px);box-shadow:var(--shadow)}
+.hero-contact{display:flex;gap:1.6rem;flex-wrap:wrap;font-size:.9rem;color:var(--dim)}
+.hero-contact a{display:inline-flex;align-items:center;gap:.5rem}
+.hero-contact a:hover{color:var(--indigo)}
+.hero-contact .ic{color:var(--indigo)}
 
-/* hero status panel */
-.hero-hud{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:1.3rem 1.4rem;font-family:var(--mono);box-shadow:var(--shadow-lg)}
-.hud-head{display:flex;justify-content:space-between;align-items:center;font-size:.66rem;letter-spacing:.14em;color:var(--faint);text-transform:uppercase;border-bottom:1px solid var(--line);padding-bottom:.7rem;margin-bottom:.9rem}
-.hud-head .lights{display:flex;gap:.35rem}
-.hud-head .lights i{width:8px;height:8px;border-radius:50%;display:block}
-.hud-row{display:flex;justify-content:space-between;font-size:.78rem;padding:.42rem 0;border-bottom:1px dashed var(--line)}
-.hud-row:last-child{border-bottom:none}
-.hud-row .k{color:var(--dim)}
-.hud-row .v{color:var(--blue);font-weight:600}
-.hud-row .v.ok{color:var(--green)}
-.hud-bar{height:6px;border-radius:3px;background:var(--bg-3);overflow:hidden;margin-top:.35rem}
-.hud-bar i{display:block;height:100%;border-radius:3px;background:var(--grad);width:0;transition:width 1.6s var(--ease)}
-
-/* ── SLD diagram strip ── */
-#sld{padding:1.5rem 0 0}
-.sld-card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:1.6rem 1.6rem 1rem;box-shadow:var(--shadow)}
-.sld-title{font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);margin-bottom:.6rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.4rem}
-.sld-title b{color:var(--teal)}
-.sld-card svg{width:100%;height:auto;display:block}
-.flow{stroke-dasharray:7 6;animation:flow 1.2s linear infinite}
-@keyframes flow{to{stroke-dashoffset:-13}}
-@media(prefers-reduced-motion:reduce){.flow{animation:none}}
+/* hero photo */
+.hero-photo{position:relative;display:grid;place-items:center}
+.photo-ring{position:relative;width:min(400px,80vw);aspect-ratio:1;border-radius:50%;padding:14px;background:var(--grad);box-shadow:0 30px 70px rgba(79,70,229,.28)}
+.photo-ring::after{content:'';position:absolute;inset:-22px;border-radius:50%;border:1px dashed rgba(99,102,241,.35);animation:spin 26s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.photo-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;background:#eef2ff;border:6px solid #fff}
+.photo-badge{position:absolute;bottom:8px;right:8px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:.6rem .95rem;box-shadow:var(--shadow-lg);font-size:.82rem;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:.5rem}
+.photo-badge .g-dot{width:9px;height:9px;border-radius:50%;background:var(--green-2);box-shadow:0 0 0 4px rgba(16,185,129,.18)}
+@media(prefers-reduced-motion:reduce){.photo-ring::after{animation:none}}
 
 /* ── sections ── */
-section{position:relative;padding:clamp(3.6rem,7vw,6rem) 0}
-.sec-tag{font-family:var(--mono);font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;color:var(--amber-2);display:flex;align-items:center;gap:.8rem;margin-bottom:1rem}
-.sec-tag::before{content:'';width:34px;height:2px;background:var(--amber-2);border-radius:1px}
-h2{font-size:clamp(1.6rem,3.4vw,2.4rem);font-weight:800;letter-spacing:-.015em;color:var(--ink);margin-bottom:.9rem}
-.sec-sub{color:var(--dim);max-width:46rem;margin-bottom:2.6rem;font-size:1rem}
+section{position:relative;padding:clamp(3.8rem,7vw,6rem) 0}
+.sec-tag{font-family:var(--mono);font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:var(--indigo);display:flex;align-items:center;gap:.8rem;margin-bottom:1rem}
+.sec-tag::before{content:'';width:34px;height:2px;background:var(--indigo);border-radius:1px}
+.sec-head{text-align:center;max-width:46rem;margin:0 auto 3rem}
+.sec-head .sec-tag{justify-content:center}
+.sec-head .sec-tag::before{display:none}
+h2{font-size:clamp(1.8rem,3.6vw,2.6rem);font-weight:800;letter-spacing:-.02em;color:var(--ink);margin-bottom:.9rem}
+.sec-sub{color:var(--dim);font-size:1.02rem}
 
 /* reveal */
 .rv{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
@@ -143,137 +134,177 @@ h2{font-size:clamp(1.6rem,3.4vw,2.4rem);font-weight:800;letter-spacing:-.015em;c
 .rv-d1{transition-delay:.07s}.rv-d2{transition-delay:.14s}.rv-d3{transition-delay:.21s}.rv-d4{transition-delay:.28s}.rv-d5{transition-delay:.35s}
 @media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
 
-/* ── stats band ── */
-#stats{padding:2.2rem 0 0}
-.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
-@media(max-width:960px){.stats{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:560px){.stats{grid-template-columns:repeat(2,1fr)}}
-.stat{background:#fff;padding:1.4rem 1rem;text-align:center;transition:background .3s}
-.stat:hover{background:var(--bg-3)}
-.stat .n{font-family:var(--mono);font-size:clamp(1.4rem,2.4vw,1.9rem);font-weight:700;color:var(--blue)}
-.stat .l{font-size:.7rem;color:var(--faint);letter-spacing:.09em;text-transform:uppercase;margin-top:.3rem}
+/* ── about ── */
+#about{background:var(--grad-soft)}
+.about-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:3rem;align-items:start}
+@media(max-width:900px){.about-grid{grid-template-columns:1fr}}
+.about-grid p{color:var(--dim);margin-bottom:1.1rem}
+.about-grid p b{color:var(--ink)}
+.strength-title{font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--indigo);margin:1.6rem 0 .9rem}
+.strengths{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+.strengths li{display:flex;align-items:flex-start;gap:.7rem;font-size:.95rem;color:var(--text)}
+.strengths li .tick{flex-shrink:0;width:22px;height:22px;border-radius:6px;background:rgba(79,70,229,.1);color:var(--indigo);display:grid;place-items:center;font-size:.75rem;font-weight:700;margin-top:.15rem}
+.about-stats{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.about-stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1.5rem 1.2rem;text-align:center;box-shadow:var(--shadow);transition:transform .3s var(--ease),box-shadow .3s}
+.about-stat:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.about-stat .n{font-size:clamp(1.5rem,2.6vw,2rem);font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.about-stat .l{font-size:.74rem;color:var(--faint);letter-spacing:.06em;text-transform:uppercase;margin-top:.35rem}
 
 /* ── cards ── */
-.card{position:relative;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:1.6rem;transition:transform .3s var(--ease),box-shadow .3s,border-color .3s;height:100%;box-shadow:var(--shadow)}
-.card:hover{transform:translateY(-4px);border-color:var(--line-2);box-shadow:var(--shadow-lg)}
-.card h3{font-size:1.05rem;font-weight:700;color:var(--ink);margin-bottom:.85rem}
+.card{position:relative;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:1.7rem;transition:transform .3s var(--ease),box-shadow .3s,border-color .3s;height:100%;box-shadow:var(--shadow)}
+.card:hover{transform:translateY(-5px);border-color:var(--line-2);box-shadow:var(--shadow-lg)}
+.card h3{font-size:1.1rem;font-weight:700;color:var(--ink);margin-bottom:.85rem}
+
+/* expertise */
+.exp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.3rem}
+@media(max-width:1020px){.exp-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.exp-grid{grid-template-columns:1fr}}
+.exp-ico{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;margin-bottom:1.1rem;font-size:1.4rem;background:var(--grad);color:#fff;box-shadow:0 10px 22px rgba(79,70,229,.28)}
+.exp p.desc{font-size:.86rem;color:var(--dim);margin-bottom:1rem}
+.chips{display:flex;flex-wrap:wrap;gap:.42rem}
+.chip{font-family:var(--mono);font-size:.68rem;color:#4338ca;border:1px solid var(--line);background:var(--bg-soft);border-radius:8px;padding:.3rem .58rem;transition:all .25s}
+.chip:hover{color:#fff;border-color:var(--indigo);background:var(--indigo)}
 
 /* competencies */
-.comp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem}
+.comp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.3rem}
 @media(max-width:1020px){.comp-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.comp-grid{grid-template-columns:1fr}}
-.comp-ico{width:44px;height:44px;border-radius:11px;display:grid;place-items:center;margin-bottom:1rem;font-size:1.2rem;background:linear-gradient(135deg,rgba(29,95,214,.1),rgba(8,145,178,.08));border:1px solid var(--line)}
-.chips{display:flex;flex-wrap:wrap;gap:.42rem}
-.chip{font-family:var(--mono);font-size:.68rem;color:#33507a;border:1px solid var(--line);background:var(--bg);border-radius:7px;padding:.28rem .55rem;transition:all .25s}
-.chip:hover{color:var(--blue);border-color:var(--blue);background:rgba(37,99,235,.05)}
+.comp-ico{width:48px;height:48px;border-radius:13px;display:grid;place-items:center;margin-bottom:1rem;font-size:1.3rem;background:rgba(79,70,229,.08);border:1px solid var(--line)}
 
 /* projects */
-.proj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.4rem}
+.proj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem}
 @media(max-width:880px){.proj-grid{grid-template-columns:1fr}}
 .proj-top{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:.9rem}
-.proj-num{font-family:var(--mono);font-size:2.2rem;font-weight:700;line-height:1;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-.proj-sector{font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);border:1px solid rgba(217,119,6,.35);background:rgba(217,119,6,.06);padding:.3rem .6rem;border-radius:7px;white-space:nowrap}
-.proj h3{font-size:1.18rem;line-height:1.3;margin-bottom:.45rem}
+.proj-num{font-family:var(--mono);font-size:2.3rem;font-weight:700;line-height:1;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.proj-sector{font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--indigo);border:1px solid rgba(79,70,229,.28);background:rgba(79,70,229,.06);padding:.32rem .62rem;border-radius:8px;white-space:nowrap}
+.proj h3{font-size:1.2rem;line-height:1.3;margin-bottom:.45rem}
 .proj-meta{font-family:var(--mono);font-size:.72rem;color:var(--faint);margin-bottom:.85rem}
 .proj-meta b{color:var(--dim);font-weight:500}
 .proj p{font-size:.9rem;color:var(--dim);margin-bottom:1.1rem}
 .proj-line{height:1px;background:linear-gradient(90deg,var(--line-2),transparent);margin:1rem 0}
+.center-cta{margin-top:2.2rem;text-align:center}
+.center-cta .btn{margin:.3rem}
 
 /* bridge */
-#bridge-sec{background:linear-gradient(180deg,var(--bg) 0%,var(--bg-3) 50%,var(--bg) 100%)}
-.bridge{display:flex;flex-direction:column;gap:.9rem}
-.bridge-row{display:grid;grid-template-columns:1fr 52px 1fr;gap:.9rem;align-items:stretch}
+#bridge-sec{background:var(--grad-soft)}
+.bridge{display:flex;flex-direction:column;gap:1rem}
+.bridge-row{display:grid;grid-template-columns:1fr 54px 1fr;gap:1rem;align-items:stretch}
 @media(max-width:760px){.bridge-row{grid-template-columns:1fr}.bridge-mid{transform:rotate(90deg);margin:-.4rem auto}}
-.bridge-cell{background:#fff;border:1px solid var(--line);border-radius:13px;padding:1.05rem 1.2rem;font-size:.88rem;color:var(--dim);box-shadow:var(--shadow)}
-.bridge-cell b{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;margin-bottom:.4rem}
-.bridge-cell.m b{color:var(--teal)}
-.bridge-cell.d{border-color:rgba(217,119,6,.3)}
-.bridge-cell.d b{color:var(--amber)}
-.bridge-mid{display:grid;place-items:center;color:var(--blue);font-size:1.15rem}
+.bridge-cell{background:#fff;border:1px solid var(--line);border-radius:14px;padding:1.1rem 1.25rem;font-size:.9rem;color:var(--dim);box-shadow:var(--shadow)}
+.bridge-cell b{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;margin-bottom:.4rem;color:var(--indigo)}
+.bridge-cell.d{border-color:rgba(124,58,237,.25)}
+.bridge-cell.d b{color:var(--violet)}
+.bridge-mid{display:grid;place-items:center;color:var(--indigo);font-size:1.15rem}
 
 /* philosophy */
-.phil-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1.1rem}
+.phil-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1.2rem}
 @media(max-width:1080px){.phil-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:640px){.phil-grid{grid-template-columns:1fr}}
-.phil .big{font-family:var(--mono);font-size:.64rem;letter-spacing:.18em;color:var(--amber);text-transform:uppercase;margin-bottom:.7rem}
-.phil h3{font-size:1rem;margin-bottom:.55rem}
-.phil p{font-size:.82rem;color:var(--dim)}
+.phil .big{font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;color:var(--indigo);text-transform:uppercase;margin-bottom:.7rem}
+.phil h3{font-size:1.05rem;margin-bottom:.55rem}
+.phil p{font-size:.84rem;color:var(--dim)}
 
 /* credentials */
-.cred-cols{display:grid;grid-template-columns:1fr 1fr;gap:2.4rem;align-items:start}
+.cred-cols{display:grid;grid-template-columns:1fr 1fr;gap:2.6rem;align-items:start}
 @media(max-width:900px){.cred-cols{grid-template-columns:1fr}}
+.col-title{font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--indigo);margin-bottom:1.2rem}
 .cert-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 @media(max-width:560px){.cert-grid{grid-template-columns:1fr}}
-.cert{padding:1.15rem 1.25rem}
-.cert h4{font-size:.92rem;color:var(--ink);margin-bottom:.25rem}
-.cert .by{font-size:.75rem;color:var(--faint)}
-.badge{display:inline-block;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;border-radius:6px;padding:.22rem .5rem;margin-top:.6rem}
-.badge.ok{color:var(--green);border:1px solid rgba(4,120,87,.3);background:rgba(4,120,87,.06)}
-.badge.ip{color:var(--amber);border:1px solid rgba(217,119,6,.35);background:rgba(217,119,6,.06)}
-.timeline{position:relative;padding-left:1.6rem}
-.timeline::before{content:'';position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:linear-gradient(180deg,var(--blue),rgba(29,95,214,.1));border-radius:1px}
-.tl{position:relative;padding-bottom:1.5rem}
+.cert{padding:1.2rem 1.3rem}
+.cert h4{font-size:.94rem;color:var(--ink);margin-bottom:.25rem}
+.cert .by{font-size:.76rem;color:var(--faint)}
+.badge{display:inline-block;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;border-radius:7px;padding:.24rem .55rem;margin-top:.7rem}
+.badge.ok{color:var(--green);border:1px solid rgba(5,150,105,.3);background:rgba(5,150,105,.07)}
+.badge.ip{color:var(--amber);border:1px solid rgba(217,119,6,.35);background:rgba(217,119,6,.07)}
+.timeline{position:relative;padding-left:1.7rem}
+.timeline::before{content:'';position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:linear-gradient(180deg,var(--indigo),rgba(79,70,229,.1));border-radius:1px}
+.tl{position:relative;padding-bottom:1.6rem}
 .tl:last-child{padding-bottom:0}
-.tl::before{content:'';position:absolute;left:-1.6rem;top:.42rem;width:13px;height:13px;border-radius:50%;background:#fff;border:3px solid var(--blue)}
-.tl .yr{font-family:var(--mono);font-size:.68rem;color:var(--blue);letter-spacing:.14em;font-weight:600}
-.tl h4{font-size:.98rem;color:var(--ink);margin:.2rem 0}
-.tl .sch{font-size:.8rem;color:var(--dim)}
-.tl .nt{font-size:.78rem;color:var(--faint);margin-top:.2rem}
+.tl::before{content:'';position:absolute;left:-1.7rem;top:.42rem;width:13px;height:13px;border-radius:50%;background:#fff;border:3px solid var(--indigo)}
+.tl .yr{font-family:var(--mono);font-size:.7rem;color:var(--indigo);letter-spacing:.14em;font-weight:600}
+.tl h4{font-size:1rem;color:var(--ink);margin:.2rem 0}
+.tl .sch{font-size:.82rem;color:var(--dim)}
+.tl .nt{font-size:.8rem;color:var(--faint);margin-top:.2rem}
 
 /* resumes */
-#resumes{background:linear-gradient(180deg,var(--bg) 0%,var(--bg-3) 50%,var(--bg) 100%)}
-.res-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem}
+#resumes{background:var(--grad-soft)}
+.res-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
 @media(max-width:960px){.res-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:620px){.res-grid{grid-template-columns:1fr}}
-.res .fmt{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;color:#fff;background:var(--blue);display:inline-block;border-radius:6px;padding:.25rem .55rem;font-weight:700;margin-bottom:.9rem}
-.res .fmt.pdf{background:var(--amber-2)}
-.res .fmt.cert{background:var(--teal-2)}
-.res h3{font-size:1.02rem}
-.res .mk{font-family:var(--mono);font-size:.64rem;color:var(--amber);letter-spacing:.08em;margin:.3rem 0 .7rem}
-.res p{font-size:.83rem;color:var(--dim);margin-bottom:1.1rem}
-.res .btn{width:100%;font-size:.85rem;padding:.68rem 1rem}
+.res .fmt{font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;color:#fff;background:var(--indigo);display:inline-block;border-radius:7px;padding:.26rem .56rem;font-weight:700;margin-bottom:.9rem}
+.res .fmt.pdf{background:var(--violet)}
+.res .fmt.cert{background:var(--green)}
+.res h3{font-size:1.05rem}
+.res .mk{font-family:var(--mono);font-size:.64rem;color:var(--indigo);letter-spacing:.06em;margin:.3rem 0 .7rem}
+.res p{font-size:.84rem;color:var(--dim);margin-bottom:1.1rem}
+.res .btn{width:100%;font-size:.86rem;padding:.7rem 1rem}
 .res .btn + .btn{margin-top:.55rem}
 
 /* contact */
-#contact .card{padding:clamp(1.8rem,4vw,2.8rem)}
-#contact .card:hover{transform:none}
-.con-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:2.4rem;align-items:start}
+.con-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.6rem;align-items:start}
 @media(max-width:900px){.con-grid{grid-template-columns:1fr}}
-.con-links{display:flex;flex-direction:column;gap:.85rem;margin-top:1.5rem}
-.con-link{display:flex;align-items:center;gap:.95rem;border:1px solid var(--line);border-radius:13px;padding:.85rem 1.1rem;background:var(--bg);transition:all .3s}
-.con-link:hover{border-color:var(--blue);transform:translateX(5px);box-shadow:var(--shadow)}
-.con-link .ic{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;background:rgba(29,95,214,.08);border:1px solid var(--line);color:var(--blue);flex-shrink:0;font-weight:700}
-.con-link b{display:block;font-size:.88rem;color:var(--ink)}
-.con-link small{font-size:.74rem;color:var(--faint)}
-.tag-title{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;color:var(--faint);text-transform:uppercase;margin:1.3rem 0 .6rem}
+.con-links{display:flex;flex-direction:column;gap:.85rem;margin:1.6rem 0}
+.con-link{display:flex;align-items:center;gap:.95rem;border:1px solid var(--line);border-radius:14px;padding:.9rem 1.1rem;background:#fff;transition:all .3s;box-shadow:var(--shadow)}
+.con-link:hover{border-color:var(--indigo);transform:translateX(5px)}
+.con-link .ic{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;background:rgba(79,70,229,.09);color:var(--indigo);flex-shrink:0;font-weight:700}
+.con-link b{display:block;font-size:.9rem;color:var(--ink)}
+.con-link small{font-size:.76rem;color:var(--faint)}
+.tag-title{font-family:var(--mono);font-size:.64rem;letter-spacing:.16em;color:var(--faint);text-transform:uppercase;margin:1.4rem 0 .6rem}
 .tags{display:flex;flex-wrap:wrap;gap:.45rem}
+.form-card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:1.8rem;box-shadow:var(--shadow)}
+.form-card h3{font-size:1.1rem;color:var(--ink);margin-bottom:1.1rem}
+.field{margin-bottom:1rem}
+.field label{display:block;font-size:.78rem;font-weight:600;color:var(--dim);margin-bottom:.4rem}
+.field input,.field textarea{width:100%;font-family:var(--sans);font-size:.92rem;color:var(--ink);background:var(--bg-soft);border:1px solid var(--line);border-radius:11px;padding:.75rem .9rem;transition:border-color .25s,box-shadow .25s}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--indigo);box-shadow:0 0 0 3px rgba(99,102,241,.15);background:#fff}
+.field textarea{resize:vertical;min-height:120px}
+.form-card .btn{width:100%}
 
 /* footer */
-footer{border-top:1px solid var(--line);padding:2rem 0;background:#fff;position:relative;z-index:1}
-.foot{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;font-size:.8rem;color:var(--faint)}
-.foot a:hover{color:var(--blue)}
+footer{border-top:1px solid var(--line);padding:3rem 0 2rem;background:#0f172a;color:#cbd5e1;position:relative;z-index:1}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:2rem;margin-bottom:2rem}
+@media(max-width:760px){.foot-grid{grid-template-columns:1fr;gap:1.6rem}}
+.foot-brand b{font-size:1.2rem;font-weight:800;color:#fff;letter-spacing:-.02em}
+.foot-brand p{font-size:.86rem;color:#94a3b8;margin-top:.5rem;max-width:22rem}
+.foot-col h5{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:#818cf8;margin-bottom:.9rem}
+.foot-col a{display:block;font-size:.9rem;color:#cbd5e1;padding:.28rem 0;transition:color .2s}
+.foot-col a:hover{color:#fff}
+.foot-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:1.4rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-size:.82rem;color:#64748b}
+
+/* ── 3D power path ── */
+#powerpath{background:linear-gradient(180deg,#ffffff 0%,#f7f8ff 100%)}
+.pp-panel{background:radial-gradient(700px 300px at 20% 0%,rgba(99,102,241,.18),transparent 60%),linear-gradient(180deg,#0f1730,#0b1020);border:1px solid #24304f;border-radius:22px;padding:1.1rem 1.3rem;box-shadow:var(--shadow-lg);overflow:hidden}
+.pp-head,.pp-foot{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:#6b7ba3}
+.pp-head{border-bottom:1px solid #24304f;padding-bottom:.75rem;margin-bottom:.2rem}
+.pp-head span:first-child{color:#818cf8}
+.pp-foot{border-top:1px solid #24304f;padding-top:.75rem;margin-top:.2rem}
+.pp-canvas{width:100%;height:460px;position:relative;cursor:grab;touch-action:pan-y}
+.pp-canvas:active{cursor:grabbing}
+.pp-canvas canvas{display:block}
+@media(max-width:700px){.pp-canvas{height:360px}}
+.pp-hint{position:absolute;bottom:8px;left:12px;font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:#64748b;pointer-events:none}
+.pp-fallback{display:none;flex-wrap:wrap;gap:.6rem;align-items:center;justify-content:center;padding:2rem 1rem}
+.pp-fallback .n{font-family:var(--mono);font-size:.7rem;color:#e2e8f0;border:1px solid #3a4a7a;background:#16204a;border-radius:10px;padding:.6rem .8rem;text-align:center}
+.pp-fallback .ar{color:#818cf8}
 </style>
 </head>
 <body>
 <div id="progress"></div>
-<div id="bg-grid"></div>
 
 <nav class="nav" id="nav">
   <div class="nav-in">
-    <a class="brand" href="#hero">
-      <span class="brand-badge">ME</span>
-      <span><b>MASHUK ELAHI</b><small>Critical Power Systems</small></span>
-    </a>
+    <a class="brand" href="#hero"><span class="dotmark"></span>Mashuk Elahi</a>
     <ul class="nav-links" id="navLinks">
-      <li><a href="#hero">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#expertise">Expertise</a></li>
+      <li><a href="#skills">Skills</a></li>
       <li><a href="#projects">Projects</a></li>
-      <li><a href="#capabilities">Capabilities</a></li>
-      <li><a href="#philosophy">Philosophy</a></li>
-      <li><a href="#credentials">Credentials</a></li>
+      <li><a href="#simulations">Simulations</a></li>
+      <li><a href="#credentials">Education</a></li>
       <li><a href="#resumes">Resumes</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
-    <a class="nav-cta" href="#resumes">DOWNLOAD CV</a>
+    <a class="nav-cta" href="#contact">Get In Touch</a>
     <button id="burger" aria-label="Menu">☰</button>
   </div>
 </nav>
@@ -285,114 +316,185 @@ footer{border-top:1px solid var(--line);padding:2rem 0;background:#fff;position:
     <div class="hero-grid">
       <div>
         <span class="hero-tag"><span class="dot"></span>Available for Mission-Critical Roles</span>
-        <h1>Critical Power<br><span class="g">Systems Engineer</span></h1>
+        <h1 class="name">Mashuk Elahi</h1>
+        <div class="hero-role g">Critical Power Systems Engineer</div>
         <p class="hero-sub">16 years designing and commissioning <b>mission-critical LV / MV / HV power systems</b> for continuous-operation environments — the same resilience, redundancy, and fault-tolerant architecture that <b>Tier III / IV data centers</b> demand.</p>
+        <div class="hero-stats">
+          <div class="hero-stat"><div class="n">16+</div><div class="l">Years Experience</div></div>
+          <div class="hero-stat"><div class="n green">99.999%</div><div class="l">Uptime Target</div></div>
+        </div>
         <div class="hero-ctas">
           <a class="btn btn-p" href="#projects">View Projects →</a>
+          <a class="btn btn-o" href="#contact">Get In Touch</a>
           <a class="btn btn-o" href="#resumes">Download CV</a>
-          <a class="btn btn-o" href="#contact">Contact</a>
         </div>
-        <div class="hero-ticker">
-          <span><b>11kV</b> MV SWITCHGEAR</span>
-          <span><b>400kVA</b> UPS</span>
-          <span><b>72kWh</b> BESS</span>
-          <span><b>IEC 61850</b> SCADA</span>
-          <span><b>N+1 / 2N</b> DESIGN</span>
+        <div class="hero-contact">
+          <a href="mailto:m_nelahi@yahoo.com"><span class="ic">✉</span>m_nelahi@yahoo.com</a>
+          <a href="https://linkedin.com/in/mashukelahi" target="_blank" rel="noopener"><span class="ic">in</span>LinkedIn</a>
         </div>
       </div>
-      <div class="hero-hud rv">
-        <div class="hud-head">
-          <span>SYS : CRITICAL-POWER-V3</span>
-          <span class="lights"><i style="background:#ef4444"></i><i style="background:#f59e0b"></i><i style="background:#10b981"></i></span>
-        </div>
-        <div class="hud-row"><span class="k">POWER PATH</span><span class="v ok">● ENERGISED</span></div>
-        <div class="hud-row"><span class="k">REDUNDANCY</span><span class="v">N+1 / 2N</span></div>
-        <div class="hud-row"><span class="k">AVAILABILITY TARGET</span><span class="v">99.999%</span></div>
-        <div class="hud-row"><span class="k">COMMISSIONING</span><span class="v">L1 → L6</span></div>
-        <div class="hud-row"><span class="k">PROTECTION</span><span class="v ok">IEC 61850 VERIFIED</span></div>
-        <div class="hud-row" style="display:block">
-          <span class="k">UPS LOAD&nbsp;&nbsp;<span class="v" id="hudPct">0%</span></span>
-          <span class="hud-bar"><i id="hudBar"></i></span>
+      <div class="hero-photo rv">
+        <div class="photo-ring">
+          <img src="assets/profile.jpg" alt="Mashuk Elahi" onerror="this.onerror=null;this.src='assets/profile-placeholder.svg'">
+          <div class="photo-badge"><span class="g-dot"></span>Singapore</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════ SINGLE-LINE DIAGRAM ═══════════ -->
-<section id="sld" aria-label="Critical power path diagram">
+<!-- ═══════════ 3D CRITICAL POWER PATH ═══════════ -->
+<section id="powerpath">
   <div class="wrap">
-    <div class="sld-card rv">
-      <div class="sld-title"><span><b>CRITICAL POWER PATH</b> — SAME DESIGN LOGIC AS MARINE MISSION-CRITICAL SYSTEMS</span><span>REDUNDANCY: N+1 / 2N · TARGET: 99.999%</span></div>
-      <svg viewBox="0 0 1120 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Power flow: utility intake, transformer, switchgear, UPS and standby generator, EPMS SCADA, critical load">
-        <defs>
-          <marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#1d5fd6"/></marker>
-        </defs>
-        <!-- connections -->
-        <line class="flow" x1="170" y1="65" x2="205" y2="65" stroke="#1d5fd6" stroke-width="2.5" marker-end="url(#arr)"/>
-        <line class="flow" x1="360" y1="65" x2="395" y2="65" stroke="#1d5fd6" stroke-width="2.5" marker-end="url(#arr)"/>
-        <line class="flow" x1="550" y1="45" x2="590" y2="30" stroke="#0e7490" stroke-width="2.5" marker-end="url(#arr)"/>
-        <line class="flow" x1="550" y1="85" x2="590" y2="105" stroke="#b45309" stroke-width="2.5" marker-end="url(#arr)"/>
-        <line class="flow" x1="745" y1="30" x2="790" y2="52" stroke="#0e7490" stroke-width="2.5" marker-end="url(#arr)"/>
-        <line class="flow" x1="745" y1="105" x2="790" y2="80" stroke="#b45309" stroke-width="2.5" marker-end="url(#arr)"/>
-        <line class="flow" x1="945" y1="65" x2="975" y2="65" stroke="#1d5fd6" stroke-width="2.5" marker-end="url(#arr)"/>
-        <!-- boxes -->
-        <g font-family="JetBrains Mono,monospace">
-          <rect x="20" y="35" width="150" height="60" rx="10" fill="#eef4fd" stroke="#1d5fd6" stroke-width="1.6"/>
-          <text x="95" y="60" text-anchor="middle" font-size="12" font-weight="700" fill="#0e2038">UTILITY INTAKE</text>
-          <text x="95" y="78" text-anchor="middle" font-size="10" fill="#51617a">11kV MV Supply</text>
-
-          <rect x="210" y="35" width="150" height="60" rx="10" fill="#eef4fd" stroke="#1d5fd6" stroke-width="1.6"/>
-          <text x="285" y="60" text-anchor="middle" font-size="12" font-weight="700" fill="#0e2038">TRANSFORMER</text>
-          <text x="285" y="78" text-anchor="middle" font-size="10" fill="#51617a">MV → LV Step-Down</text>
-
-          <rect x="400" y="35" width="150" height="60" rx="10" fill="#e8f7fb" stroke="#0e7490" stroke-width="1.6"/>
-          <text x="475" y="60" text-anchor="middle" font-size="12" font-weight="700" fill="#0e2038">MV/LV SWGR</text>
-          <text x="475" y="78" text-anchor="middle" font-size="10" fill="#51617a">Main Distribution</text>
-
-          <rect x="595" y="5" width="150" height="52" rx="10" fill="#e8f7fb" stroke="#0e7490" stroke-width="1.6"/>
-          <text x="670" y="27" text-anchor="middle" font-size="12" font-weight="700" fill="#0e2038">UPS SYSTEM</text>
-          <text x="670" y="44" text-anchor="middle" font-size="10" fill="#51617a">400kVA Protected</text>
-
-          <rect x="595" y="82" width="150" height="52" rx="10" fill="#fdf3e6" stroke="#b45309" stroke-width="1.6"/>
-          <text x="670" y="104" text-anchor="middle" font-size="12" font-weight="700" fill="#0e2038">STANDBY GEN</text>
-          <text x="670" y="121" text-anchor="middle" font-size="10" fill="#51617a">N+1 Redundancy</text>
-
-          <rect x="795" y="35" width="150" height="60" rx="10" fill="#eef4fd" stroke="#1d5fd6" stroke-width="1.6"/>
-          <text x="870" y="60" text-anchor="middle" font-size="12" font-weight="700" fill="#0e2038">EPMS / SCADA</text>
-          <text x="870" y="78" text-anchor="middle" font-size="10" fill="#51617a">IEC 61850 Monitoring</text>
-
-          <rect x="980" y="35" width="125" height="60" rx="10" fill="#fdf3e6" stroke="#b45309" stroke-width="1.6"/>
-          <text x="1042" y="60" text-anchor="middle" font-size="12" font-weight="700" fill="#0e2038">CRITICAL LOAD</text>
-          <text x="1042" y="78" text-anchor="middle" font-size="10" fill="#51617a">IT / Process</text>
-
-          <text x="20" y="170" font-size="10" fill="#7b8aa3">STATUS: OPERATIONAL · CLEAN POWER · SYNC · MONITORED</text>
-          <text x="1105" y="170" text-anchor="end" font-size="10" fill="#7b8aa3">SYS: CRITICAL-POWER-V3</text>
-        </g>
-      </svg>
+    <div class="sec-head rv">
+      <div class="sec-tag">Critical Power Path · 3D</div>
+      <h2>Same Design Logic as <span class="g">Marine Mission-Critical Systems</span></h2>
+      <p class="sec-sub">Utility intake through protected distribution, UPS, standby generation and EPMS monitoring to the critical load. Drag to orbit the model — energy flows along every live path.</p>
+    </div>
+    <div class="pp-panel rv">
+      <div class="pp-head"><span>● CRITICAL POWER PATH — ENERGISED</span><span>REDUNDANCY: N+1 / 2N · TARGET: 99.999%</span></div>
+      <div id="powerpath3d" class="pp-canvas">
+        <div class="pp-hint">Drag to rotate</div>
+        <div id="pp-fallback" class="pp-fallback">
+          <span class="n">UTILITY INTAKE<br>11kV MV</span><span class="ar">→</span>
+          <span class="n">TRANSFORMER<br>MV → LV</span><span class="ar">→</span>
+          <span class="n">MV/LV SWGR<br>Main Dist</span><span class="ar">→</span>
+          <span class="n">UPS 400kVA<br>/ STANDBY GEN</span><span class="ar">→</span>
+          <span class="n">EPMS / SCADA<br>IEC 61850</span><span class="ar">→</span>
+          <span class="n">CRITICAL LOAD<br>IT / Process</span>
+        </div>
+      </div>
+      <div class="pp-foot"><span>STATUS: OPERATIONAL · CLEAN POWER · SYNC · MONITORED</span><span>SYS: CRITICAL-POWER-V3</span></div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════ STATS ═══════════ -->
-<section id="stats">
+<!-- ═══════════ ABOUT ═══════════ -->
+<section id="about">
   <div class="wrap">
-    <div class="stats rv">
-      <div class="stat"><div class="n"><span class="count" data-to="16">0</span>+</div><div class="l">Years Experience</div></div>
-      <div class="stat"><div class="n">11kV</div><div class="l">MV Switchgear</div></div>
-      <div class="stat"><div class="n">L1–L6</div><div class="l">Commissioning Levels</div></div>
-      <div class="stat"><div class="n"><span class="count" data-to="100">0</span>+</div><div class="l">Crew Managed</div></div>
-      <div class="stat"><div class="n">N+1</div><div class="l">Redundancy Design</div></div>
-      <div class="stat"><div class="n"><span class="count" data-to="72">0</span>kWh</div><div class="l">BESS Integrated</div></div>
+    <div class="sec-head">
+      <div class="sec-tag">About Me</div>
+      <h2>From Mission-Critical Marine to <span class="g">Data Center Facilities</span></h2>
+      <p class="sec-sub">Transitioning into data center critical facilities engineering with proven expertise in mission-critical power systems.</p>
+    </div>
+    <div class="about-grid">
+      <div class="rv">
+        <p>With <b>16 years of hands-on experience</b> designing and commissioning mission-critical LV/MV/HV power systems, I bring the same resilience, redundancy, and fault-tolerant architecture that Tier III/IV data centers demand.</p>
+        <p>My expertise spans <b>11kV MV switchgear, 400kVA UPS systems, 72kWh BESS integration, and IEC 61850 SCADA</b> implementations across marine, offshore, semiconductor, and heavy-industry environments.</p>
+        <p>I specialize in <b>N+1/2N redundancy design, selective coordination, and L1–L6 commissioning</b> — ensuring 99.999% uptime targets through rigorous fault containment and protected load distribution strategies.</p>
+        <div class="strength-title">Core Strengths</div>
+        <ul class="strengths">
+          <li><span class="tick">✓</span>MV 11kV Switchgear Design &amp; Commissioning</li>
+          <li><span class="tick">✓</span>Critical Power Distribution (N+1/2N Redundancy)</li>
+          <li><span class="tick">✓</span>BESS &amp; UPS System Integration</li>
+          <li><span class="tick">✓</span>IEC 61850 Protection &amp; SCADA Integration</li>
+          <li><span class="tick">✓</span>Data Center Tier III/IV Design Principles</li>
+          <li><span class="tick">✓</span>Marine &amp; Offshore Power Systems</li>
+        </ul>
+      </div>
+      <div class="about-stats rv rv-d1">
+        <div class="about-stat"><div class="n"><span class="count" data-to="16">0</span>+</div><div class="l">Years Experience</div></div>
+        <div class="about-stat"><div class="n">11kV</div><div class="l">MV Switchgear</div></div>
+        <div class="about-stat"><div class="n">L1–L6</div><div class="l">Commissioning Levels</div></div>
+        <div class="about-stat"><div class="n"><span class="count" data-to="50">0</span>+</div><div class="l">Crew Managed</div></div>
+        <div class="about-stat"><div class="n">N+1</div><div class="l">Redundancy Design</div></div>
+        <div class="about-stat"><div class="n"><span class="count" data-to="72">0</span>kWh</div><div class="l">BESS Integrated</div></div>
+      </div>
     </div>
   </div>
 </section>
-<!-- ═══════════ COMPETENCIES ═══════════ -->
-<section id="capabilities">
+
+<!-- ═══════════ EXPERTISE ═══════════ -->
+<section id="expertise">
   <div class="wrap">
-    <div class="sec-tag rv">SECTION 01 — TECHNICAL COMPETENCIES</div>
-    <h2 class="rv">Core Technical <span class="g">Competencies</span></h2>
-    <p class="sec-sub rv">Across 16 years of mission-critical delivery, these are the systems, standards, and tools that define my daily engineering practice.</p>
+    <div class="sec-head rv">
+      <div class="sec-tag">Expertise Areas</div>
+      <h2>Specialized Across <span class="g">Critical Infrastructure</span></h2>
+      <p class="sec-sub">Deep, domain-specific knowledge across the systems that keep continuous-operation environments running.</p>
+    </div>
+    <div class="exp-grid">
+      <div class="card exp rv">
+        <div class="exp-ico">⚡</div>
+        <h3>Electrical Power Systems</h3>
+        <p class="desc">MV/LV distribution, 11kV switchgear, transformers, and critical power path design.</p>
+        <div class="chips"><span class="chip">MV/LV Distribution</span><span class="chip">MV 11kV Switchgear</span><span class="chip">Transformers</span><span class="chip">UPS (400kVA)</span><span class="chip">BESS (72kWh)</span><span class="chip">Standby Generators</span><span class="chip">Chillers / CRAH</span></div>
+      </div>
+      <div class="card exp rv rv-d1">
+        <div class="exp-ico">🏢</div>
+        <h3>Data Center Infrastructure</h3>
+        <p class="desc">Tier III/IV design, N+1/2N redundancy, and mission-critical facilities engineering.</p>
+        <div class="chips"><span class="chip">Tier III/IV Design</span><span class="chip">N+1 / 2N+1</span><span class="chip">Critical Load Segmentation</span><span class="chip">PUE Optimization</span><span class="chip">DCIM Integration</span><span class="chip">Selective Coordination</span><span class="chip">Fault Containment</span></div>
+      </div>
+      <div class="card exp rv rv-d2">
+        <div class="exp-ico">🌊</div>
+        <h3>Marine &amp; Offshore</h3>
+        <p class="desc">Continuous-operation power systems for high-consequence marine and offshore platforms.</p>
+        <div class="chips"><span class="chip">Generator Integration</span><span class="chip">Load Sharing</span><span class="chip">Bus-Tie Logic</span><span class="chip">Protected Feeders</span><span class="chip">FMEA Risk Assessment</span><span class="chip">IECEx/ATEX</span><span class="chip">Operational Switching</span></div>
+      </div>
+      <div class="card exp rv rv-d3">
+        <div class="exp-ico">🔋</div>
+        <h3>Battery &amp; Shore Power</h3>
+        <p class="desc">BESS integration, shore power solutions, and energy storage systems.</p>
+        <div class="chips"><span class="chip">BESS (72kWh Li-ion)</span><span class="chip">Shore Power Distribution</span><span class="chip">Energy Storage</span><span class="chip">Solar-Wind Hybrid</span><span class="chip">UPS Backbone</span><span class="chip">Power Quality</span><span class="chip">Load Analysis</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ RECOGNITION & INNOVATION ═══════════ -->
+<style>
+.recog-wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:1.3rem;align-items:stretch}
+@media(max-width:900px){.recog-wrap{grid-template-columns:1fr}}
+.recog-idea{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:1.8rem;box-shadow:var(--shadow)}
+.recog-src{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--indigo);background:var(--bg-soft);border:1px solid var(--line);border-radius:8px;padding:.34rem .62rem;margin-bottom:1.05rem}
+.recog-idea h3{font-size:1.16rem;margin-bottom:.7rem;color:var(--ink)}
+.recog-idea>p{font-size:.9rem;color:var(--dim);line-height:1.62;margin-bottom:1.1rem}
+.recog-quote{border-left:3px solid var(--indigo);padding-left:1rem;font-style:italic;color:var(--text);font-size:.92rem;line-height:1.62;margin:0}
+.recog-quote cite{display:block;margin-top:.65rem;font-style:normal;font-weight:600;font-size:.8rem;color:var(--faint)}
+.expo-gallery{display:grid;grid-template-rows:1fr 1fr;gap:1.3rem}
+@media(max-width:560px){.expo-gallery{grid-template-rows:none}}
+.expo-card{position:relative;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);min-height:200px}
+.expo-card img{width:100%;height:100%;object-fit:cover;display:block}
+.expo-cap{position:absolute;left:0;right:0;bottom:0;padding:.95rem 1.05rem;background:linear-gradient(to top,rgba(15,23,42,.88),rgba(15,23,42,0));color:#fff;font-size:.82rem;font-weight:700}
+.expo-cap span{display:block;font-weight:400;opacity:.85;font-size:.72rem;margin-top:.18rem}
+</style>
+<section id="recognition">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="sec-tag">Recognition &amp; Innovation</div>
+      <h2>Recognised Innovation &amp; <span class="g">Industry Engagement</span></h2>
+      <p class="sec-sub">Featured internally for a safety-and-quality innovation, and active in the marine power technology community.</p>
+    </div>
+    <div class="recog-wrap">
+      <div class="recog-idea rv">
+        <div class="recog-src">★ Featured — Exyte News &amp; Stories</div>
+        <h3>Safer, Higher-Quality Electrical Installation On-Site</h3>
+        <p>As Senior Project Engineer in Singapore, I proposed a materials-and-methods standard to raise the quality and safety of on-site electrical equipment and panel installation: explosion-proof enclosures, cable glands, lugs, cleats, metal epoxy cable ties, insulated ring lugs, and VCI stretch-film pallet wrap. Together these cut the risk of explosion, fire, and corrosion, lower maintenance costs and failure rates, and keep installations compliant with international standards.</p>
+        <blockquote class="recog-quote">"In my daily work, I noticed that some practices with electrical equipment on-site could lead to safety risks and non-compliance with international standards. So I put together a plan of the equipment and methods that ensure full compliance with safety standards and improve the reliability and quality of our work."
+        <cite>Md Mashuk Elahi · Senior Project Engineer, Exyte Singapore</cite></blockquote>
+      </div>
+      <div class="expo-gallery">
+        <div class="expo-card rv rv-d1">
+          <img src="assets/expo-rehlko-team.jpg" alt="Mashuk Elahi with the Strategic Marine team at the Rehlko marine power booth" loading="lazy">
+          <div class="expo-cap">Strategic Marine at the marine power expo<span>Rehlko paralleling &amp; marine generator systems</span></div>
+        </div>
+        <div class="expo-card rv rv-d2">
+          <img src="assets/expo-hamiltonjet.jpg" alt="Mashuk Elahi at the HamiltonJet waterjet propulsion display" loading="lazy">
+          <div class="expo-cap">HamiltonJet waterjet propulsion display<span>Marine systems engagement &amp; industry networking</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ COMPETENCIES / SKILLS ═══════════ -->
+<section id="skills">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="sec-tag">Section 01 — Technical Competencies</div>
+      <h2>Core Technical <span class="g">Competencies</span></h2>
+      <p class="sec-sub">Across 16 years of mission-critical delivery, these are the systems, standards, and tools that define my daily engineering practice.</p>
+    </div>
     <div class="comp-grid">
       <div class="card rv">
         <div class="comp-ico">⚡</div>
@@ -421,9 +523,11 @@ footer{border-top:1px solid var(--line);padding:2rem 0;background:#fff;position:
 <!-- ═══════════ PROJECTS ═══════════ -->
 <section id="projects">
   <div class="wrap">
-    <div class="sec-tag rv">SECTION 02 — FLAGSHIP PROJECTS</div>
-    <h2 class="rv">Mission-Critical <span class="g">Project Portfolio</span></h2>
-    <p class="sec-sub rv">Each project demonstrates protected load distribution, electrical resilience, switching philosophy, and commissioning readiness — the same competencies that govern data center critical power infrastructure.</p>
+    <div class="sec-head rv">
+      <div class="sec-tag">Section 02 — Flagship Projects</div>
+      <h2>Mission-Critical <span class="g">Project Portfolio</span></h2>
+      <p class="sec-sub">Each project demonstrates protected load distribution, electrical resilience, switching philosophy, and commissioning readiness — the same competencies that govern data center critical power infrastructure.</p>
+    </div>
     <div class="proj-grid">
       <div class="card proj rv">
         <div class="proj-top"><span class="proj-num">01</span><span class="proj-sector">Heavy-Industry Power</span></div>
@@ -458,19 +562,52 @@ footer{border-top:1px solid var(--line);padding:2rem 0;background:#fff;position:
         <div class="chips"><span class="chip">Solar-Wind Hybrid</span><span class="chip">IECEx / ATEX</span><span class="chip">400kVA UPS</span><span class="chip">SCADA</span></div>
       </div>
     </div>
-    <p class="rv" style="margin-top:2rem;text-align:center">
-      <a class="btn btn-o" href="critical-facilities.html">Deep-Dive: Critical Facilities Case Study →</a>
-      <a class="btn btn-o" href="toolkit/index.html" style="margin-left:.6rem">Engineering Toolkit →</a>
-    </p>
+    <div class="center-cta rv">
+      <a class="btn btn-p" href="critical-facilities.html">Deep-Dive: Critical Facilities Case Study →</a>
+      <a class="btn btn-o" href="toolkit/index.html">Engineering Toolkit →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SIMULATIONS ═══════════ -->
+<section id="simulations">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="sec-tag">Interactive Engineering Tools</div>
+      <h2>Live <span class="g">Power System Simulations</span></h2>
+      <p class="sec-sub">Two browser-based simulations demonstrating the design logic behind mission-critical power — trip components, drive the weather and demand, and watch the system respond in real time.</p>
+    </div>
+    <div class="proj-grid">
+      <a class="card proj rv" href="simulations/datacenter.html">
+        <div class="proj-top"><span class="proj-num">◧</span><span class="proj-sector">Critical Facilities</span></div>
+        <h3>Data Center Power Simulation</h3>
+        <div class="proj-meta">2N redundancy · UPS ride-through · generator failover</div>
+        <p>Interactive Tier III/IV single-line diagram. Trip utility feeds, fail UPS modules, and toggle the standby generator — watch the dual-corded IT load ride through on battery and stay online.</p>
+        <div class="proj-line"></div>
+        <div class="chips"><span class="chip">N+1 / 2N</span><span class="chip">UPS Battery</span><span class="chip">Generator Failover</span><span class="chip">Availability</span></div>
+        <p style="margin-top:1rem"><span class="btn btn-p" style="pointer-events:none">Launch Simulation →</span></p>
+      </a>
+      <a class="card proj rv rv-d1" href="simulations/microgrid.html">
+        <div class="proj-top"><span class="proj-num">◒</span><span class="proj-sector">Energy Systems</span></div>
+        <h3>Hybrid Microgrid Simulation</h3>
+        <div class="proj-meta">Solar · Wind · BESS · Diesel genset dispatch</div>
+        <p>Balance a live load with renewables, a battery energy storage system, and a diesel genset. Drive irradiance, wind speed and demand — see real-time dispatch, renewable fraction, BESS state of charge and fuel burn.</p>
+        <div class="proj-line"></div>
+        <div class="chips"><span class="chip">BESS Dispatch</span><span class="chip">Solar-Wind Hybrid</span><span class="chip">Renewable Fraction</span><span class="chip">Genset Auto-Start</span></div>
+        <p style="margin-top:1rem"><span class="btn btn-p" style="pointer-events:none">Launch Simulation →</span></p>
+      </a>
+    </div>
   </div>
 </section>
 
 <!-- ═══════════ CAPABILITY BRIDGE ═══════════ -->
 <section id="bridge-sec">
   <div class="wrap">
-    <div class="sec-tag rv">SECTION 03 — CAPABILITY BRIDGE</div>
-    <h2 class="rv">Marine-to-Data-Center <span class="g">Transferable Capabilities</span></h2>
-    <p class="sec-sub rv">The same design logic that governs continuous-operation marine power systems — protected distribution, redundancy, selective coordination, and controlled failure response — is exactly what data center mission-critical infrastructure demands.</p>
+    <div class="sec-head rv">
+      <div class="sec-tag">Section 03 — Capability Bridge</div>
+      <h2>Marine-to-Data-Center <span class="g">Transferable Capabilities</span></h2>
+      <p class="sec-sub">The same design logic that governs continuous-operation marine power systems — protected distribution, redundancy, selective coordination, and controlled failure response — is exactly what data center mission-critical infrastructure demands.</p>
+    </div>
     <div class="bridge">
       <div class="bridge-row rv"><div class="bridge-cell m"><b>Marine / Offshore Capability</b>Switchboard and bus-tie logic design for complex power distribution</div><div class="bridge-mid"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div><div class="bridge-cell d"><b>Data Center Relevance</b>Main distribution and resilient switching strategy for Tier III/IV facilities</div></div>
       <div class="bridge-row rv"><div class="bridge-cell m"><b>Marine / Offshore Capability</b>Generator integration, load sharing, and operational switching under constrained conditions</div><div class="bridge-mid"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div><div class="bridge-cell d"><b>Data Center Relevance</b>Standby generation architecture, continuity design, and paralleling systems</div></div>
@@ -485,9 +622,11 @@ footer{border-top:1px solid var(--line);padding:2rem 0;background:#fff;position:
 <!-- ═══════════ PHILOSOPHY ═══════════ -->
 <section id="philosophy">
   <div class="wrap">
-    <div class="sec-tag rv">SECTION 04 — DESIGN PHILOSOPHY</div>
-    <h2 class="rv">Mission-Critical <span class="g">Design Principles</span></h2>
-    <p class="sec-sub rv">Five pillars that govern every power system I design — whether for a marine platform, semiconductor fab, or data center hall. These are not abstract ideals; they are engineering disciplines applied daily.</p>
+    <div class="sec-head rv">
+      <div class="sec-tag">Section 04 — Design Philosophy</div>
+      <h2>Mission-Critical <span class="g">Design Principles</span></h2>
+      <p class="sec-sub">Five pillars that govern every power system I design — whether for a marine platform, semiconductor fab, or data center hall. These are not abstract ideals; they are engineering disciplines applied daily.</p>
+    </div>
     <div class="phil-grid">
       <div class="card phil rv"><div class="big">01 · Availability</div><h3>99.999%+ Uptime</h3><p>N+1 and 2N redundancy architectures eliminating single points of failure in the power path from utility intake to critical load.</p></div>
       <div class="card phil rv rv-d1"><div class="big">02 · Reliability</div><h3>Fault Containment</h3><p>Selective coordination and protection philosophy ensuring failure in any subsystem does not propagate beyond its zone of influence.</p></div>
@@ -501,26 +640,32 @@ footer{border-top:1px solid var(--line);padding:2rem 0;background:#fff;position:
 <!-- ═══════════ CREDENTIALS ═══════════ -->
 <section id="credentials">
   <div class="wrap">
-    <div class="sec-tag rv">SECTION 05 — CREDENTIALS &amp; TRANSITION ROADMAP</div>
-    <h2 class="rv">Education, Certifications &amp; <span class="g">Development</span></h2>
-    <p class="sec-sub rv">A deliberate combination of advanced education, professional certifications, and targeted data center qualifications demonstrating a structured transition into mission-critical facilities engineering.</p>
+    <div class="sec-head rv">
+      <div class="sec-tag">Section 05 — Credentials &amp; Transition Roadmap</div>
+      <h2>Education, Certifications &amp; <span class="g">Development</span></h2>
+      <p class="sec-sub">A deliberate combination of advanced education, professional certifications, and targeted data center qualifications demonstrating a structured transition into mission-critical facilities engineering.</p>
+    </div>
     <div class="cred-cols">
-      <div>
+      <div class="rv">
+        <div class="col-title">Certifications</div>
         <div class="cert-grid">
-          <div class="card cert rv"><h4>ISO 9001:2015 Lead Auditor</h4><div class="by">CQI-IRCA Certified</div><span class="badge ok">Certified</span></div>
-          <div class="card cert rv rv-d1"><h4>ISO 50001:2018 Lead Auditor</h4><div class="by">CQI-IRCA Certified</div><span class="badge ok">Certified</span></div>
-          <div class="card cert rv rv-d2"><h4>IECEx Ex 001</h4><div class="by">Hazardous-Area Competence</div><span class="badge ok">Certified</span></div>
-          <div class="card cert rv rv-d3"><h4>CDCP — Certified Data Centre Professional</h4><div class="by">EPI</div><span class="badge ip">In Progress</span></div>
-          <div class="card cert rv rv-d4"><h4>Chartered Engineer (CEng)</h4><div class="by">IET · Registration Underway</div><span class="badge ip">In Progress</span></div>
-          <div class="card cert rv rv-d5"><h4>PMP Training</h4><div class="by">Project Management</div><span class="badge ok">Completed</span></div>
+          <div class="card cert"><h4>ISO 9001:2015 Lead Auditor</h4><div class="by">CQI-IRCA Certified</div><span class="badge ok">Certified</span></div>
+          <div class="card cert"><h4>ISO 50001:2018 Lead Auditor</h4><div class="by">CQI-IRCA Certified</div><span class="badge ok">Certified</span></div>
+          <div class="card cert"><h4>IECEx Ex 001</h4><div class="by">Hazardous-Area Competence</div><span class="badge ok">Certified</span></div>
+          <div class="card cert"><h4>CDCP — Certified Data Centre Professional</h4><div class="by">EPI</div><span class="badge ip">In Progress</span></div>
+          <div class="card cert"><h4>Chartered Engineer (CEng)</h4><div class="by">IET · Registration Underway</div><span class="badge ip">In Progress</span></div>
+          <div class="card cert"><h4>PMP Training</h4><div class="by">Project Management</div><span class="badge ok">Completed</span></div>
         </div>
       </div>
-      <div class="timeline rv">
-        <div class="tl"><div class="yr">2026</div><h4>MSc Sustainable Electricity Generation</h4><div class="sch">Universidad Católica de Murcia (UCAM), Spain</div><div class="nt">Score 8.55/10 — renewable integration, grid resilience, sustainable power architecture.</div></div>
-        <div class="tl"><div class="yr">2026</div><h4>MSc Digital Transformation</h4><div class="sch">London Metropolitan University, UK</div><div class="nt">Digital tools, automation, and data-driven engineering workflows for modern power systems.</div></div>
-        <div class="tl"><div class="yr">2025</div><h4>Master of Business Administration (MBA)</h4><div class="sch">University of Sunderland, UK</div><div class="nt">Strategic management, project leadership, business case development.</div></div>
-        <div class="tl"><div class="yr">2008</div><h4>BSc Electrical &amp; Electronic Engineering</h4><div class="sch">Bangladesh University</div><div class="nt">Power systems, control theory, electrical design.</div></div>
-        <div class="tl"><div class="yr">2004</div><h4>Diploma in Electronics Engineering</h4><div class="sch">Jessore Polytechnic Institute</div><div class="nt">Hands-on electrical and electronics fundamentals.</div></div>
+      <div class="rv rv-d1">
+        <div class="col-title">Education</div>
+        <div class="timeline">
+          <div class="tl"><div class="yr">2026</div><h4>MSc Sustainable Electricity Generation</h4><div class="sch">Universidad Católica de Murcia (UCAM), Spain</div><div class="nt">Score 8.55/10 — renewable integration, grid resilience, sustainable power architecture.</div></div>
+          <div class="tl"><div class="yr">2026</div><h4>MSc Digital Transformation</h4><div class="sch">London Metropolitan University, UK</div><div class="nt">Digital tools, automation, and data-driven engineering workflows for modern power systems.</div></div>
+          <div class="tl"><div class="yr">2025</div><h4>Master of Business Administration (MBA)</h4><div class="sch">University of Sunderland, UK</div><div class="nt">Strategic management, project leadership, business case development.</div></div>
+          <div class="tl"><div class="yr">2008</div><h4>BSc Electrical &amp; Electronic Engineering</h4><div class="sch">Bangladesh University</div><div class="nt">Power systems, control theory, electrical design.</div></div>
+          <div class="tl"><div class="yr">2004</div><h4>Diploma in Electronics Engineering</h4><div class="sch">Jessore Polytechnic Institute</div><div class="nt">Hands-on electrical and electronics fundamentals.</div></div>
+        </div>
       </div>
     </div>
   </div>
@@ -529,9 +674,11 @@ footer{border-top:1px solid var(--line);padding:2rem 0;background:#fff;position:
 <!-- ═══════════ RESUMES & CERTIFICATES ═══════════ -->
 <section id="resumes">
   <div class="wrap">
-    <div class="sec-tag rv">SECTION 06 — DOWNLOAD CV &amp; CERTIFICATES</div>
-    <h2 class="rv">Resume <span class="g">Versions</span></h2>
-    <p class="sec-sub rv">Targeted resume versions for different sectors and markets, plus consolidated certificate packages for verification.</p>
+    <div class="sec-head rv">
+      <div class="sec-tag">Section 06 — Download CV &amp; Certificates</div>
+      <h2>Resume <span class="g">Versions</span></h2>
+      <p class="sec-sub">Targeted resume versions for different sectors and markets, plus consolidated certificate packages for verification.</p>
+    </div>
     <div class="res-grid">
       <div class="card res rv">
         <span class="fmt">DOCX</span>
@@ -577,26 +724,34 @@ footer{border-top:1px solid var(--line);padding:2rem 0;background:#fff;position:
 <!-- ═══════════ CONTACT ═══════════ -->
 <section id="contact">
   <div class="wrap">
-    <div class="card rv">
-      <div class="con-grid">
-        <div>
-          <div class="sec-tag">SECTION 07 — GET IN TOUCH</div>
-          <h2>Available for <span class="g">Mission-Critical Roles</span></h2>
-          <p style="color:var(--dim);font-size:.95rem">Actively seeking Senior Critical Facilities Engineer, Mission-Critical Commissioning Engineer, and Critical Power Systems Engineer positions in data center and critical infrastructure environments. Open to Singapore, Europe (Frankfurt, Amsterdam, Dublin), Middle East, and remote arrangements.</p>
-          <div class="con-links">
-            <a class="con-link" href="mailto:m_nelahi@yahoo.com"><span class="ic">✉</span><span><b>Email</b><small>m_nelahi@yahoo.com</small></span></a>
-            <a class="con-link" href="https://linkedin.com/in/mashukelahi" target="_blank" rel="noopener"><span class="ic">in</span><span><b>LinkedIn</b><small>linkedin.com/in/mashukelahi</small></span></a>
-            <a class="con-link" href="tel:+6587885453"><span class="ic">☎</span><span><b>Phone</b><small>Singapore · +65 8788 5453</small></span></a>
-          </div>
+    <div class="sec-head rv">
+      <div class="sec-tag">Section 07 — Get In Touch</div>
+      <h2>Available for <span class="g">Mission-Critical Roles</span></h2>
+      <p class="sec-sub">Actively seeking Senior Critical Facilities Engineer, Mission-Critical Commissioning Engineer, and Critical Power Systems Engineer positions in data center and critical infrastructure environments.</p>
+    </div>
+    <div class="con-grid">
+      <div class="rv">
+        <div class="con-links">
+          <a class="con-link" href="mailto:m_nelahi@yahoo.com"><span class="ic">✉</span><span><b>Email</b><small>m_nelahi@yahoo.com</small></span></a>
+          <a class="con-link" href="tel:+6587885453"><span class="ic">☎</span><span><b>Phone</b><small>Singapore · +65 8788 5453</small></span></a>
+          <a class="con-link" href="https://linkedin.com/in/mashukelahi" target="_blank" rel="noopener"><span class="ic">in</span><span><b>LinkedIn</b><small>linkedin.com/in/mashukelahi</small></span></a>
         </div>
-        <div>
-          <div class="tag-title">Target Markets</div>
-          <div class="tags"><span class="chip">Singapore</span><span class="chip">Frankfurt</span><span class="chip">Amsterdam</span><span class="chip">Dublin</span><span class="chip">Middle East</span><span class="chip">Remote (Europe)</span></div>
-          <div class="tag-title">Target Role Titles</div>
-          <div class="tags"><span class="chip">Critical Power Systems Engineer</span><span class="chip">Senior Critical Facilities Engineer</span><span class="chip">Mission-Critical Commissioning Engineer</span><span class="chip">Electrical Engineer — Data Center</span><span class="chip">Commissioning Manager — Critical Facilities</span></div>
-          <div class="tag-title">Explore</div>
-          <div class="tags"><a class="chip" href="critical-facilities.html">Critical-Facilities Case Study</a><a class="chip" href="toolkit/index.html">Engineering Toolkit</a></div>
-        </div>
+        <div class="tag-title">Target Markets</div>
+        <div class="tags"><span class="chip">Singapore</span><span class="chip">Frankfurt</span><span class="chip">Amsterdam</span><span class="chip">Dublin</span><span class="chip">Middle East</span><span class="chip">Remote (Europe)</span></div>
+        <div class="tag-title">Target Role Titles</div>
+        <div class="tags"><span class="chip">Critical Power Systems Engineer</span><span class="chip">Senior Critical Facilities Engineer</span><span class="chip">Mission-Critical Commissioning Engineer</span><span class="chip">Electrical Engineer — Data Center</span><span class="chip">Commissioning Manager — Critical Facilities</span></div>
+        <div class="tag-title">Explore</div>
+        <div class="tags"><a class="chip" href="critical-facilities.html">Critical-Facilities Case Study</a><a class="chip" href="toolkit/index.html">Engineering Toolkit</a></div>
+      </div>
+      <div class="rv rv-d1">
+        <form class="form-card" id="contactForm">
+          <h3>Send a Message</h3>
+          <div class="field"><label for="cf-name">Your Name</label><input id="cf-name" name="name" type="text" required placeholder="Jane Doe"></div>
+          <div class="field"><label for="cf-email">Your Email</label><input id="cf-email" name="email" type="email" required placeholder="jane@company.com"></div>
+          <div class="field"><label for="cf-subject">Subject</label><input id="cf-subject" name="subject" type="text" placeholder="Critical Facilities Engineer opportunity"></div>
+          <div class="field"><label for="cf-message">Message</label><textarea id="cf-message" name="message" required placeholder="Tell me about the role or project…"></textarea></div>
+          <button type="submit" class="btn btn-p">Send Message</button>
+        </form>
       </div>
     </div>
   </div>
@@ -604,12 +759,138 @@ footer{border-top:1px solid var(--line);padding:2rem 0;background:#fff;position:
 </main>
 
 <footer>
-  <div class="wrap foot">
-    <span>Mashuk Elahi — Critical Power Systems Engineer</span>
-    <span><a href="#hero">Back to top ↑</a> &nbsp;|&nbsp; Singapore · +65 8788 5453</span>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <b>Mashuk Elahi</b>
+        <p>Critical Power Systems Engineer · Data Center Specialist. 16+ years of mission-critical power systems engineering.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Quick Links</h5>
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#resumes">Resumes</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h5>Contact</h5>
+        <a href="mailto:m_nelahi@yahoo.com">m_nelahi@yahoo.com</a>
+        <a href="tel:+6587885453">+65 8788 5453</a>
+        <a href="https://linkedin.com/in/mashukelahi" target="_blank" rel="noopener">LinkedIn Profile</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Mashuk Elahi. All rights reserved.</span>
+      <span>Critical Power Systems Engineer | Data Center Specialist</span>
+    </div>
   </div>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ═══ 3D Critical Power Path ═══ */
+(function(){
+  var mount=document.getElementById('powerpath3d');
+  var fb=document.getElementById('pp-fallback');
+  if(!mount||!window.THREE){ if(fb)fb.style.display='flex'; return; }
+  try{
+    var W=mount.clientWidth, H=mount.clientHeight||440;
+    var scene=new THREE.Scene();
+    var camera=new THREE.PerspectiveCamera(45,W/H,0.1,120);
+    camera.position.set(0,3,W<700?25:18);
+    camera.lookAt(0,0,0);
+    var renderer=new THREE.WebGLRenderer({alpha:true,antialias:true});
+    renderer.setSize(W,H); renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+    mount.appendChild(renderer.domElement);
+
+    scene.add(new THREE.AmbientLight(0xffffff,0.7));
+    var dl=new THREE.DirectionalLight(0xffffff,0.9); dl.position.set(6,10,8); scene.add(dl);
+    var pl1=new THREE.PointLight(0x6366f1,0.9,80); pl1.position.set(-9,5,7); scene.add(pl1);
+    var pl2=new THREE.PointLight(0x22d3ee,0.8,80); pl2.position.set(9,-5,7); scene.add(pl2);
+
+    var group=new THREE.Group(); scene.add(group);
+
+    var NODES={
+      util:{p:[-7.6,0,0],c:0x3b82f6,t:'UTILITY INTAKE',s:'11kV MV Supply'},
+      tx:{p:[-5.0,0,0],c:0x3b82f6,t:'TRANSFORMER',s:'MV → LV'},
+      swgr:{p:[-2.4,0,0],c:0x06b6d4,t:'MV/LV SWGR',s:'Main Distribution'},
+      ups:{p:[0.3,1.75,0],c:0x06b6d4,t:'UPS SYSTEM',s:'400kVA Protected'},
+      gen:{p:[0.3,-1.75,0],c:0xf59e0b,t:'STANDBY GEN',s:'N+1 Redundancy'},
+      epms:{p:[3.1,0,0],c:0x6366f1,t:'EPMS / SCADA',s:'IEC 61850'},
+      load:{p:[5.7,0,0],c:0xf59e0b,t:'CRITICAL LOAD',s:'IT / Process'}
+    };
+    var CONN=[['util','tx'],['tx','swgr'],['swgr','ups'],['swgr','gen'],['ups','epms'],['gen','epms'],['epms','load']];
+
+    function label(t,s){
+      var c=document.createElement('canvas'); c.width=300; c.height=110;
+      var x=c.getContext('2d');
+      x.font='700 32px Inter,Segoe UI,sans-serif'; x.fillStyle='#f8fafc'; x.textAlign='center';
+      x.fillText(t,150,44);
+      x.font='500 22px "JetBrains Mono",monospace'; x.fillStyle='#9fb0d4';
+      x.fillText(s,150,80);
+      var tex=new THREE.CanvasTexture(c); tex.anisotropy=2;
+      var sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false,depthWrite:false}));
+      sp.scale.set(4.6,1.7,1); return sp;
+    }
+
+    Object.keys(NODES).forEach(function(k){
+      var n=NODES[k];
+      var m=new THREE.Mesh(
+        new THREE.BoxGeometry(2.25,1.2,0.75),
+        new THREE.MeshStandardMaterial({color:n.c,emissive:n.c,emissiveIntensity:0.3,metalness:0.55,roughness:0.32}));
+      m.position.set(n.p[0],n.p[1],n.p[2]); group.add(m);
+      var lab=label(n.t,n.s); lab.position.set(n.p[0],n.p[1]+1.2,n.p[2]+0.5); group.add(lab);
+    });
+
+    var pulses=[];
+    CONN.forEach(function(c){
+      var a=new THREE.Vector3().fromArray(NODES[c[0]].p);
+      var b=new THREE.Vector3().fromArray(NODES[c[1]].p);
+      var tube=new THREE.Mesh(
+        new THREE.TubeGeometry(new THREE.LineCurve3(a,b),1,0.05,8,false),
+        new THREE.MeshStandardMaterial({color:0x475069,emissive:0x334155,emissiveIntensity:0.5}));
+      group.add(tube);
+      var col=(NODES[c[1]].c===0xf59e0b)?0xf59e0b:0x22d3ee;
+      var ps=new THREE.Mesh(new THREE.SphereGeometry(0.13,12,12),new THREE.MeshBasicMaterial({color:col}));
+      group.add(ps);
+      pulses.push({a:a,b:b,mesh:ps,off:Math.random()});
+    });
+
+    // interaction
+    var tgtX=0,tgtY=0,curX=0,curY=0,dragging=false,px=0,py=0,manual=0;
+    mount.addEventListener('pointerdown',function(e){dragging=true;px=e.clientX;py=e.clientY;manual=1;});
+    window.addEventListener('pointerup',function(){dragging=false;});
+    window.addEventListener('pointermove',function(e){
+      if(!dragging)return;
+      tgtY+=(e.clientX-px)*0.006; tgtX+=(e.clientY-py)*0.004; px=e.clientX; py=e.clientY;
+      tgtX=Math.max(-0.6,Math.min(0.6,tgtX));
+    });
+
+    var t0=performance.now();
+    function loop(){
+      var t=(performance.now()-t0)/1000;
+      var auto=manual?0:Math.sin(t*0.3)*0.35;
+      curX+=((tgtX)-curX)*0.08; curY+=((tgtY+auto)-curY)*0.08;
+      group.rotation.y=curY; group.rotation.x=curX;
+      for(var i=0;i<pulses.length;i++){
+        var pl=pulses[i], tt=((t*0.35)+pl.off)%1;
+        pl.mesh.position.lerpVectors(pl.a,pl.b,tt);
+        pl.mesh.scale.setScalar(0.7+0.6*Math.sin(tt*Math.PI));
+      }
+      renderer.render(scene,camera);
+      requestAnimationFrame(loop);
+    }
+    loop();
+
+    window.addEventListener('resize',function(){
+      W=mount.clientWidth; H=mount.clientHeight||440;
+      camera.aspect=W/H; camera.position.z=W<700?25:18; camera.updateProjectionMatrix();
+      renderer.setSize(W,H);
+    });
+  }catch(err){ if(fb)fb.style.display='flex'; mount.querySelector('canvas')&&mount.querySelector('canvas').remove(); }
+})();
+</script>
 <script>
 (function(){
   var nav=document.getElementById('nav'),prog=document.getElementById('progress');
@@ -625,7 +906,6 @@ footer{border-top:1px solid var(--line);padding:2rem 0;background:#fff;position:
   window.addEventListener('scroll',onScroll,{passive:true});onScroll();
 
   /* scroll-spy */
-  var secs=document.querySelectorAll('section[id]');
   var navAs=links.querySelectorAll('a');
   var spy=new IntersectionObserver(function(es){
     es.forEach(function(e){
@@ -633,8 +913,8 @@ footer{border-top:1px solid var(--line);padding:2rem 0;background:#fff;position:
         navAs.forEach(function(a){a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id)});
       }
     });
-  },{rootMargin:'-40% 0px -55% 0px'});
-  secs.forEach(function(s){spy.observe(s)});
+  },{rootMargin:'-45% 0px -50% 0px'});
+  document.querySelectorAll('section[id]').forEach(function(s){spy.observe(s)});
 
   /* reveal */
   var rv=new IntersectionObserver(function(es){
@@ -657,13 +937,18 @@ footer{border-top:1px solid var(--line);padding:2rem 0;background:#fff;position:
   },{threshold:.5});
   document.querySelectorAll('.count').forEach(function(el){co.observe(el)});
 
-  /* HUD bar */
-  setTimeout(function(){
-    var bar=document.getElementById('hudBar'),pct=document.getElementById('hudPct');
-    if(bar){bar.style.width='68%';var v=0,iv=setInterval(function(){v+=2;if(v>=68){v=68;clearInterval(iv)}pct.textContent=v+'%'},40);}
-  },700);
+  /* contact form → mailto */
+  var form=document.getElementById('contactForm');
+  if(form){form.addEventListener('submit',function(ev){
+    ev.preventDefault();
+    var name=document.getElementById('cf-name').value.trim();
+    var email=document.getElementById('cf-email').value.trim();
+    var s=document.getElementById('cf-subject').value.trim()||'Portfolio enquiry';
+    var m=document.getElementById('cf-message').value.trim();
+    var body='Name: '+name+'\r\nEmail: '+email+'\r\n\r\n'+m;
+    window.location.href='mailto:m_nelahi@yahoo.com?subject='+encodeURIComponent(s)+'&body='+encodeURIComponent(body);
+  });}
 })();
 </script>
 </body>
 </html>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
