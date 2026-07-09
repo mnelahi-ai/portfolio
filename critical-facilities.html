@@ -21,18 +21,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --navy-950:#020617; --navy-900:#0a0f1e; --navy-800:#0f172a;
-  --blue-400:#60A5FA; --blue-500:#3B82F6; --blue-600:#2563EB;
+  --navy-950:#04070f; --navy-900:#070d1a; --navy-800:#0f172a;
+  --blue-400:#22d3ee; --blue-500:#3b82f6; --blue-600:#2563EB;
   --amber-400:#FBBF24; --amber-500:#F59E0B;
   --emerald-400:#34D399; --emerald-500:#10B981;
   --text:#e2e8f0; --text-dim:#94a3b8; --text-faint:#64748b;
   --gradient-primary:linear-gradient(135deg,var(--blue-400),var(--amber-500));
-  --gradient-blue:linear-gradient(135deg,#3B82F6,#60A5FA);
+  --gradient-blue:linear-gradient(135deg,#3b82f6,#22d3ee);
   --gradient-glass:linear-gradient(135deg,rgba(255,255,255,0.07),rgba(255,255,255,0.02));
   --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   --font-mono:'JetBrains Mono','Fira Code',monospace;
   --section-pad:clamp(3.5rem,7vw,6.5rem);
-  --glass-bg:rgba(15,23,42,0.6); --glass-border:rgba(96,165,250,0.15);
+  --glass-bg:rgba(15,23,42,0.6); --glass-border:rgba(56,189,248,0.15);
   --glass-blur:blur(20px);
   --ease:cubic-bezier(0.16,1,0.3,1);
 }
@@ -74,7 +74,7 @@ a{color:inherit;text-decoration:none}
 section.block{position:relative;z-index:1;padding:var(--section-pad) 0}
 .case-grid{display:grid;grid-template-columns:1fr;gap:1.6rem}
 .case-card{position:relative;background:var(--glass-bg);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);border-radius:18px;padding:1.9rem 2rem;transition:border-color .35s}
-.case-card:hover{border-color:rgba(96,165,250,.4)}
+.case-card:hover{border-color:rgba(56,189,248,.4)}
 .case-card.diffcard{border-color:rgba(245,158,11,.4)}
 .case-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.6rem;align-items:center;margin-bottom:.6rem}
 .case-num{font-family:var(--font-mono);font-size:.78rem;color:var(--blue-400);letter-spacing:.06em}
@@ -84,7 +84,7 @@ section.block{position:relative;z-index:1;padding:var(--section-pad) 0}
 .case-block .lbl{font-family:var(--font-mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-faint);margin-bottom:.4rem;display:block}
 .case-block p{font-size:.92rem;color:var(--text-dim);line-height:1.6}
 .chiprow{display:flex;flex-wrap:wrap;gap:.4rem}
-.chip{font-size:.78rem;padding:.32rem .65rem;border-radius:7px;background:rgba(96,165,250,.1);border:1px solid var(--glass-border);color:var(--text-dim)}
+.chip{font-size:.78rem;padding:.32rem .65rem;border-radius:7px;background:rgba(56,189,248,.1);border:1px solid var(--glass-border);color:var(--text-dim)}
 .chip.sys{background:rgba(148,163,184,.08);border-color:rgba(148,163,184,.15)}
 .chip.tool{background:rgba(52,211,153,.08);border-color:rgba(52,211,153,.2);color:var(--emerald-400)}
 .case-result{display:flex;align-items:flex-start;gap:.7rem;padding:.95rem 1.1rem;border-radius:12px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);margin-top:.4rem}
@@ -281,7 +281,7 @@ document.addEventListener('DOMContentLoaded',()=>{
           ctx.beginPath();
           ctx.moveTo(particles[i].x,particles[i].y);
           ctx.lineTo(particles[j].x,particles[j].y);
-          ctx.strokeStyle=`rgba(96,165,250,${(.12*(1-dist/120)).toFixed(3)})`;
+          ctx.strokeStyle=`rgba(56,189,248,${(.12*(1-dist/120)).toFixed(3)})`;
           ctx.lineWidth=1;
           ctx.stroke();
         }
