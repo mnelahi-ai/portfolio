@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1e252b">
+<meta name="description" content="Interactive FMEA simulator for a 43 m HSC catamaran ferry — SM291-75-007 Rev D. Inject single failures into the propulsion, steering and control architecture and verify the 2000 HSC Code single-failure criterion. By Mashuk Elahi.">
+<title>FMEA Simulator — 43 m HSC Catamaran (SM291-75-007 D) — Mashuk Elahi</title>
+<style>
+  :root{
+    --bg:#14181c; --panel:#1e252b; --panel2:#171d22; --steel:#39444d; --steel2:#2a333a;
+    --txt:#cfd8dc; --dim:#78909c; --grn:#43d675; --amb:#ffb300; --red:#ef5350; --cyn:#4dd0e1;
+    --lamp-off:#333c42;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);font-family:'Segoe UI',Tahoma,Verdana,sans-serif;font-size:14px;min-height:100vh}
+  a{color:var(--cyn);text-decoration:none}
+  .mono{font-family:Consolas,'Lucida Console',monospace}
+  /* ── VMS top bar ── */
+  .topbar{display:flex;align-items:stretch;gap:1px;background:var(--steel2);border-bottom:2px solid #000}
+  .topbar>div{background:linear-gradient(#262f36,#1b2126);padding:8px 14px;display:flex;flex-direction:column;justify-content:center}
+  .topbar .sys{flex:1}
+  .topbar .sys b{font-size:15px;letter-spacing:.6px;color:#eceff1}
+  .topbar .sys span{font-size:11px;color:var(--dim);letter-spacing:.4px}
+  .lampbox{display:flex;gap:14px;align-items:center;padding:8px 18px}
+  .lamp{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;color:var(--dim);letter-spacing:.5px}
+  .lamp i{width:26px;height:12px;border-radius:2px;background:var(--lamp-off);border:1px solid #000;box-shadow:inset 0 1px 2px rgba(255,255,255,.08)}
+  .lamp.on-g i{background:var(--grn);box-shadow:0 0 8px rgba(67,214,117,.7)}
+  .lamp.on-a i{background:var(--amb);box-shadow:0 0 8px rgba(255,179,0,.7);animation:fl 1s steps(2) infinite}
+  .lamp.on-r i{background:var(--red);box-shadow:0 0 8px rgba(239,83,80,.8);animation:fl .7s steps(2) infinite}
+  @keyframes fl{50%{opacity:.45}}
+  .clock{font-family:Consolas,monospace;font-size:16px;color:#aee9ff;text-align:right}
+  .clock small{display:block;font-size:10px;color:var(--dim)}
+  nav.crumb{padding:6px 14px;font-size:12px;background:#10141a;border-bottom:1px solid var(--steel2);display:flex;gap:14px;flex-wrap:wrap}
+  nav.crumb .here{color:var(--txt);font-weight:600}
+  .wrap{max-width:1280px;margin:0 auto;padding:14px 12px 40px}
+  h1{font-size:clamp(17px,2.4vw,23px);letter-spacing:.4px;margin:6px 0 2px;color:#eceff1}
+  .sub{color:var(--dim);font-size:12.5px;max-width:900px;line-height:1.5}
+  /* ── panels ── */
+  .grid{display:grid;grid-template-columns:1.35fr 1fr;gap:12px;margin-top:12px}
+  @media(max-width:980px){.grid{grid-template-columns:1fr}}
+  .pnl{background:var(--panel);border:1px solid var(--steel);border-radius:4px;box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 2px 6px rgba(0,0,0,.45)}
+  .pnl .hd{background:linear-gradient(#2b353d,#222a31);border-bottom:1px solid var(--steel);padding:6px 12px;font-size:11.5px;letter-spacing:1.2px;color:#b0bec5;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
+  .pnl .bd{padding:10px 12px}
+  svg{width:100%;height:auto;display:block}
+  /* mimic svg */
+  .nbox{fill:#232c33;stroke:#4a5860;stroke-width:1}
+  .nlbl{fill:#cfd8dc;font-size:10px;font-weight:600;font-family:Consolas,monospace}
+  .nsub{fill:#78909c;font-size:8px;font-family:Consolas,monospace}
+  .pipe{stroke:#546e7a;stroke-width:1.6;fill:none}
+  .pipe.act{stroke:var(--grn)}
+  .busln{stroke:#4dd0e1;stroke-width:1.4;fill:none;stroke-dasharray:4 4}
+  .fault rect{stroke:var(--red)!important;stroke-width:2!important;fill:#301b1b!important}
+  .fault .nlbl{fill:#ff8a80!important}
+  .degr rect{stroke:var(--amb)!important;stroke-width:1.6!important}
+  .stlamp{r:4;fill:var(--grn)}
+  .fault .stlamp{fill:var(--red)}
+  .degr .stlamp{fill:var(--amb)}
+  /* selector */
+  select,button{font-family:inherit}
+  select{width:100%;background:#10151a;color:var(--txt);border:1px solid var(--steel);border-radius:3px;padding:8px;font-size:13px}
+  .btnrow{display:flex;gap:8px;margin-top:8px}
+  .hbtn{flex:1;background:linear-gradient(#37424b,#252d34);border:1px solid var(--steel);color:#eceff1;border-radius:3px;padding:9px 10px;font-size:12.5px;letter-spacing:.6px;cursor:pointer;text-transform:uppercase}
+  .hbtn:hover{border-color:#607d8b}
+  .hbtn:active{transform:translateY(1px)}
+  .hbtn.red{background:linear-gradient(#5c2a28,#3d1c1b);border-color:#8d4a45;color:#ffcdd2}
+  .hbtn.grn{background:linear-gradient(#2b4d36,#1d3325);border-color:#4a7a58;color:#c8e6c9}
+  /* detail rows */
+  .frow{display:grid;grid-template-columns:130px 1fr;gap:8px;padding:6px 0;border-bottom:1px solid #262f36;font-size:12.5px;line-height:1.45}
+  .frow:last-child{border-bottom:none}
+  .frow b{color:#90a4ae;font-size:10.5px;text-transform:uppercase;letter-spacing:.7px;padding-top:1px}
+  .sevrow{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
+  .sevchip{flex:1;min-width:130px;background:#10151a;border:1px solid var(--steel);border-radius:3px;padding:7px 10px;text-align:center}
+  .sevchip small{display:block;font-size:9.5px;color:var(--dim);letter-spacing:.8px;text-transform:uppercase}
+  .sevchip b{font-size:13px;letter-spacing:.4px}
+  .sev-Minor{color:var(--grn)} .sev-Major{color:var(--amb)} .sev-Hazardous{color:#ff7043} .sev-Catastrophic{color:var(--red)}
+  /* alarm list */
+  table.alm{width:100%;border-collapse:collapse;font-family:Consolas,monospace;font-size:11.5px}
+  table.alm th{background:#232c33;color:#90a4ae;text-align:left;padding:4px 8px;font-size:10px;letter-spacing:.8px;border-bottom:1px solid var(--steel)}
+  table.alm td{padding:4px 8px;border-bottom:1px solid #20282e;color:#b0bec5}
+  tr.unack td{color:#ffcc80;animation:fl 1s steps(2) infinite}
+  tr.alm-r td:first-child{color:var(--red)} tr.alm-a td:first-child{color:var(--amb)} tr.alm-g td:first-child{color:var(--grn)}
+  .almwrap{max-height:200px;overflow-y:auto}
+  /* verdict banner */
+  .verdict{margin-top:12px;border-radius:3px;border:1px solid;padding:10px 14px;font-size:13px;letter-spacing:.3px;display:flex;gap:10px;align-items:center}
+  .verdict.ok{border-color:#2f5c3c;background:#122019;color:#a5d6a7}
+  .verdict.deg{border-color:#6d5518;background:#241d0a;color:#ffe082}
+  .verdict i{width:11px;height:11px;border-radius:50%;background:currentColor;flex:none}
+  footer{border-top:1px solid var(--steel2);color:var(--dim);text-align:center;padding:16px;font-size:11.5px;margin-top:26px}
+  .note{font-size:11px;color:var(--dim);margin-top:8px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="sys">
+    <b>FMEA SIMULATOR — PROPULSION · STEERING · CONTROL</b>
+    <span>43 m HSC CATAMARAN PASSENGER FERRY · H697/H698/H699 · SM291-75-007 REV D · BUREAU VERITAS CLASS · 2000 HSC CODE ANNEX 3/4</span>
+  </div>
+  <div class="lampbox">
+    <div class="lamp on-g" id="lp_norm"><i></i>NORMAL</div>
+    <div class="lamp" id="lp_warn"><i></i>WARNING</div>
+    <div class="lamp" id="lp_crit"><i></i>CRITICAL</div>
+  </div>
+  <div><div class="clock mono" id="clock">--:--:--<small id="cdate"></small></div></div>
+</div>
+<nav class="crumb">
+  <a href="datacenter.html">Data Center 2N</a>
+  <a href="microgrid.html">Hybrid Microgrid</a>
+  <a href="hybridvessel.html">Hybrid Vessel</a>
+  <span class="here">FMEA H697</span>
+  <a href="../index.html#simulations">← Portfolio</a>
+</nav>
+
+<div class="wrap">
+  <h1>Failure Mode &amp; Effect Analysis — Interactive Single-Failure Simulator</h1>
+  <p class="sub">Working simulation of the approved FMEA for a 43 m aluminium high-speed catamaran (293 pax): twin MTU 16V2000M72 engines, Reintjes WVS 730/1 gearboxes, Kamewa steerable waterjets under CanMan Touch control with quad-redundant 24 VDC supplies. Select any worksheet test and inject the failure — the mimic shows the affected equipment, the alarm list responds as the AMS would, and the verdict checks the HSC 2000 single-failure criterion. Authored by Mashuk Elahi (document author).</p>
+
+  <div class="grid">
+    <div>
+      <div class="pnl">
+        <div class="hd"><span>SYSTEM MIMIC — PROPULSION / STEERING / CONTROL</span><span class="mono" id="mimst" style="color:var(--grn)">ALL SYSTEMS NORMAL</span></div>
+        <div class="bd">
+        <svg viewBox="0 0 860 560" xmlns="http://www.w3.org/2000/svg" aria-label="Propulsion steering control mimic diagram">
+          <!-- Bridge stations -->
+          <g id="nd_stn"><rect class="nbox" x="290" y="14" width="280" height="46" rx="3"/>
+            <circle class="stlamp" cx="302" cy="26" r="4"/>
+            <text class="nlbl" x="430" y="32" text-anchor="middle">BRIDGE STATIONS 1–3 (MAIN / WINGS)</text>
+            <text class="nsub" x="430" y="46" text-anchor="middle">Tiller · Joystick · Thrust lever · Backup selector</text></g>
+          <g id="nd_ts"><rect class="nbox" x="60" y="14" width="200" height="46" rx="3"/>
+            <circle class="stlamp" cx="72" cy="26" r="4"/>
+            <text class="nlbl" x="160" y="32" text-anchor="middle">TOUCH SCREENS MAIN A/B</text>
+            <text class="nsub" x="160" y="46" text-anchor="middle">Alarm display · config · cables 350–355</text></g>
+          <g id="nd_ams"><rect class="nbox" x="600" y="14" width="200" height="46" rx="3"/>
+            <circle class="stlamp" cx="612" cy="26" r="4"/>
+            <text class="nlbl" x="700" y="32" text-anchor="middle">ALARM &amp; MONITORING SYS</text>
+            <text class="nsub" x="700" y="46" text-anchor="middle">External i/f 309 / 329 · logging</text></g>
+
+          <path class="busln" d="M160 60 V 92 H 700 V 60" id="bus_top"/>
+          <path class="busln" d="M430 60 V 92" id="bus_stn"/>
+          <!-- CAN bus -->
+          <g id="nd_can"><rect class="nbox" x="290" y="92" width="280" height="34" rx="3"/>
+            <circle class="stlamp" cx="302" cy="103" r="4"/>
+            <text class="nlbl" x="430" y="106" text-anchor="middle">SLIO / SYSTEM CAN BUS</text>
+            <text class="nsub" x="430" y="119" text-anchor="middle">120 Ω terminated · dual segment</text></g>
+
+          <!-- 24VDC -->
+          <g id="nd_pwr"><rect class="nbox" x="30" y="92" width="220" height="70" rx="3"/>
+            <circle class="stlamp" cx="42" cy="104" r="4"/>
+            <text class="nlbl" x="140" y="108" text-anchor="middle">24 VDC DISTRIBUTION</text>
+            <text class="nsub" x="140" y="122" text-anchor="middle">SRC A + B → MAIN SYSTEM</text>
+            <text class="nsub" x="140" y="134" text-anchor="middle">SRC C + D → BACK-UP &amp; INDICATION</text>
+            <text class="nsub" x="140" y="150" text-anchor="middle" id="pwrst" fill="#43d675">QUAD REDUNDANT · HEALTHY</text></g>
+          <path class="pipe act" d="M250 127 H 290" id="pp_pwr"/>
+
+          <!-- Control units -->
+          <g id="nd_cu"><rect class="nbox" x="290" y="152" width="130" height="52" rx="3"/>
+            <circle class="stlamp" cx="302" cy="164" r="4"/>
+            <text class="nlbl" x="355" y="170" text-anchor="middle">CONTROL UNIT</text>
+            <text class="nsub" x="355" y="184" text-anchor="middle">CanMan MAIN</text></g>
+          <g id="nd_bcu"><rect class="nbox" x="440" y="152" width="130" height="52" rx="3"/>
+            <circle class="stlamp" cx="452" cy="164" r="4"/>
+            <text class="nlbl" x="505" y="170" text-anchor="middle">BACK-UP &amp; IND</text>
+            <text class="nsub" x="505" y="184" text-anchor="middle">Independent lanes</text></g>
+          <g id="nd_icu"><rect class="nbox" x="620" y="152" width="160" height="52" rx="3"/>
+            <circle class="stlamp" cx="632" cy="164" r="4"/>
+            <text class="nlbl" x="700" y="170" text-anchor="middle">INTERFACE CU</text>
+            <text class="nsub" x="700" y="184" text-anchor="middle">MTU link cable 409 · RPM/telegraph</text></g>
+          <path class="pipe act" d="M430 126 V 152" id="pp_can"/>
+          <path class="pipe act" d="M570 178 H 620" id="pp_icu"/>
+
+          <!-- PORT train -->
+          <text class="nsub" x="30" y="238" style="font-size:11px;fill:#90a4ae;letter-spacing:2px">PORT TRAIN</text>
+          <g id="nd_jcu_p"><rect class="nbox" x="30" y="248" width="150" height="46" rx="3"/>
+            <circle class="stlamp" cx="42" cy="260" r="4"/>
+            <text class="nlbl" x="105" y="266" text-anchor="middle">JET CONTROL UNIT P</text>
+            <text class="nsub" x="105" y="280" text-anchor="middle">Steering &amp; reverse fb</text></g>
+          <g id="nd_hpp_p"><rect class="nbox" x="210" y="248" width="150" height="46" rx="3"/>
+            <circle class="stlamp" cx="222" cy="260" r="4"/>
+            <text class="nlbl" x="285" y="266" text-anchor="middle">HYDRAULIC PACK P</text>
+            <text class="nsub" x="285" y="280" text-anchor="middle">PTO pump + emerg valves</text></g>
+          <g id="nd_eng_p"><rect class="nbox" x="390" y="248" width="150" height="46" rx="3"/>
+            <circle class="stlamp" cx="402" cy="260" r="4"/>
+            <text class="nlbl" x="465" y="266" text-anchor="middle">MTU 16V2000 M72 P</text>
+            <text class="nsub" x="465" y="280" text-anchor="middle">BlueVision ECU · -QM1 clutch</text></g>
+          <g id="nd_gb_p"><rect class="nbox" x="570" y="248" width="120" height="46" rx="3"/>
+            <circle class="stlamp" cx="582" cy="260" r="4"/>
+            <text class="nlbl" x="630" y="266" text-anchor="middle">REINTJES GB P</text>
+            <text class="nsub" x="630" y="280" text-anchor="middle">WVS 730/1</text></g>
+          <g id="nd_jet_p"><rect class="nbox" x="720" y="248" width="120" height="46" rx="3"/>
+            <circle class="stlamp" cx="732" cy="260" r="4"/>
+            <text class="nlbl" x="780" y="266" text-anchor="middle">WATERJET P</text>
+            <text class="nsub" x="780" y="280" text-anchor="middle">Nozzle + bucket</text></g>
+          <path class="pipe act" d="M180 271 H 210" id="pp_p1"/>
+          <path class="pipe act" d="M360 271 H 390" id="pp_p2"/>
+          <path class="pipe act" d="M540 271 H 570" id="pp_p3"/>
+          <path class="pipe act" d="M690 271 H 720" id="pp_p4"/>
+          <path class="pipe act" d="M355 204 V 226 H 105 V 248" id="pp_cujp"/>
+
+          <!-- STBD train -->
+          <text class="nsub" x="30" y="348" style="font-size:11px;fill:#90a4ae;letter-spacing:2px">STARBOARD TRAIN</text>
+          <g id="nd_jcu_s"><rect class="nbox" x="30" y="358" width="150" height="46" rx="3"/>
+            <circle class="stlamp" cx="42" cy="370" r="4"/>
+            <text class="nlbl" x="105" y="376" text-anchor="middle">JET CONTROL UNIT S</text>
+            <text class="nsub" x="105" y="390" text-anchor="middle">Steering &amp; reverse fb</text></g>
+          <g id="nd_hpp_s"><rect class="nbox" x="210" y="358" width="150" height="46" rx="3"/>
+            <circle class="stlamp" cx="222" cy="370" r="4"/>
+            <text class="nlbl" x="285" y="376" text-anchor="middle">HYDRAULIC PACK S</text>
+            <text class="nsub" x="285" y="390" text-anchor="middle">PTO pump + emerg valves</text></g>
+          <g id="nd_eng_s"><rect class="nbox" x="390" y="358" width="150" height="46" rx="3"/>
+            <circle class="stlamp" cx="402" cy="370" r="4"/>
+            <text class="nlbl" x="465" y="376" text-anchor="middle">MTU 16V2000 M72 S</text>
+            <text class="nsub" x="465" y="390" text-anchor="middle">BlueVision ECU · -QM1 clutch</text></g>
+          <g id="nd_gb_s"><rect class="nbox" x="570" y="358" width="120" height="46" rx="3"/>
+            <circle class="stlamp" cx="582" cy="370" r="4"/>
+            <text class="nlbl" x="630" y="376" text-anchor="middle">REINTJES GB S</text>
+            <text class="nsub" x="630" y="390" text-anchor="middle">WVS 730/1</text></g>
+          <g id="nd_jet_s"><rect class="nbox" x="720" y="358" width="120" height="46" rx="3"/>
+            <circle class="stlamp" cx="732" cy="370" r="4"/>
+            <text class="nlbl" x="780" y="376" text-anchor="middle">WATERJET S</text>
+            <text class="nsub" x="780" y="390" text-anchor="middle">Nozzle + bucket</text></g>
+          <path class="pipe act" d="M180 381 H 210" id="pp_s1"/>
+          <path class="pipe act" d="M360 381 H 390" id="pp_s2"/>
+          <path class="pipe act" d="M540 381 H 570" id="pp_s3"/>
+          <path class="pipe act" d="M690 381 H 720" id="pp_s4"/>
+          <path class="pipe act" d="M505 204 V 336 H 105 V 358" id="pp_cujs"/>
+
+          <!-- vessel status -->
+          <g id="nd_vessel"><rect class="nbox" x="230" y="452" width="400" height="72" rx="3" style="stroke:#607d8b;stroke-width:1.5"/>
+            <text class="nlbl" x="430" y="474" text-anchor="middle" style="font-size:12px">VESSEL CAPABILITY</text>
+            <text class="nlbl" id="vs_prop" x="330" y="496" text-anchor="middle" fill="#43d675">PROPULSION 2/2</text>
+            <text class="nlbl" id="vs_str" x="530" y="496" text-anchor="middle" fill="#43d675">STEERING 2/2</text>
+            <text class="nsub" id="vs_note" x="430" y="514" text-anchor="middle" fill="#78909c">Both trains available · full manoeuvrability</text></g>
+        </svg>
+        <p class="note">Node lamps: green = healthy · amber = degraded / on back-up · red flashing = failed. Architecture per FMEA §6 node &amp; interconnection lists (CanMan Touch, MTU BlueVision, Reintjes, quad 24 VDC).</p>
+        </div>
+      </div>
+
+      <div class="pnl" style="margin-top:12px">
+        <div class="hd"><span>ALARM LIST — AMS</span><button class="hbtn" style="flex:none;padding:4px 14px;font-size:11px" onclick="ackAll()">ACK ALL</button></div>
+        <div class="bd almwrap">
+          <table class="alm"><thead><tr><th>PRI</th><th>TIME</th><th>TAG</th><th>MESSAGE</th><th>ST</th></tr></thead>
+          <tbody id="almbody"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="pnl">
+        <div class="hd"><span>FMEA WORKSHEET — FAILURE INJECTION</span><span class="mono" id="tcount"></span></div>
+        <div class="bd">
+          <select id="selTest" onchange="preview()"></select>
+          <div class="btnrow">
+            <button class="hbtn red" onclick="inject()">⚠ Inject Failure</button>
+            <button class="hbtn grn" onclick="restore()">Restore / Normalise</button>
+          </div>
+        </div>
+      </div>
+      <div class="pnl" style="margin-top:12px">
+        <div class="hd"><span>ANALYSIS DETAIL</span><span class="mono" id="dref"></span></div>
+        <div class="bd" id="detail"><p class="note">Select a worksheet test and inject the failure to view the analysis.</p></div>
+      </div>
+      <div id="verdict" class="verdict ok" style="display:none"><i></i><span id="verdictTxt"></span></div>
+    </div>
+  </div>
+
+  <div class="pnl" style="margin-top:14px">
+    <div class="hd"><span>METHOD &amp; BASIS</span></div>
+    <div class="bd sub" style="font-size:12.5px">
+      Analysis basis: single-failure concept of the <b>2000 HSC Code, Annex 3 / Annex 4</b> (failure-mode worksheet with sea-trial test references). Severity classes — Minor, Major, Hazardous, Catastrophic; probability classes — Frequent to Extremely Improbable, per the approved document. The vessel's redundancy philosophy (twin independent trains, quad-redundant 24 VDC control power, back-up &amp; indication lanes, hydraulic emergency operation) means no single failure analysed leaves the vessel without propulsion and steering. Document: SM291-75-007 Rev D, issued for approval 02 Jul 2026 — authored by Mashuk Elahi, Strategic Marine, Bureau Veritas class.
+    </div>
+  </div>
+</div>
+
+<footer>© 2026 Mashuk Elahi — Marine Electrical &amp; Critical Power Systems · <a href="../index.html">Portfolio</a> · <a href="mailto:m_nelahi@yahoo.com">m_nelahi@yahoo.com</a></footer>
+
+<script>
+'use strict';
+const FMEA={"worksheet": [["1", "Waterjet control system – 24 VDC supply, Main System (single jet)", "Failure in primary power supply.", "Main-System source (Source A port side / Source B stbd side) falls below minimum level due to battery / charger fault.", "Automatic transfer to the healthy supply; no interruption of thrust or steering control on the affected jet. Each Jet Control Unit is dual-fed (Port = A+C; Stbd = B+D).", "None. Vessel remains under full control; both jets controllable.", "Source-failure alarm on the Main Bridge Touch Screen (Main A / B) via the Bridge Unit; alarm logged by the Alarm & Monitoring System.", "Switch off the faulty source at the 24 VDC distribution board; repair and restore the failed supply. No operational restriction.", "Switch off Source A (or B) at the 24 VDC distribution board. Ref: DMN000341677 Sh. 5.", "Safe. Quad-redundant supply (Sources A–D). Severity: Minor. Probability: Remote."], ["2", "Waterjet control system – 24 VDC supply, Back-up & Indication (single jet)", "Failure in secondary power supply.", "Back-up & Indication source (Source C / Source D) falls below minimum level due to battery / charger fault.", "None while the Main System is healthy; back-up feed to the affected Jet Control Unit is maintained by the paired Main source.", "None.", "Source-failure alarm on the Touch Screen; alarm logged by the Alarm & Monitoring System.", "Switch off the faulty source at the 24 VDC distribution board; repair the secondary supply and restore redundancy.", "Switch off Source C (or D) at the 24 VDC distribution board. Ref: DMN000341677 Sh. 5.", "Safe. Severity: Minor. Probability: Remote."], ["3", "Hydraulic Power Pack (one jet)", "Total loss of reverse and steering control on one jet.", "Broken PTO drive or failing hydraulic pump.", "Reverse and steering on the affected jet stop operating in the current position; engine RPM reduced to idle on the affected jet.", "Loss of one jet; vessel will fail to respond to steering or reverse on the affected side. Vessel maneuvers on the remaining jet.", "Audible and visual control alarms on the Touch Screen via the Jet Control Unit; all alarms logged by the Alarm & Monitoring System.", "Operate the jet with the hydraulic-manifold emergency push-buttons (Ahead / Astern / Port / Stbd / Interceptor up-down). If hydraulic oil or pressure is lost, disconnect the PTO-driven pump; close down the affected jet or use it as a booster and maneuver on the remaining jet.", "Stop the hydraulic power pack / isolate the PTO. Ref: Emergency Operation Ch. 2.4; DMN000341677 Sh. 12/13.", "Safe – twin installation. Severity: Major. Probability: Remote."], ["4", "Joystick unit at a control station", "Loss of steering control via the joystick on a single jet.", "Sensor failure, wiring fault.", "Steering command from the affected joystick frozen in the current position; engine RPM reduced to idle on the affected jet.", "Steering control maintained via the steering tiller at the same station and via the Port / Stbd Wing stations.", "Steering alarm on the Touch Screen; all alarms logged by the Alarm & Monitoring System.", "Isolate the joystick at its Station I/O Unit; steer using the steering tiller or transfer control to another station.", "Disconnect the joystick at its Station I/O Unit. Ref: DMN000341677 Sh. 2–4, 8.", "Reverse control still operates in Normal. Safe. Severity: Minor. Probability: Remote."], ["5", "Control (thrust) lever / Hand-Held Terminal", "Loss of reverse / thrust control on a single jet.", "Sensor failure, wiring fault.", "Reverse command from the affected lever frozen in the current position; engine RPM reduced to idle on the affected jet.", "Reverse control maintained on the jet on the other side of the vessel and from the other stations.", "Control alarm on the Touch Screen; all alarms logged by the Alarm & Monitoring System.", "Switch the affected station to the Back-up & Indication system (Thrust Control Panel Back-up) and operate reverse; isolate the faulty lever at its Station I/O Unit.", "Disconnect the control lever at its Station I/O Unit. Ref: DMN000341677 Sh. 2–4, 11.", "Steering control still operates in Normal. Safe. Severity: Minor. Probability: Remote."], ["6", "Steering feedback transmitter (one jet)", "Loss of steering control and steering indication on a single jet.", "Steering-nozzle feedback sensor failure, mechanical damage, cable fault.", "Steering on the affected jet frozen in the current position; fault sensed at the jet end; engine RPM reduced to idle on the affected jet.", "Steering control maintained on the remaining jet; Back-up & Indication system available.", "Steering-fault indication on the Touch Screen; detection closes at the Jet Control Unit first, then reports up the SLIO / System CAN bus; alarms logged by the Alarm & Monitoring System.", "Isolate the transmitter circuit at the Jet Control Unit; repair the feedback transmitter / cable; switch to Back-up & Indication if required.", "Disconnect the steering feedback transmitter (Port cables 102/202; Stbd 302/402). Ref: DMN000341677 Sh. 9.", "Reverse control still operates in Normal. Safe. Severity: Minor. Probability: Remote."], ["7", "Reversing feedback transmitter (one jet)", "Loss of reverse control and reverse indication on a single jet.", "Reverse feedback sensor failure, mechanical damage, cable fault.", "Reverse on the affected jet frozen in the current position; fault sensed at the jet end; engine RPM reduced to idle on the affected jet.", "Reverse control maintained on the remaining jet; Back-up & Indication system available.", "Reverse-fault indication on the Touch Screen; detection at the Jet Control Unit first, then reported up-bus; alarms logged by the Alarm & Monitoring System.", "Isolate the transmitter circuit at the Jet Control Unit; repair the feedback transmitter / cable; switch to Back-up & Indication if required.", "Disconnect the reversing feedback transmitter (Port cables 102/202; Stbd 302/402). Ref: DMN000341677 Sh. 9.", "Steering control still operates in Normal. Safe. Severity: Minor. Probability: Remote."], ["8", "Waterjet hydraulic-oil pressure sensing", "Loss of correct detection of high or low hydraulic oil pressure.", "Oil-pressure sensor failure or wiring fault.", "Spurious or missing oil-pressure alarm on one jet; no immediate effect on control.", "None.", "Audible and visual alarm annunciated by the Jet Control Unit / Touch Screen and recorded by the Alarm & Monitoring System (interface 309/329).", "Repair or replace the sensor or wiring – non-urgent.", "Disconnect the oil-pressure sensor. Ref: DMN000341677 Sh. 6.", "A wiring fault will cause a failure-to-alarm state. Safe. Severity: Minor. Probability: Reasonably Probable."], ["9", "Back-up & Indication system interface", "Loss of back-up control and engine idle adjustment from the control station.", "Complete failure or disconnection of the Back-up & Indication CAN interconnection.", "The back-up function is no longer available; Main-System control is unaffected.", "None while the Main System is healthy.", "Audible and visual control alarms on the Touch Screen (jet side) and MFD (engine side); alarms logged by the Alarm & Monitoring System.", "Repair the fault; restore the Back-up & Indication CAN interconnection and the engine interface (cable 409).", "Interrupt the Back-up & Indication interconnection. Ref: DMN000341677 Sh. 14 (Back-up), 15 (Indication), 16 (Alarms).", "Main control remains operable – single-fault tolerant. Safe. Severity: Minor. Probability: Remote."], ["10", "Gearbox clutch – REINTJES WVS 730/1 (one shaft)", "Loss of clutch control; clutch disengages.", "Control-valve or wiring fault in the -QM1 solenoid circuit (-QM1.01 ahead / -QM1.02 astern).", "Clutch out on the affected shaft; engine RPM changes; reverse and steering stop operating in the current position on the affected jet.", "Vessel speed is reduced; vessel maneuvers on the opposite engine / jet.", "Detected by gearbox sensors (-BP74 / -BP75 / -QM1-SG1) → MTU Safety System / ECU → alarms on MTU MFD and LOP, then relayed to the waterjet control via the engine interface (cable 409).", "Operate the -QM1 main-clutch control-valve mechanical hand-override at the gearbox. (The gearbox has no local control panel.)", "Interrupt the -QM1 control-valve solenoid circuit. Ref: 0-211-159202.", "Loss of hydraulic clutch actuation only on one shaft. Safe. Severity: Minor. Probability: Remote."], ["11", "Main engine – emergency stop", "Activation of emergency stop.", "Emergency-stop push-button operated or external E-stop input.", "Engine stop and clutch out on the affected engine; no thrust on that side. The emergency stop de-energises the injector power stage directly, independent of the ECU software.", "Vessel speed is reduced; ship remains under control on the other propulsion train.", "Alarm recorded on the MTU MFD and LOP panel; audible and visual control alarms at bridge and local station; logged by the Alarm & Monitoring System.", "Reset the system; restart the engine after the cause has been confirmed and cleared.", "Operate the emergency-stop button at the control stand (Start/Stop PAN, stand FST3). Ref: MTU BlueVision documentation (FST schedule, stands FST1–FST6).", "Ship under control. Safe. Severity: Minor. Probability: Remote."], ["12", "Main engine control system – primary power X40 (24V_1)", "Failure in primary power supply.", "Primary control supply X40 falls below minimum level due to battery / charger fault.", "Automatic switching to the redundant supply X41 (24V_2); engine and gearbox control maintained. Alarm on LOP panel in engine room and on MFD in wheelhouse indicates which supply failed.", "None. Ship under control.", "Alarm recorded on the MTU MFD and LOP panel; audible and visual control alarms at bridge and local station; logged by the Alarm & Monitoring System.", "Repair the fault; switch off the faulty primary supply at the 24 VDC distribution board.", "Switch off the X40 (24V_1) supply at the 24 VDC distribution board. Ref: MTU BlueVision documentation, terminals X40 / X41.", "Ship under control. Safe. Severity: Minor. Probability: Remote."], ["13", "Main engine control system – redundant power X41 (24V_2)", "Failure in secondary power supply.", "Redundant control supply X41 falls below minimum level due to battery / charger fault.", "None with X40 healthy; gearbox stays clutched and engine remains under control. Alarm indicates which supply failed.", "None.", "Alarm recorded on the MTU MFD and LOP panel; audible and visual control alarms at bridge and local station; logged by the Alarm & Monitoring System.", "Repair the fault; switch off the faulty secondary supply at the 24 VDC distribution board; restore redundancy.", "Switch off the X41 (24V_2) supply at the 24 VDC distribution board. Ref: MTU BlueVision documentation, terminals X40 / X41.", "Gearbox stays clutched. Safe. Severity: Minor. Probability: Remote."], ["14", "Main engine – engine speed signal to waterjet control", "Loss of RPM / telegraph signal from the engine control to the waterjet control system.", "Wiring fault on the engine interface (cable 409).", "Engine RPM defaults toward idle on the affected jet; gearbox stays clutched; ship slows down on that side.", "Ship under control; maneuver on the opposite propulsion train.", "Alarm recorded on the MTU MFD and LOP panel; audible and visual control alarms on the Touch Screen at bridge and local station; logged by the Alarm & Monitoring System.", "Restore the ECU → SCU → RCS CAN → waterjet-control path (cable 409). Fallback: operate the engine locally from the MTU LOP.", "Disconnect the engine-interface link (cable 409). Ref: DMN000341677 Sh. 6; MTU BlueVision documentation.", "Ship under control. Safe. Severity: Minor. Probability: Remote."], ["15", "Main engine – engine governing power (ECU)", "Power failure to the engine governing function.", "Fuse blow or wiring fault in the engine 24 VDC feed. The governor function is integrated in the ECU.", "Affected engine may shut down; thrust and steering on that jet stop operating in the current position; power-failure alarm.", "Vessel speed is reduced and the vessel will fail to respond to steering or reverse on the affected jet; maneuver on the opposite train.", "Power-failure alarm on the MTU MFD and LOP panel; audible and visual control alarms at bridge and local station; logged by the Alarm & Monitoring System.", "Inspect the main engine control power supply and restore. MTU LOP local control available once power is restored.", "Switch off the engine 24 VDC supply feed (X40 / X41) at the ship 24 VDC distribution board. Ref: MTU BlueVision documentation (cables W007.1 / W007.2).", "Circuit protection is at the ship 24 VDC distribution board. Safe. Severity: Minor. Probability: Remote."], ["16", "Main engine – engine monitoring (ECU)", "Power failure to the engine monitoring function.", "Fuse blow or wiring fault. Engine monitoring is integrated in the ECU / Safety System.", "Loss of engine monitoring / annunciation; the engine continues to run; no immediate effect on thrust.", "None; power-failure alarm.", "Power-failure alarm on the MTU MFD and LOP panel; audible and visual control alarms at bridge and local station.", "Inspect the ECU / Safety-System power supply and restore. Monitoring is powered from the redundant X40 / X41 24 VDC supplies.", "Switch off the monitoring 24 VDC supply (X40 / X41). Ref: MTU BlueVision documentation.", "Ship under control; monitoring degraded until restored. Safe. Severity: Minor. Probability: Remote."], ["17", "Main engine – Local Operating Panel (LOP)", "Power failure to the LOP.", "Fuse blow or wiring fault.", "No display at the LOP; the engine continues to run on the ECU; control retained at the bridge.", "None; power-failure alarm.", "Power-failure alarm on the MTU MFD; audible and visual control alarms at bridge and local station.", "Inspect and restore the LOP power supply. The LOP is powered from X40 (24V_1) and X41 (24V_2).", "Switch off the LOP 24 VDC supply (X40 / X41). Ref: MTU BlueVision documentation (cables W007.1 / W007.2).", "Ship under control. Safe. Severity: Minor. Probability: Remote."], ["18", "Gearbox control-valve circuit power", "Power failure to the gearbox control.", "Fuse blow or wiring fault. The gearbox is driven from the MTU SCU gearbox output via the Reintjes control-valve circuit.", "Loss of gearbox clutch control on the affected shaft; no immediate effect until a clutch change is demanded; error alarm.", "Vessel will fail to respond to a clutch order on the affected shaft; maneuver on the opposite train.", "Error alarm on the MTU MFD and LOP panel first, then relayed to the waterjet control (cable 409); logged by the Alarm & Monitoring System.", "Inspect the MTU SCU gearbox output and the Reintjes control-valve circuit; restore the gearbox 10 A pre-fuse. Mechanical hand-override on the -QM1 valve available.", "Remove the gearbox 10 A pre-fuse. Ref: 0-211-159202; MTU BlueVision documentation (SCU).", "Ship under control. Safe. Severity: Minor. Probability: Remote."], ["19", "Bridge engine-data feed", "No engine parameter reading on the bridge monitoring; RPM signal stops.", "Fuse blow or wiring fault in the bridge data path.", "Loss of engine parameter / RPM indication at the bridge; power-failure / bus alarm. Engine control itself is not affected.", "None on propulsion; bridge indication degraded.", "Power-failure / bus alarm on the MTU MFD and on the Touch Screen.", "Restore the RCS CAN / engine-interface path (cable 409). The engine remains controllable at the LOP.", "Interrupt the RCS CAN feed to the bridge (cable 409). Ref: MTU BlueVision documentation; DMN000341677 Sh. 6.", "Bridge engine data travels ECU → SCU → RCS CAN → waterjet control. Safe. Severity: Minor. Probability: Remote."], ["20", "Main power supply 400 VAC", "Main 400 VAC power failure.", "MCCB trip or generator shutdown.", "AC-powered equipment on the affected switchboard stops; no immediate effect on the 24 VDC propulsion and steering control; power-failure alarm for related equipment.", "None on propulsion control; reduce engine speed as required until AC supply is restored.", "Audible and visual monitoring alarms at bridge and local station; all alarms recorded by the Ship Alarm & Monitoring System and the SmartGen HMC4300 genset monitoring.", "Start / transfer to the other generator; inspect the main switchboard and genset. Emergency source: Kohler 35EFKOZD back-up generator.", "Switch off the main supply MCCB at the affected main switchboard (PMSB / SMSB). Ref: SM291-55-002 / SM291-55-005; S0319-0055.", "Ship under control. Safe. Severity: Major. Probability: Remote."], ["21", "Main switchboard (one hull)", "Loss of a main switchboard.", "Short circuit or flooding in one engine room.", "Loss of partial AC power supply; power-failure alarm for related equipment.", "None on propulsion control; essential AC maintained from the opposite hull.", "Audible and visual monitoring alarms at bridge and local station; all alarms recorded by the Ship Alarm & Monitoring System and genset monitoring.", "Isolate the affected main switchboard; cross-connect from the opposite hull via the bus-tie (BUSTIE); repair the fault.", "Isolate the affected main switchboard (PMSB or SMSB) and open the bus-tie. Ref: SM291-55-005.", "Redundant switchboard in the opposite hull. Safe. Severity: Major. Probability: Remote."], ["22", "400 V distribution board", "Loss of a 400 V distribution board.", "Short circuit in the distribution board.", "Loss of main lighting and non-essential navigational equipment; essential equipment is supplied from the back-up supply; power-failure alarm.", "None on propulsion control.", "Audible and visual monitoring alarms at bridge and local station; all alarms recorded by the Ship Alarm & Monitoring System.", "Inspect the distribution board and repair the fault; essential loads remain on the back-up supply.", "Trip / switch off the affected distribution board (PDB1–PDB3). Ref: SM291-55-005.", "Safe. Severity: Minor. Probability: Remote."], ["23", "Main 24 VDC distribution board", "Loss of a main 24 VDC distribution board.", "Short circuit in the distribution board.", "Power-failure alarm for related equipment. Propulsion and steering control is NOT lost on a single-board fault: the quad-redundant sources (A–D) and dual CAN buses transfer automatically.", "None on a single fault. A total loss of control requires a common-mode event (see Test Ref. 26) or simultaneous loss of both sources feeding one jet (A+C or B+D).", "Audible and visual monitoring alarms on the Touch Screen and at bridge / local station; recorded by the Ship Alarm & Monitoring System.", "Isolate and repair the faulty board; control is retained via the redundant source / bus.", "Remove the fuses at the affected 24 VDC distribution board (DCDB1 bridge / DCDB2A Port E/R). Ref: SM291-55-005; DMN000341677 Sh. 5.", "Safe. Severity: Minor. Probability: Remote."], ["24", "Transitional power supply 24 VDC", "Loss of transitional 24 VDC distribution.", "Short circuit in the switchboard.", "No immediate effect; essential equipment is supplied from the main supply; power-failure alarm for related equipment.", "None.", "Audible and visual monitoring alarms at bridge and local station; recorded by the Ship Alarm & Monitoring System.", "Inspect the switchboard and battery chargers; repair the fault.", "Remove the fuses from the batteries and chargers (DCDB1 / DCDB2A, panels DCBP1–3). Ref: SM291-55-005.", "Safe. Severity: Minor. Probability: Remote."], ["25", "Emergency power supply 24 VDC (radio / GMDSS)", "Loss of the 24 VDC radio distribution.", "Short circuit in the switchboard.", "No immediate effect; essential equipment is supplied from the main supply; power-failure alarm for related equipment.", "None.", "Audible and visual monitoring alarms at bridge and local station; recorded by the Ship Alarm & Monitoring System.", "Inspect the switchboard and repair the fault.", "Isolate the 24 VDC Radio (GMDSS) Distribution Board. Ref: SM291-55-005.", "Safe. Severity: Minor. Probability: Remote."], ["26", "Complete failure of equipment located in one hull", "Loss of all equipment in one hull.", "Fire or flooding in one hull, or accidental release of CO₂.", "Loss of ONE propulsion train (engine + gearbox + waterjet), the generator and the related main switchboard and batteries in the affected hull.", "Vessel speed and maneuverability reduced; vessel maneuvers on the opposite hull’s propulsion train; emergency power from the Kohler back-up generator in the opposite hull.", "Audible and visual monitoring alarms at bridge and local station; all alarms recorded by the Ship Alarm & Monitoring System.", "Switch off the jet and engine in the affected hull; isolate its main switchboard and batteries; inspect and repair depending on the scenario.", "Simulate isolation of one hull’s switchboard, batteries and engine. Ref: SM291-15-001 / SM291-15-002.", "Each hull contains one complete train + one genset. Safe. Severity: Hazardous. Probability: Remote."], ["27", "Alarm & Monitoring System – power supply", "Failure of an alarm-system power supply.", "Electronic failure.", "Loss of some sensor / monitoring inputs; propulsion and steering controls remain fully available (control is independent of the Alarm System).", "None on control; monitoring degraded. Engine and gearbox faults are still annunciated on the MTU MFD / LOP.", "Audible and visual alarm at bridge and local station.", "Repair the power supply; the redundant supply maintains monitoring.", "Disconnect one alarm-system power supply. Ref: SM291-55-008; DMN000341677 Sh. 6.", "Safe. Severity: Minor. Probability: Remote."], ["28", "Alarm & Monitoring System – processor", "Failure of the alarm processor.", "Electronic failure.", "Loss of monitoring / annunciation for the affected I/O positions. Propulsion and steering control via the redundant CAN buses is retained.", "None on control; monitoring lost until the processor is restored.", "Audible and visual alarm at bridge and local station.", "Repair / replace the processor; restore the 24 V supply.", "Disconnect the 24 V supply to the alarm processor. Ref: SM291-55-008.", "Safe. Severity: Minor. Probability: Remote."], ["29", "Alarm & Monitoring System – marine PC", "Failure of a marine PC.", "Electronic failure.", "The redundant marine PC takes over; no loss of monitoring.", "None.", "Audible and visual monitoring alarms at bridge and local station; recorded by the Ship Alarm & Monitoring System and the SmartGen genset monitoring.", "Repair / replace the failed PC; display switched to the other position.", "Switch off the supply of one marine PC. Ref: SM291-55-008; S0319-0055.", "Display must be switched to the other position. Safe. Severity: Minor. Probability: Remote."], ["30", "System CAN bus", "Data-bus failure (System CAN).", "Bus open circuit, short circuit or missing 120 Ω termination.", "Degraded bus communication between touchscreens, Bridge Unit and Interface CU; the redundant SLIO CAN bus maintains control. No loss of control on a single-bus fault.", "None.", "Bus-fault alarm on the Touch Screen; logged by the Alarm & Monitoring System.", "Repair the bus; restore the 120 Ω termination at each end.", "Open one bus leg / remove a terminating resistor (cables 350–355). Ref: DMN000341677 Sh. 7.", "Redundant dual-bus architecture. Safe. Severity: Minor. Probability: Remote."], ["31", "SLIO CAN bus", "Data-bus failure (SLIO CAN).", "Bus open circuit, short circuit or missing 120 Ω termination.", "Degraded bus communication between Station I/O units, joysticks and Jet Control Units; the redundant System CAN bus maintains control. No loss of control on a single-bus fault.", "None.", "Bus-fault alarm on the Touch Screen; logged by the Alarm & Monitoring System.", "Repair the bus; restore the 120 Ω termination at each end.", "Open one bus leg / remove a terminating resistor. Ref: DMN000341677 Sh. 8.", "Redundant dual-bus architecture. Safe. Severity: Minor. Probability: Remote."], ["32", "Waterjet control processing units (DC/DC Converter Unit, Bridge Unit & Remote Access, Interface CU, Station I/O Unit)", "Failure of a single processing or power-conversion unit.", "Electronic failure / internal power failure.", "Loss of the affected function only; the redundant power sources (A–D) and dual CAN buses maintain overall thrust and steering control.", "None; degraded but controllable.", "Unit-fault alarm on the Touch Screen; logged by the Alarm & Monitoring System.", "Isolate / replace the affected unit; transfer control to another station if a Station I/O Unit fails.", "Power down the affected unit. Ref: DMN000341677 Sh. 5–8.", "Single-fault tolerant. Safe. Severity: Minor. Probability: Remote."]]};
+const $=id=>document.getElementById(id);
+
+/* clock */
+setInterval(()=>{const n=new Date();$('clock').childNodes[0].nodeValue=n.toLocaleTimeString('en-GB');$('cdate').textContent=n.toLocaleDateString('en-GB');},1000);
+
+/* keyword → mimic node mapping */
+const MAPS=[
+ [/24 vdc|power supply|source a|source b|source c|source d/i,['nd_pwr']],
+ [/hydraulic power pack/i,['nd_hpp_p']],
+ [/joystick|control station|station i\/o|thrust lever|control \(thrust\) lever|hand-held|tiller/i,['nd_stn']],
+ [/touch screen/i,['nd_ts']],
+ [/steering feedback|reverse feedback|feedback transmitter|jet control unit/i,['nd_jcu_p']],
+ [/can bus|slio|system can/i,['nd_can']],
+ [/interface cu|interface control unit|cable 409|mtu link/i,['nd_icu']],
+ [/main engine|mtu|engine control|ecu|bluevision|clutch|-qm1/i,['nd_eng_p']],
+ [/gearbox|reintjes/i,['nd_gb_p']],
+ [/waterjet|nozzle|bucket|impeller/i,['nd_jet_p']],
+ [/back-?up (control|& ind|system)|back-up & indication/i,['nd_bcu']],
+ [/control unit/i,['nd_cu']],
+ [/alarm.*monitor|monitoring system|ams/i,['nd_ams']]
+];
+function nodesFor(row){
+  const txt=(row[1]+' '+row[2]+' '+row[3]).toLowerCase();
+  for(const [re,nodes] of MAPS){ if(re.test(txt)) return nodes; }
+  return ['nd_cu'];
+}
+function sev(row){
+  const m=(row[9]||row[8]||'').match(/Severity:\s*([A-Za-z]+)/i);
+  return m?m[1].replace(/^\w/,c=>c.toUpperCase()):'Minor';
+}
+function prob(row){
+  const m=(row[9]||row[8]||'').match(/Probability:\s*([A-Za-z ]+?)\.?\s*$/im);
+  return m?m[1].trim():'Remote';
+}
+function safeV(row){ return /safe/i.test(row[9]||'') || !/hazardous|catastrophic/i.test(sev(row)); }
+
+/* populate selector */
+const sel=$('selTest');
+FMEA.worksheet.forEach((r,i)=>{
+  const o=document.createElement('option');
+  o.value=i; o.textContent=`Test ${r[0]} — ${r[1].slice(0,58)}${r[1].length>58?'…':''} · ${r[2].slice(0,46)}`;
+  sel.appendChild(o);
+});
+$('tcount').textContent=FMEA.worksheet.length+' TESTS';
+
+let active=-1, almN=0;
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+function preview(){ if(active>=0) inject(); else showDetail(+sel.value,false); }
+function showDetail(i,injected){
+  const r=FMEA.worksheet[i], s=sev(r), p=prob(r);
+  $('dref').textContent='TEST REF '+r[0];
+  $('detail').innerHTML=
+   `<div class="frow"><b>Component</b><span>${esc(r[1])}</span></div>
+    <div class="frow"><b>Failure mode</b><span>${esc(r[2])}</span></div>
+    <div class="frow"><b>Cause</b><span>${esc(r[3])}</span></div>
+    <div class="frow"><b>Local effect</b><span>${esc(r[4])}</span></div>
+    <div class="frow"><b>End effect</b><span>${esc(r[5])}</span></div>
+    <div class="frow"><b>Detection</b><span>${esc(r[6])}</span></div>
+    <div class="frow"><b>Corrective action</b><span>${esc(r[7])}</span></div>
+    <div class="frow"><b>Sea-trial simulation</b><span>${esc(r[8])}</span></div>
+    <div class="sevrow">
+      <div class="sevchip"><small>Severity</small><b class="sev-${s}">${s.toUpperCase()}</b></div>
+      <div class="sevchip"><small>Probability</small><b style="color:var(--cyn)">${p.toUpperCase()}</b></div>
+      <div class="sevchip"><small>Single-failure verdict</small><b class="${safeV(r)?'sev-Minor':'sev-Hazardous'}">${safeV(r)?'SAFE':'REVIEW'}</b></div>
+    </div>`;
+}
+function inject(){
+  restoreMimic();
+  const i=+sel.value, r=FMEA.worksheet[i];
+  active=i; showDetail(i,true);
+  const nodes=nodesFor(r);
+  nodes.forEach(n=>{const e=$(n); if(e) e.classList.add('fault');
+    // mirror port→stbd nodes stay healthy: fault only port instance to show redundancy
+  });
+  // degrade partners: if a port-train element failed, other train remains green; CU fault → BCU degraded (takes over)
+  if(nodes.includes('nd_cu')) $('nd_bcu').classList.add('degr');
+  if(nodes.includes('nd_pwr')) $('pwrst').textContent='ONE SOURCE LOST · AUTO-TRANSFERRED', $('pwrst').setAttribute('fill','#ffb300');
+  const s=sev(r);
+  const oneTrain=nodes.some(n=>/_p$/.test(n));
+  $('vs_prop').textContent='PROPULSION '+(/engine|gearbox|waterjet|clutch/i.test(r[1])?'1/2':'2/2');
+  $('vs_prop').setAttribute('fill',/engine|gearbox|waterjet|clutch/i.test(r[1])?'#ffb300':'#43d675');
+  $('vs_str').textContent='STEERING '+(/steering|hydraulic|nozzle|feedback|jet control/i.test(r[1]+r[2])?'1/2':'2/2');
+  $('vs_str').setAttribute('fill',/steering|hydraulic|nozzle|feedback|jet control/i.test(r[1]+r[2])?'#ffb300':'#43d675');
+  $('vs_note').textContent='Redundant train / lane carries the vessel — see corrective action';
+  $('mimst').textContent='FAILURE INJECTED — TEST '+r[0]; $('mimst').style.color='var(--red)';
+  // lamps
+  const crit=/hazardous|catastrophic/i.test(s);
+  $('lp_norm').className='lamp';
+  $('lp_warn').className='lamp on-a';
+  $('lp_crit').className=crit?'lamp on-r':'lamp';
+  // alarms
+  addAlm(crit?'r':'a', 'T'+r[0], r[6].split(/[.;]/)[0].slice(0,70)||'Failure alarm');
+  if(/transfer|back-?up/i.test(r[4])) addAlm('g','SYS','Automatic transfer to healthy source / lane completed');
+  // verdict
+  const v=$('verdict'); v.style.display='flex';
+  if(safeV(r)){ v.className='verdict ok'; $('verdictTxt').textContent='SINGLE-FAILURE CRITERION MET — vessel retains propulsion & steering; effect class '+s+' ('+prob(r)+'). Corrective action per worksheet.'; }
+  else { v.className='verdict deg'; $('verdictTxt').textContent='DEGRADED CONDITION — effect class '+s+'. Crew action required per corrective-action column; vessel remains within HSC 2000 operable limits.'; }
+}
+function restoreMimic(){
+  document.querySelectorAll('.fault,.degr').forEach(e=>e.classList.remove('fault','degr'));
+  $('pwrst').textContent='QUAD REDUNDANT · HEALTHY'; $('pwrst').setAttribute('fill','#43d675');
+}
+function restore(){
+  restoreMimic(); active=-1;
+  $('vs_prop').textContent='PROPULSION 2/2'; $('vs_prop').setAttribute('fill','#43d675');
+  $('vs_str').textContent='STEERING 2/2'; $('vs_str').setAttribute('fill','#43d675');
+  $('vs_note').textContent='Both trains available · full manoeuvrability';
+  $('mimst').textContent='ALL SYSTEMS NORMAL'; $('mimst').style.color='var(--grn)';
+  $('lp_norm').className='lamp on-g'; $('lp_warn').className='lamp'; $('lp_crit').className='lamp';
+  $('verdict').style.display='none';
+  addAlm('g','SYS','System normalised — all failures restored');
+}
+function addAlm(pri,tag,msg){
+  const tb=$('almbody'); const tr=document.createElement('tr');
+  tr.className='unack alm-'+pri;
+  tr.innerHTML=`<td>${pri==='r'?'CRIT':pri==='a'?'WARN':'INFO'}</td><td>${new Date().toLocaleTimeString('en-GB')}</td><td>${tag}</td><td>${msg}</td><td>UNACK</td>`;
+  tb.prepend(tr); while(tb.children.length>30) tb.lastChild.remove();
+}
+function ackAll(){ document.querySelectorAll('#almbody tr.unack').forEach(tr=>{tr.classList.remove('unack'); tr.lastElementChild.textContent='ACK';}); }
+showDetail(0,false);
+addAlm('g','SYS','FMEA simulator initialised — worksheet Rev D loaded ('+FMEA.worksheet.length+' tests)');
+</script>
+</body>
+</html>
