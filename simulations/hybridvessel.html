@@ -186,7 +186,7 @@
         <div class="metric" style="margin-top:6px"><span>BESS SOC</span><b id="m_soc">80%</b></div>
         <div class="bar"><i id="bar_soc" style="width:80%"></i></div>
         <div class="metric" style="margin-top:6px"><span>BESS power</span><b id="m_bp">0 kW</b></div>
-        <div class="metric"><span>Zero-emission endurance</span><b id="m_ze">—</b></div>
+        <div class="metric"><span>Zero-emission endurance</span><b id="m_zeh">—</b></div>
         <div class="metric"><span>Fuel rate</span><b id="m_fr">0 L/h</b></div>
         <div class="metric"><span>Fuel used (session)</span><b id="m_fuel">0.0 L</b></div>
         <div class="metric"><span>Insulation resistance</span><b id="m_ir">&gt; 5 MΩ</b></div>
@@ -342,7 +342,7 @@ function render(d){
   $('m_soc').textContent=r(S.soc)+'%'; $('bar_soc').style.width=S.soc+'%';
   $('m_bp').textContent=(d.bess>0?'+':'')+r(d.bess)+' kW '+(d.bess>0.5?'(discharge)':d.bess<-0.5?'(charge)':'');
   const useable=(S.soc-20)/100*CAP.bessKwh;
-  $('m_ze').textContent=(d.demand>0&&useable>0)?(useable/Math.min(d.demand,CAP.bessKw)).toFixed(1)+' h @ current load':'—';
+  $('m_zeh').textContent=(d.demand>0&&useable>0)?(useable/Math.min(d.demand,CAP.bessKw)).toFixed(1)+' h @ current load':'—';
   const gTot=d.g1+d.g2;
   $('m_fr').textContent=r(gTot*0.21)+' L/h';
   $('m_fuel').textContent=S.fuel.toFixed(1)+' L';
@@ -354,7 +354,7 @@ function render(d){
   // banner
   if(d.shedKw>0.5) banner('bad','OVERLOAD — shedding non-essential load · reduce telegraph or start additional generation');
   else if(S.ef) banner('warn','EARTH FAULT ALARM — first fault on IT system · no trip, service continuity maintained · locate before second fault');
-  else if(S.mode==='ze') banner('ok','ZERO-EMISSION SAILING — BESS only · '+$('m_ze').textContent);
+  else if(S.mode==='ze') banner('ok','ZERO-EMISSION SAILING — BESS only · '+$('m_zeh').textContent);
   else if(S.g1||S.g2) banner('warn',(S.g1&&S.g2?'TWO GENSETS':'ONE GENSET')+' ON LOAD — PMS dispatch'+(d.bess<-0.5?' · BESS charging':d.bess>0.5?' · BESS peak-shaving':''));
   else banner('ok','HYBRID MODE — BESS covering demand · gensets standby');
 }
