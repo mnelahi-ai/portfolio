@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#4f46e5">
+<meta name="description" content="Interactive hybrid-electric vessel propulsion simulation — DC-bus architecture with gensets, grid converters, BESS dispatch, propulsion telegraph and IT-system insulation monitoring. By Mashuk Elahi, Critical Power Systems Engineer.">
+<title>Hybrid-Electric Vessel Simulation — Mashuk Elahi</title>
+<style>
+  :root{
+    --bg:#0b0f1a; --panel:#111827; --panel2:#0f172a; --line:#1f2937;
+    --ind:#4f46e5; --ind2:#6366f1; --txt:#e5e7eb; --mut:#9ca3af;
+    --ok:#22c55e; --warn:#f59e0b; --bad:#ef4444; --cyan:#22d3ee; --gen:#f59e0b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;min-height:100vh}
+  a{color:var(--ind2);text-decoration:none}
+  header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 22px;border-bottom:1px solid var(--line);background:rgba(11,15,26,.92);position:sticky;top:0;z-index:10;flex-wrap:wrap}
+  header .brand{font-weight:700;letter-spacing:.3px}
+  header .brand span{color:var(--ind2)}
+  .tag{font-size:12px;color:var(--mut)}
+  .wrap{max-width:1180px;margin:0 auto;padding:20px 18px 60px}
+  h1{font-size:clamp(20px,3vw,30px);margin:14px 0 6px}
+  .sub{color:var(--mut);font-size:14px;max-width:860px;line-height:1.5}
+  .grid{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-top:20px}
+  @media(max-width:920px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+  .card h2{font-size:13px;text-transform:uppercase;letter-spacing:1.4px;color:var(--ind2);margin-bottom:10px}
+  svg{width:100%;height:auto;display:block}
+  label.sl{display:block;font-size:13px;margin:10px 0 4px}
+  label.sl b{float:right;font-variant-numeric:tabular-nums;color:var(--cyan)}
+  input[type=range]{width:100%;accent-color:var(--ind);cursor:pointer}
+  .metric{display:flex;justify-content:space-between;align-items:baseline;padding:7px 2px;border-bottom:1px dashed var(--line);font-size:13px}
+  .metric:last-child{border-bottom:none}
+  .metric b{font-size:15px;font-variant-numeric:tabular-nums}
+  .banner{margin-top:14px;border-radius:10px;padding:12px 14px;font-weight:600;font-size:14px;border:1px solid;display:flex;gap:10px;align-items:center}
+  .banner.ok{border-color:#14532d;background:#052e16;color:var(--ok)}
+  .banner.warn{border-color:#713f12;background:#2a1e05;color:var(--warn)}
+  .banner.bad{border-color:#7f1d1d;background:#2a0a0a;color:var(--bad)}
+  .dot{width:10px;height:10px;border-radius:50%;background:currentColor;flex:none;animation:pulse 1.2s infinite}
+  @keyframes pulse{50%{opacity:.35}}
+  .bar{height:9px;background:var(--panel2);border-radius:6px;overflow:hidden;margin-top:5px;border:1px solid var(--line)}
+  .bar i{display:block;height:100%;border-radius:6px;transition:width .4s;background:linear-gradient(90deg,var(--ind),var(--cyan))}
+  .bar.amber i{background:linear-gradient(90deg,#b45309,#fbbf24)}
+  .modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:4px}
+  .modes button{background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:9px 6px;font-size:12.5px;cursor:pointer;transition:border-color .15s}
+  .modes button:hover{border-color:var(--ind)}
+  .modes button.on{border-color:var(--ind);background:#1e1b4b;color:#c7d2fe;font-weight:600}
+  .btnrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+  .btnrow button{background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:9px 8px;font-size:12.5px;cursor:pointer}
+  .btnrow button:hover{border-color:var(--ind)}
+  .btnrow button.alarm{border-color:#7f1d1d;background:#2a0a0a;color:var(--bad)}
+  .log{max-height:170px;overflow-y:auto;font-family:Consolas,Menlo,monospace;font-size:12px;line-height:1.55}
+  .log div{padding:2px 0;border-bottom:1px solid #0d1522;color:var(--mut)}
+  .log .e-bad{color:var(--bad)} .log .e-ok{color:var(--ok)} .log .e-warn{color:var(--warn)}
+  footer{border-top:1px solid var(--line);color:var(--mut);text-align:center;padding:18px;font-size:12px;margin-top:30px}
+  .hint{font-size:12px;color:var(--mut);margin-top:10px}
+  .box{fill:var(--panel2);stroke:#334155;stroke-width:1.2}
+  .lbl{fill:var(--txt);font-size:11px;font-weight:600}
+  .lbl2{fill:var(--mut);font-size:9.5px}
+  .val{fill:var(--cyan);font-size:11px;font-weight:700;font-variant-numeric:tabular-nums}
+  .flow{stroke-width:2.6;fill:none;stroke-dasharray:6 7;animation:dash 1s linear infinite}
+  .f-gen{stroke:var(--gen)} .f-batt{stroke:var(--cyan)} .f-bus{stroke:var(--ind2)} .f-prop{stroke:#a78bfa}
+  .flow.dead{stroke:#374151;animation:none;stroke-dasharray:3 5}
+  .flow.rev{animation:dashrev 1s linear infinite}
+  @keyframes dash{to{stroke-dashoffset:-13}}
+  @keyframes dashrev{to{stroke-dashoffset:13}}
+  .node-dead rect{stroke:#475569!important;fill:#0d1017!important}
+  .node-dead text{fill:#6b7280!important}
+  .node-alarm rect{stroke:#ef4444!important}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Mashuk <span>Elahi</span> · Critical Power Simulations</div>
+  <nav style="display:flex;gap:16px;font-size:13px;flex-wrap:wrap">
+    <a href="datacenter.html">Data Center 2N</a>
+    <a href="microgrid.html">Hybrid Microgrid</a>
+    <a href="hybridvessel.html" style="color:var(--txt);font-weight:600">Hybrid Vessel</a>
+    <a href="../index.html#simulations">← Back to Portfolio</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <div class="tag">INTERACTIVE SIMULATION · MARINE HYBRID PROPULSION · DC-BUS ARCHITECTURE · IT SYSTEM</div>
+  <h1>Hybrid-Electric Vessel Propulsion Simulation</h1>
+  <p class="sub">A conceptual power-management model of a hybrid-electric vessel: two diesel gensets feed a common DC bus through active-front-end grid converters, a battery energy storage system enables zero-emission sailing, and twin propulsion motors follow the bridge telegraph. Includes an IT-system insulation monitor — the earthed-neutral-free distribution used on aluminium hulls to control stray current and corrosion.</p>
+
+  <div id="banner" class="banner ok"><span class="dot"></span><span id="bannerTxt">HYBRID MODE — power management active · all systems normal</span></div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Power Plant — DC-Bus Single-Line</h2>
+      <svg viewBox="0 0 760 540" xmlns="http://www.w3.org/2000/svg" aria-label="Hybrid vessel DC bus single line diagram">
+        <!-- Gensets -->
+        <g id="n_g1"><rect class="box" x="30" y="30" width="175" height="60" rx="7"/>
+          <text class="lbl" x="117" y="50" text-anchor="middle">⛽ GENSET 1 · 450 ekW</text>
+          <text class="val" id="v_g1" x="117" y="66" text-anchor="middle">0 kW</text>
+          <text class="lbl2" id="v_g1st" x="117" y="80" text-anchor="middle">standby</text></g>
+        <g id="n_g2"><rect class="box" x="30" y="120" width="175" height="60" rx="7"/>
+          <text class="lbl" x="117" y="140" text-anchor="middle">⛽ GENSET 2 · 450 ekW</text>
+          <text class="val" id="v_g2" x="117" y="156" text-anchor="middle">0 kW</text>
+          <text class="lbl2" id="v_g2st" x="117" y="170" text-anchor="middle">standby</text></g>
+        <path id="f_g1" class="flow f-gen dead" d="M205 60 H 280"/>
+        <path id="f_g2" class="flow f-gen dead" d="M205 150 H 280"/>
+
+        <!-- Grid converters -->
+        <g id="n_c1"><rect class="box" x="280" y="38" width="120" height="44" rx="6"/>
+          <text class="lbl" x="340" y="56" text-anchor="middle">AFE CONV 1</text>
+          <text class="lbl2" x="340" y="70" text-anchor="middle">AC → DC · 690V</text></g>
+        <g id="n_c2"><rect class="box" x="280" y="128" width="120" height="44" rx="6"/>
+          <text class="lbl" x="340" y="146" text-anchor="middle">AFE CONV 2</text>
+          <text class="lbl2" x="340" y="160" text-anchor="middle">AC → DC · 690V</text></g>
+        <path id="f_c1" class="flow f-gen dead" d="M400 60 H 448"/>
+        <path id="f_c2" class="flow f-gen dead" d="M400 150 H 448"/>
+
+        <!-- BESS -->
+        <g id="n_bess"><rect class="box" x="30" y="228" width="175" height="66" rx="7"/>
+          <text class="lbl" x="117" y="248" text-anchor="middle">🔋 BESS · 500 kWh</text>
+          <text class="val" id="v_bess" x="117" y="264" text-anchor="middle">0 kW</text>
+          <text class="lbl2" id="v_soc" x="117" y="279" text-anchor="middle">SOC 80% · idle</text></g>
+        <g id="n_dcdc"><rect class="box" x="280" y="238" width="120" height="44" rx="6"/>
+          <text class="lbl" x="340" y="256" text-anchor="middle">DC/DC CONV</text>
+          <text class="lbl2" x="340" y="270" text-anchor="middle">±400 kW</text></g>
+        <path id="f_bess" class="flow f-batt dead" d="M205 260 H 280"/>
+        <path id="f_dcdc" class="flow f-batt dead" d="M400 260 H 448"/>
+
+        <!-- DC BUS -->
+        <rect x="448" y="30" width="14" height="420" rx="4" fill="#1e293b" stroke="#4f46e5" stroke-width="1.6"/>
+        <text class="lbl" x="455" y="475" text-anchor="middle">690V DC BUS</text>
+        <text class="val" id="v_bus" x="455" y="490" text-anchor="middle">690 V</text>
+
+        <!-- Propulsion -->
+        <path id="f_p1" class="flow f-prop" d="M462 80 H 545"/>
+        <g id="n_p1"><rect class="box" x="545" y="56" width="185" height="52" rx="7"/>
+          <text class="lbl" x="637" y="76" text-anchor="middle">⚙ PROP MOTOR PS · 550 kW</text>
+          <text class="val" id="v_p1" x="637" y="93" text-anchor="middle">0 kW</text></g>
+        <path id="f_p2" class="flow f-prop" d="M462 170 H 545"/>
+        <g id="n_p2"><rect class="box" x="545" y="146" width="185" height="52" rx="7"/>
+          <text class="lbl" x="637" y="166" text-anchor="middle">⚙ PROP MOTOR SB · 550 kW</text>
+          <text class="val" id="v_p2" x="637" y="183" text-anchor="middle">0 kW</text></g>
+
+        <!-- Hotel -->
+        <path id="f_h" class="flow f-bus" d="M462 290 H 545"/>
+        <g id="n_hotel"><rect class="box" x="545" y="262" width="185" height="56" rx="7"/>
+          <text class="lbl" x="637" y="282" text-anchor="middle">🛳 HOTEL / AUX LOAD</text>
+          <text class="val" id="v_h" x="637" y="298" text-anchor="middle">80 kW</text>
+          <text class="lbl2" id="v_hst" x="637" y="311" text-anchor="middle">essential + non-essential</text></g>
+
+        <!-- IT system monitor -->
+        <g id="n_it"><rect class="box" x="545" y="360" width="185" height="66" rx="7"/>
+          <text class="lbl" x="637" y="380" text-anchor="middle">Ω INSULATION MONITOR</text>
+          <text class="val" id="v_ir" x="637" y="397" text-anchor="middle">&gt; 5 MΩ</text>
+          <text class="lbl2" id="v_irst" x="637" y="412" text-anchor="middle">IT system · unearthed · healthy</text></g>
+        <path class="flow f-bus dead" d="M462 393 H 545" id="f_it"/>
+      </svg>
+      <div class="hint">Amber dashes = genset power · cyan = BESS (reverses when charging) · violet = propulsion demand. IT-system monitoring shown per IEC 60092-507 practice for unearthed marine LV distribution.</div>
+    </div>
+
+    <div>
+      <div class="card">
+        <h2>Bridge & PMS Controls</h2>
+        <div class="modes">
+          <button id="m_ze" onclick="setMode('ze')">⚡ Zero-Emission</button>
+          <button id="m_hy" class="on" onclick="setMode('hy')">◐ Hybrid (PMS)</button>
+          <button id="m_ds" onclick="setMode('ds')">⛽ Genset Only</button>
+        </div>
+        <label class="sl">Telegraph / throttle <b id="l_thr">45%</b></label>
+        <input type="range" id="s_thr" min="0" max="100" value="45" oninput="tickRender()">
+        <label class="sl">Sea state (added resistance) <b id="l_sea">2</b></label>
+        <input type="range" id="s_sea" min="0" max="6" value="2" oninput="tickRender()">
+        <label class="sl">Hotel / auxiliary load <b id="l_hot">80 kW</b></label>
+        <input type="range" id="s_hot" min="30" max="150" value="80" oninput="tickRender()">
+        <div class="btnrow">
+          <button id="b_ef" onclick="earthFault()">Inject Earth Fault (IT test)</button>
+          <button onclick="resetAll()">Reset Scenario</button>
+        </div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h2>Power Management</h2>
+        <div class="metric"><span>Total demand</span><b id="m_dem">— kW</b></div>
+        <div class="metric"><span>Genset 1 loading</span><b id="m_g1">0%</b></div>
+        <div class="bar amber"><i id="bar_g1" style="width:0%"></i></div>
+        <div class="metric" style="margin-top:6px"><span>Genset 2 loading</span><b id="m_g2">0%</b></div>
+        <div class="bar amber"><i id="bar_g2" style="width:0%"></i></div>
+        <div class="metric" style="margin-top:6px"><span>BESS SOC</span><b id="m_soc">80%</b></div>
+        <div class="bar"><i id="bar_soc" style="width:80%"></i></div>
+        <div class="metric" style="margin-top:6px"><span>BESS power</span><b id="m_bp">0 kW</b></div>
+        <div class="metric"><span>Zero-emission endurance</span><b id="m_ze">—</b></div>
+        <div class="metric"><span>Fuel rate</span><b id="m_fr">0 L/h</b></div>
+        <div class="metric"><span>Fuel used (session)</span><b id="m_fuel">0.0 L</b></div>
+        <div class="metric"><span>Insulation resistance</span><b id="m_ir">&gt; 5 MΩ</b></div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h2>Event Log</h2>
+        <div class="log" id="log"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h2>PMS Dispatch & Safety Logic</h2>
+    <p class="sub" style="font-size:13px">
+      <b>Zero-emission mode</b> sails on BESS alone and blocks genset start until SOC reaches the 20% safety floor, then forces changeover. <b>Hybrid mode</b> lets the PMS peak-shave: BESS covers transients first, genset 1 starts when sustained demand exceeds BESS capability or SOC ≤ 30%, genset 2 auto-starts above 85% loading on genset 1 (N+1 headroom) and stops below 40% combined with hysteresis. <b>Genset-only mode</b> recharges the BESS with spare engine capacity — engines are held above 30% load to avoid wet-stacking. If demand exceeds all available sources, <b style="color:var(--warn)">non-essential hotel load is shed first</b> and propulsion is power-limited last — essential services are never shed. The insulation monitor models the unearthed IT distribution used on aluminium hulls: a first earth fault raises an alarm without tripping (continuity of service), while the crew locates the fault before a second fault can drive stray current through the hull.
+    </p>
+  </div>
+</div>
+
+<footer>© 2026 Mashuk Elahi — Critical Power Systems Engineer · <a href="../index.html">Portfolio</a> · <a href="mailto:m_nelahi@yahoo.com">m_nelahi@yahoo.com</a></footer>
+
+<script>
+'use strict';
+const CAP={gen:450,bessKwh:500,bessKw:400,prop:550,busV:690};
+const S={mode:'hy',soc:80,fuel:0,g1:false,g2:false,ef:false,shedding:false};
+const $=id=>document.getElementById(id);
+
+function log(msg,cls){const d=document.createElement('div');d.textContent=new Date().toLocaleTimeString()+'  '+msg;if(cls)d.className=cls;$('log').prepend(d);while($('log').children.length>40)$('log').lastChild.remove();}
+
+function setMode(m){
+  S.mode=m;
+  ['ze','hy','ds'].forEach(x=>$('m_'+x).classList.toggle('on',x===m));
+  log('Mode: '+(m==='ze'?'ZERO-EMISSION — gensets blocked, BESS only':m==='hy'?'HYBRID — PMS dispatch active':'GENSET ONLY — BESS recharging'),'e-warn');
+  tickRender();
+}
+function earthFault(){
+  S.ef=!S.ef;
+  $('b_ef').classList.toggle('alarm',S.ef);
+  $('b_ef').textContent=S.ef?'Clear Earth Fault':'Inject Earth Fault (IT test)';
+  log(S.ef?'EARTH FAULT — insulation 0.05 MΩ on DC bus negative. First fault: ALARM only, no trip (IT system).':'Earth fault cleared — insulation restored > 5 MΩ',S.ef?'e-bad':'e-ok');
+  tickRender();
+}
+function resetAll(){
+  Object.assign(S,{mode:'hy',soc:80,fuel:0,g1:false,g2:false,ef:false,shedding:false});
+  $('s_thr').value=45;$('s_sea').value=2;$('s_hot').value=80;
+  $('b_ef').classList.remove('alarm');$('b_ef').textContent='Inject Earth Fault (IT test)';
+  ['ze','hy','ds'].forEach(x=>$('m_'+x).classList.toggle('on',x==='hy'));
+  log('Scenario reset — hybrid mode, SOC 80%','e-ok');
+  tickRender();
+}
+
+function dispatch(dt){
+  const thr=+$('s_thr').value/100, sea=+$('s_sea').value, hotel=+$('s_hot').value;
+  // propeller law: P ∝ n³, sea state adds resistance
+  const seaF=1+sea*0.09;
+  let prop=2*CAP.prop*Math.pow(thr,3)*seaF;
+  prop=Math.min(prop,2*CAP.prop);
+  let demand=prop+hotel, served=demand, shedKw=0;
+  let g1=0,g2=0,bess=0;
+  const canDis=(S.soc>20)?CAP.bessKw:0;
+
+  if(S.mode==='ze'){
+    S.g1=S.g2=false;
+    if(S.soc<=20){ // safety floor — force changeover
+      setModeSilent('hy'); log('SOC 20% safety floor — auto changeover to HYBRID, genset starting','e-warn');
+      return dispatch(dt);
+    }
+    bess=Math.min(demand,canDis);
+    if(bess<demand){ shedKw=demand-bess; }
+  } else if(S.mode==='hy'){
+    // start/stop logic
+    if(!S.g1 && (demand>canDis || S.soc<=30)){ S.g1=true; log('PMS: Genset 1 AUTO-START ('+(S.soc<=30?'SOC ≤ 30%':'demand > BESS capability')+')','e-warn'); }
+    const cap1=S.g1?CAP.gen:0;
+    if(S.g1&&!S.g2&&demand>cap1*0.85+ (S.soc>25?CAP.bessKw*0.5:0)){ S.g2=true; log('PMS: Genset 2 AUTO-START — sustained load > 85% on Genset 1','e-warn'); }
+    if(S.g2&&demand<CAP.gen*0.8){ S.g2=false; log('PMS: Genset 2 stopped — load within single-genset band','e-ok'); }
+    if(S.g1&&!S.g2&&demand<CAP.bessKw*0.6&&S.soc>60){ S.g1=false; log('PMS: Genset 1 stopped — BESS covering load, SOC healthy','e-ok'); }
+    const genCap=(S.g1?CAP.gen:0)+(S.g2?CAP.gen:0);
+    let gen=Math.min(demand,genCap);
+    let deficit=demand-gen;
+    bess=Math.min(deficit,canDis);
+    deficit-=bess;
+    if(deficit>0.5) shedKw=deficit;
+    // spare genset capacity recharges BESS (min-load rule)
+    if(genCap>0){
+      const minLoad=genCap*0.3;
+      let spare=genCap-gen;
+      if(gen<minLoad){ const boost=Math.min(minLoad-gen,(S.soc<95)?CAP.bessKw:0); gen+=boost; bess-=boost; }
+      else if(spare>0&&S.soc<90&&bess<=0){ const chg=Math.min(spare,CAP.bessKw,(demand<genCap?spare:0)); gen+=chg; bess-=chg; }
+    }
+    if(S.g1&&S.g2){ g1=gen/2; g2=gen/2; } else if(S.g1){ g1=gen; }
+  } else { // genset only
+    if(!S.g1){S.g1=true;log('Genset 1 started — genset-only mode','e-warn');}
+    if(demand>CAP.gen*0.85&&!S.g2){S.g2=true;log('PMS: Genset 2 AUTO-START — N+1 headroom','e-warn');}
+    if(S.g2&&demand<CAP.gen*0.75){S.g2=false;log('Genset 2 stopped','e-ok');}
+    const genCap=(S.g1?CAP.gen:0)+(S.g2?CAP.gen:0);
+    let gen=Math.min(demand,genCap);
+    let spare=genCap-gen;
+    if(spare>0&&S.soc<90){ const chg=Math.min(spare,CAP.bessKw); gen+=chg; bess=-chg; }
+    if(gen<genCap*0.3&&bess===0){ const boost=genCap*0.3-gen; if(S.soc<95){gen+=boost;bess=-boost;} }
+    if(demand>genCap){ const d=demand-genCap; const b=Math.min(d,canDis); bess+=b; if(d-b>0.5) shedKw=d-b; }
+    if(S.g1&&S.g2){g1=gen/2;g2=gen/2;}else if(S.g1){g1=gen;}
+  }
+
+  // load shed: non-essential hotel first (up to 50% of hotel), then power-limit propulsion
+  let hotelServed=hotel, propServed=prop;
+  if(shedKw>0){
+    const shedH=Math.min(shedKw,hotel*0.5); hotelServed-=shedH;
+    const shedP=shedKw-shedH; propServed-=Math.min(shedP,prop);
+    if(!S.shedding) log('LOAD SHED — non-essential hotel load shed '+Math.round(shedH)+' kW'+(shedP>0.5?' · propulsion power-limited '+Math.round(shedP)+' kW':''),'e-bad');
+    S.shedding=true;
+  } else if(S.shedding){ S.shedding=false; log('Load restored — all consumers supplied','e-ok'); }
+
+  if(dt>0){
+    S.soc=Math.min(95,Math.max(5,S.soc-bess*dt/CAP.bessKwh*100));
+    const gTot=g1+g2;
+    if(gTot>0){ S.fuel+=gTot*0.21*dt; } // ~0.21 L/kWh medium-speed diesel
+  }
+  return {prop:propServed,hotel:hotelServed,demand,g1,g2,bess,shedKw};
+}
+function setModeSilent(m){S.mode=m;['ze','hy','ds'].forEach(x=>$('m_'+x).classList.toggle('on',x===m));}
+
+function render(d){
+  $('l_thr').textContent=$('s_thr').value+'%';
+  $('l_sea').textContent=$('s_sea').value;
+  $('l_hot').textContent=$('s_hot').value+' kW';
+  const r=x=>Math.round(x);
+  $('v_g1').textContent=r(d.g1)+' kW'; $('v_g2').textContent=r(d.g2)+' kW';
+  $('v_g1st').textContent=S.g1?'RUNNING · '+r(100*d.g1/CAP.gen)+'%':'standby';
+  $('v_g2st').textContent=S.g2?'RUNNING · '+r(100*d.g2/CAP.gen)+'%':'standby';
+  $('v_bess').textContent=(d.bess>0?'+':'')+r(d.bess)+' kW';
+  $('v_soc').textContent='SOC '+r(S.soc)+'% · '+(d.bess>0.5?'discharging':d.bess<-0.5?'charging':'idle');
+  $('v_p1').textContent=r(d.prop/2)+' kW'; $('v_p2').textContent=r(d.prop/2)+' kW';
+  $('v_h').textContent=r(d.hotel)+' kW';
+  $('v_hst').textContent=S.shedding?'NON-ESSENTIAL SHED':'essential + non-essential';
+  $('v_bus').textContent=(CAP.busV-(d.shedKw>0?18:0)+(d.bess<-0.5?2:0))+' V';
+  // flows
+  const f=(id,on)=>$(id).classList.toggle('dead',!on);
+  f('f_g1',d.g1>1); f('f_c1',d.g1>1); f('f_g2',d.g2>1); f('f_c2',d.g2>1);
+  f('f_bess',Math.abs(d.bess)>0.5); f('f_dcdc',Math.abs(d.bess)>0.5);
+  $('f_bess').classList.toggle('rev',d.bess<-0.5); $('f_dcdc').classList.toggle('rev',d.bess<-0.5);
+  f('f_p1',d.prop>1); f('f_p2',d.prop>1); f('f_h',d.hotel>1);
+  $('n_g1').classList.toggle('node-dead',!S.g1);
+  $('n_g2').classList.toggle('node-dead',!S.g2);
+  $('n_c1').classList.toggle('node-dead',!S.g1);
+  $('n_c2').classList.toggle('node-dead',!S.g2);
+  $('n_it').classList.toggle('node-alarm',S.ef);
+  $('n_hotel').classList.toggle('node-alarm',S.shedding);
+  // metrics
+  $('m_dem').textContent=r(d.demand)+' kW';
+  const l1=100*d.g1/CAP.gen,l2=100*d.g2/CAP.gen;
+  $('m_g1').textContent=r(l1)+'%'; $('bar_g1').style.width=Math.min(100,l1)+'%';
+  $('m_g2').textContent=r(l2)+'%'; $('bar_g2').style.width=Math.min(100,l2)+'%';
+  $('m_soc').textContent=r(S.soc)+'%'; $('bar_soc').style.width=S.soc+'%';
+  $('m_bp').textContent=(d.bess>0?'+':'')+r(d.bess)+' kW '+(d.bess>0.5?'(discharge)':d.bess<-0.5?'(charge)':'');
+  const useable=(S.soc-20)/100*CAP.bessKwh;
+  $('m_ze').textContent=(d.demand>0&&useable>0)?(useable/Math.min(d.demand,CAP.bessKw)).toFixed(1)+' h @ current load':'—';
+  const gTot=d.g1+d.g2;
+  $('m_fr').textContent=r(gTot*0.21)+' L/h';
+  $('m_fuel').textContent=S.fuel.toFixed(1)+' L';
+  $('m_ir').textContent=S.ef?'0.05 MΩ':'> 5 MΩ';
+  $('m_ir').style.color=S.ef?'var(--bad)':'';
+  $('v_ir').textContent=S.ef?'0.05 MΩ':'> 5 MΩ';
+  $('v_ir').setAttribute('fill',S.ef?'#ef4444':'#22d3ee');
+  $('v_irst').textContent=S.ef?'FIRST EARTH FAULT · ALARM · locate & clear':'IT system · unearthed · healthy';
+  // banner
+  if(d.shedKw>0.5) banner('bad','OVERLOAD — shedding non-essential load · reduce telegraph or start additional generation');
+  else if(S.ef) banner('warn','EARTH FAULT ALARM — first fault on IT system · no trip, service continuity maintained · locate before second fault');
+  else if(S.mode==='ze') banner('ok','ZERO-EMISSION SAILING — BESS only · '+$('m_ze').textContent);
+  else if(S.g1||S.g2) banner('warn',(S.g1&&S.g2?'TWO GENSETS':'ONE GENSET')+' ON LOAD — PMS dispatch'+(d.bess<-0.5?' · BESS charging':d.bess>0.5?' · BESS peak-shaving':''));
+  else banner('ok','HYBRID MODE — BESS covering demand · gensets standby');
+}
+function banner(cls,txt){const b=$('banner');b.className='banner '+cls;$('bannerTxt').textContent=txt;}
+function tickRender(){render(dispatch(0));}
+
+setInterval(()=>{render(dispatch(1/240));},1000); // 1 tick = 15 sim-seconds
+log('Simulation initialised — hybrid-electric DC-bus plant · IT system healthy','e-ok');
+tickRender();
+</script>
+</body>
+</html>
