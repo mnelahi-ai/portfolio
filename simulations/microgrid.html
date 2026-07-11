@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#4f46e5">
+<meta name="description" content="Interactive hybrid microgrid simulation — solar, wind, BESS and diesel genset dispatch with live renewable fraction, state of charge and fuel burn. By Mashuk Elahi, Critical Power Systems Engineer.">
+<title>Hybrid Microgrid Simulation — Mashuk Elahi</title>
+<style>
+  :root{
+    --bg:#0b0f1a; --panel:#111827; --panel2:#0f172a; --line:#1f2937;
+    --ind:#4f46e5; --ind2:#6366f1; --txt:#e5e7eb; --mut:#9ca3af;
+    --ok:#22c55e; --warn:#f59e0b; --bad:#ef4444; --cyan:#22d3ee; --sun:#fbbf24; --wind:#38bdf8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;min-height:100vh}
+  a{color:var(--ind2);text-decoration:none}
+  header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 22px;border-bottom:1px solid var(--line);background:rgba(11,15,26,.92);position:sticky;top:0;z-index:10;flex-wrap:wrap}
+  header .brand{font-weight:700;letter-spacing:.3px}
+  header .brand span{color:var(--ind2)}
+  .tag{font-size:12px;color:var(--mut)}
+  .wrap{max-width:1180px;margin:0 auto;padding:20px 18px 60px}
+  h1{font-size:clamp(20px,3vw,30px);margin:14px 0 6px}
+  .sub{color:var(--mut);font-size:14px;max-width:840px;line-height:1.5}
+  .grid{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-top:20px}
+  @media(max-width:920px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+  .card h2{font-size:13px;text-transform:uppercase;letter-spacing:1.4px;color:var(--ind2);margin-bottom:10px}
+  svg{width:100%;height:auto;display:block}
+  .sld{display:flex;flex-direction:column;gap:14px}
+  label.sl{display:block;font-size:13px;margin:10px 0 4px;color:var(--txt)}
+  label.sl b{float:right;font-variant-numeric:tabular-nums;color:var(--cyan)}
+  input[type=range]{width:100%;accent-color:var(--ind);cursor:pointer}
+  .metric{display:flex;justify-content:space-between;align-items:baseline;padding:7px 2px;border-bottom:1px dashed var(--line);font-size:13px}
+  .metric:last-child{border-bottom:none}
+  .metric b{font-size:15px;font-variant-numeric:tabular-nums}
+  .banner{margin-top:14px;border-radius:10px;padding:12px 14px;font-weight:600;font-size:14px;border:1px solid;display:flex;gap:10px;align-items:center}
+  .banner.ok{border-color:#14532d;background:#052e16;color:var(--ok)}
+  .banner.warn{border-color:#713f12;background:#2a1e05;color:var(--warn)}
+  .banner.bad{border-color:#7f1d1d;background:#2a0a0a;color:var(--bad)}
+  .dot{width:10px;height:10px;border-radius:50%;background:currentColor;flex:none;animation:pulse 1.2s infinite}
+  @keyframes pulse{50%{opacity:.35}}
+  .bar{height:9px;background:var(--panel2);border-radius:6px;overflow:hidden;margin-top:5px;border:1px solid var(--line)}
+  .bar i{display:block;height:100%;border-radius:6px;transition:width .4s;background:linear-gradient(90deg,var(--ind),var(--cyan))}
+  .bar.green i{background:linear-gradient(90deg,#16a34a,#4ade80)}
+  .presets{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+  .presets button{background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:9px 8px;font-size:12.5px;cursor:pointer;transition:border-color .15s}
+  .presets button:hover{border-color:var(--ind)}
+  footer{border-top:1px solid var(--line);color:var(--mut);text-align:center;padding:18px;font-size:12px;margin-top:30px}
+  .hint{font-size:12px;color:var(--mut);margin-top:10px}
+  .box{fill:var(--panel2);stroke:#334155;stroke-width:1.2}
+  .lbl{fill:var(--txt);font-size:11px;font-weight:600}
+  .lbl2{fill:var(--mut);font-size:9.5px}
+  .val{fill:var(--cyan);font-size:11px;font-weight:700;font-variant-numeric:tabular-nums}
+  .flow{stroke-width:2.6;fill:none;stroke-dasharray:6 7;animation:dash 1s linear infinite}
+  .f-sun{stroke:var(--sun)} .f-wind{stroke:var(--wind)} .f-batt{stroke:var(--cyan)} .f-gen{stroke:var(--warn)} .f-bus{stroke:var(--ind2)}
+  .flow.dead{stroke:#374151;animation:none;stroke-dasharray:3 5}
+  .flow.rev{animation:dashrev 1s linear infinite}
+  @keyframes dash{to{stroke-dashoffset:-13}}
+  @keyframes dashrev{to{stroke-dashoffset:13}}
+  .node-dead rect{stroke:#475569!important;fill:#0d1017!important}
+  .node-dead text{fill:#6b7280!important}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Mashuk <span>Elahi</span> · Critical Power Simulations</div>
+  <nav style="display:flex;gap:16px;font-size:13px">
+    <a href="datacenter.html">Data Center 2N</a>
+    <a href="microgrid.html" style="color:var(--txt);font-weight:600">Hybrid Microgrid</a>
+    <a href="../index.html#simulations">← Back to Portfolio</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <div class="tag">INTERACTIVE SIMULATION · SOLAR · WIND · BESS · DIESEL DISPATCH</div>
+  <h1>Hybrid Microgrid Dispatch Simulation</h1>
+  <p class="sub">A live energy-balance model of an autonomous hybrid plant: solar PV, wind turbine, battery energy storage and a diesel genset serving a variable load. Drive irradiance, wind speed and demand — the dispatcher covers the load renewables-first, cycles the BESS within SOC limits, and auto-starts the genset only when needed.</p>
+
+  <div id="banner" class="banner ok"><span class="dot"></span><span id="bannerTxt">100% RENEWABLE — load covered by solar & wind · BESS charging</span></div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Power Flow — Hybrid Plant Single-Line</h2>
+      <svg viewBox="0 0 760 520" xmlns="http://www.w3.org/2000/svg" aria-label="Hybrid microgrid power flow diagram">
+        <!-- Sources column -->
+        <g id="n_pv"><rect class="box" x="40" y="30" width="185" height="58" rx="7"/>
+          <text class="lbl" x="132" y="50" text-anchor="middle">☀ SOLAR PV · 250 kWp</text>
+          <text class="val" id="v_pv" x="132" y="66" text-anchor="middle">0 kW</text>
+          <text class="lbl2" x="132" y="79" text-anchor="middle">MPPT inverters</text></g>
+        <g id="n_wt"><rect class="box" x="40" y="130" width="185" height="58" rx="7"/>
+          <text class="lbl" x="132" y="150" text-anchor="middle">🌀 WIND TURBINE · 150 kW</text>
+          <text class="val" id="v_wt" x="132" y="166" text-anchor="middle">0 kW</text>
+          <text class="lbl2" x="132" y="179" text-anchor="middle">cut-in 3 · rated 12 · cut-out 25 m/s</text></g>
+        <g id="n_bess"><rect class="box" x="40" y="230" width="185" height="66" rx="7"/>
+          <text class="lbl" x="132" y="250" text-anchor="middle">🔋 BESS · 72 kWh Li-ion</text>
+          <text class="val" id="v_bess" x="132" y="266" text-anchor="middle">0 kW</text>
+          <text class="lbl2" id="v_soc" x="132" y="280" text-anchor="middle">SOC 60% · idle</text></g>
+        <g id="n_gen"><rect class="box" x="40" y="340" width="185" height="58" rx="7"/>
+          <text class="lbl" x="132" y="360" text-anchor="middle">⛽ DIESEL GENSET · 200 kVA</text>
+          <text class="val" id="v_gen" x="132" y="376" text-anchor="middle">0 kW</text>
+          <text class="lbl2" id="v_genst" x="132" y="389" text-anchor="middle">standby · auto-start</text></g>
+
+        <!-- flows to bus -->
+        <path id="f_pv"  class="flow f-sun"  d="M225 59  H 370"/>
+        <path id="f_wt"  class="flow f-wind" d="M225 159 H 370"/>
+        <path id="f_bess" class="flow f-batt" d="M225 263 H 370"/>
+        <path id="f_gen" class="flow f-gen dead" d="M225 369 H 370"/>
+
+        <!-- Bus -->
+        <rect x="370" y="30" width="14" height="380" rx="4" fill="#1e293b" stroke="#4f46e5" stroke-width="1.6"/>
+        <text class="lbl" x="377" y="440" text-anchor="middle">400V AC BUS</text>
+        <text class="lbl2" x="377" y="454" text-anchor="middle">islanded · 50 Hz</text>
+
+        <!-- Load -->
+        <path id="f_load" class="flow f-bus" d="M384 220 H 530"/>
+        <g id="n_load"><rect class="box" x="530" y="185" width="195" height="70" rx="8" style="stroke:#4f46e5;stroke-width:1.8"/>
+          <text class="lbl" x="627" y="208" text-anchor="middle">SITE LOAD</text>
+          <text class="val" id="v_load" x="627" y="226" text-anchor="middle" style="font-size:14px">120 kW</text>
+          <text class="lbl2" id="v_loadst" x="627" y="243" text-anchor="middle" fill="#22c55e">SUPPLIED · STABLE</text></g>
+
+        <!-- Frequency dial -->
+        <g><rect class="box" x="530" y="300" width="195" height="54" rx="7"/>
+          <text class="lbl2" x="627" y="320" text-anchor="middle">BUS FREQUENCY</text>
+          <text class="val" id="v_hz" x="627" y="340" text-anchor="middle" style="font-size:15px">50.00 Hz</text></g>
+      </svg>
+      <div class="hint">Yellow = solar · blue = wind · cyan = BESS (reverses when charging) · amber = genset · grey = idle.</div>
+    </div>
+
+    <div>
+      <div class="card">
+        <h2>Environment & Demand</h2>
+        <label class="sl">Solar irradiance <b id="l_irr">650 W/m²</b></label>
+        <input type="range" id="s_irr" min="0" max="1000" value="650" oninput="tickRender()">
+        <label class="sl">Wind speed <b id="l_wind">8.0 m/s</b></label>
+        <input type="range" id="s_wind" min="0" max="28" value="8" step="0.5" oninput="tickRender()">
+        <label class="sl">Load demand <b id="l_load">120 kW</b></label>
+        <input type="range" id="s_load" min="10" max="320" value="120" oninput="tickRender()">
+        <div class="presets">
+          <button onclick="preset(950,10,150)">☀ Sunny midday</button>
+          <button onclick="preset(0,14,180)">🌙 Windy night</button>
+          <button onclick="preset(0,2,220)">⚡ Calm night · peak load</button>
+          <button onclick="preset(300,26,120)">🌪 Storm (turbine cut-out)</button>
+        </div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h2>Dispatch & Energy</h2>
+        <div class="metric"><span>Renewable output</span><b id="m_ren">0 kW</b></div>
+        <div class="metric"><span>Renewable fraction (instant)</span><b id="m_rf">0%</b></div>
+        <div class="bar green"><i id="bar_rf" style="width:0%"></i></div>
+        <div class="metric" style="margin-top:6px"><span>BESS state of charge</span><b id="m_soc">60%</b></div>
+        <div class="bar"><i id="bar_soc" style="width:60%"></i></div>
+        <div class="metric" style="margin-top:6px"><span>BESS power</span><b id="m_bp">0 kW</b></div>
+        <div class="metric"><span>Genset output</span><b id="m_gp">0 kW</b></div>
+        <div class="metric"><span>Fuel burn (session)</span><b id="m_fuel">0.0 L</b></div>
+        <div class="metric"><span>Genset run-hours</span><b id="m_hrs">0.00 h</b></div>
+        <div class="metric"><span>Unserved load events</span><b id="m_shed">0</b></div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h2>Dispatch Rules</h2>
+        <p class="sub" style="font-size:12.5px;line-height:1.6">
+          1 · Renewables serve the load first.<br>
+          2 · Surplus charges the BESS (≤ 60 kW, ≤ 95% SOC).<br>
+          3 · Deficit discharges the BESS (≤ 60 kW, ≥ 15% SOC).<br>
+          4 · Genset auto-starts on SOC ≤ 20% or deficit &gt; BESS rating; runs ≥ 30% load, recharges BESS with spare capacity.<br>
+          5 · Turbine cuts out above 25 m/s; load shed only if all sources exhausted.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h2>Engineering Basis</h2>
+    <p class="sub" style="font-size:13px">Mirrors the autonomous solar-wind remote power plant I engineered at Phoenix Mecano — hybrid generation with UPS/BESS backbone and SCADA supervision under IECEx/ATEX discipline. Wind output follows a cubic power curve between cut-in and rated speed; PV output scales with irradiance at 20% system efficiency; genset fuel burn is modelled at 0.27 L/kWh with a 30% minimum-load rule to avoid wet-stacking. Frequency deviation indicates instantaneous supply-demand imbalance — sustained imbalance triggers load shed, the microgrid equivalent of losing the critical bus.</p>
+  </div>
+</div>
+
+<footer>© 2026 Mashuk Elahi — Critical Power Systems Engineer · <a href="../index.html">Portfolio</a> · <a href="mailto:m_nelahi@yahoo.com">m_nelahi@yahoo.com</a></footer>
+
+<script>
+'use strict';
+const CAP={pv:250,wt:150,bessKwh:72,bessKw:60,gen:160}; // gen 200kVA @0.8pf
+const S={soc:60,fuel:0,genH:0,shed:0,genOn:false};
+const $=id=>document.getElementById(id);
+
+function pvOut(irr){ return CAP.pv*(irr/1000); }
+function wtOut(v){
+  if(v<3||v>25) return 0;
+  if(v>=12) return CAP.wt;
+  return CAP.wt*Math.pow((v-3)/9,3);
+}
+
+function dispatch(dt){ // dt hours
+  const irr=+$('s_irr').value, wind=+$('s_wind').value, load=+$('s_load').value;
+  const pv=pvOut(irr), wt=wtOut(wind), ren=pv+wt;
+  let bess=0, gen=0, served=load;
+  let bal=ren-load; // + surplus / - deficit
+  if(bal>=0){
+    // charge
+    if(S.soc<95){ bess=-Math.min(bal,CAP.bessKw); }
+    S.genOn=false;
+  } else {
+    const deficit=-bal;
+    const canDis=(S.soc>15)?Math.min(CAP.bessKw,deficit):0;
+    // genset start logic
+    if(S.soc<=20 || deficit>canDis) S.genOn=true;
+    if(S.soc>=45 && S.genOn && deficit<=canDis) S.genOn=false; // stop with hysteresis
+    if(S.genOn){
+      gen=Math.min(CAP.gen,Math.max(deficit,CAP.gen*0.3));
+      const spare=gen-deficit;
+      if(spare>0 && S.soc<95) bess=-Math.min(spare,CAP.bessKw);
+      else if(spare<0){ const need=-spare; bess=(S.soc>15)?Math.min(CAP.bessKw,need):0; }
+    } else {
+      bess=canDis;
+    }
+    const supply=ren+gen+Math.max(bess,0);
+    if(supply<load-0.5){ served=supply; }
+  }
+  // integrate
+  if(dt>0){
+    S.soc=Math.min(95,Math.max(5,S.soc+(-bess)*dt/CAP.bessKwh*100));
+    if(S.genOn&&gen>0){ S.fuel+=gen*0.27*dt; S.genH+=dt; }
+  }
+  return {pv,wt,ren,bess,gen,load,served};
+}
+
+function render(d){
+  $('l_irr').textContent=$('s_irr').value+' W/m²';
+  $('l_wind').textContent=(+$('s_wind').value).toFixed(1)+' m/s';
+  $('l_load').textContent=$('s_load').value+' kW';
+  const r=x=>Math.round(x);
+  $('v_pv').textContent=r(d.pv)+' kW';
+  $('v_wt').textContent=r(d.wt)+' kW';
+  $('v_bess').textContent=(d.bess>0?'+':'')+r(d.bess)+' kW';
+  $('v_soc').textContent='SOC '+r(S.soc)+'% · '+(d.bess>0.5?'discharging':d.bess<-0.5?'charging':'idle');
+  $('v_gen').textContent=r(d.gen)+' kW';
+  $('v_genst').textContent=S.genOn?'RUNNING · on load':'standby · auto-start';
+  $('v_load').textContent=r(d.load)+' kW';
+  // flows
+  const f=(id,on)=>$(id).classList.toggle('dead',!on);
+  f('f_pv',d.pv>1); f('f_wt',d.wt>1); f('f_gen',d.gen>1);
+  f('f_bess',Math.abs(d.bess)>0.5);
+  $('f_bess').classList.toggle('rev',d.bess<-0.5);
+  f('f_load',d.served>1);
+  // node dims
+  $('n_pv').classList.toggle('node-dead',d.pv<=1);
+  $('n_wt').classList.toggle('node-dead',d.wt<=1);
+  $('n_gen').classList.toggle('node-dead',!S.genOn);
+  // metrics
+  $('m_ren').textContent=r(d.ren)+' kW';
+  const rf=d.load>0?Math.min(100,100*Math.min(d.ren,d.served)/d.load):100;
+  $('m_rf').textContent=r(rf)+'%';
+  $('bar_rf').style.width=rf+'%';
+  $('m_soc').textContent=r(S.soc)+'%';
+  $('bar_soc').style.width=S.soc+'%';
+  $('m_bp').textContent=(d.bess>0?'+':'')+r(d.bess)+' kW '+(d.bess>0.5?'(discharge)':d.bess<-0.5?'(charge)':'');
+  $('m_gp').textContent=r(d.gen)+' kW';
+  $('m_fuel').textContent=S.fuel.toFixed(1)+' L';
+  $('m_hrs').textContent=S.genH.toFixed(2)+' h';
+  $('m_shed').textContent=S.shed;
+  // frequency & status
+  const short=d.load-d.served;
+  const hz=short>0.5?(50-Math.min(2.5,short/40)):50+(d.bess<-0.5?0.02:0);
+  $('v_hz').textContent=hz.toFixed(2)+' Hz';
+  const st=$('v_loadst'), wcut=(+$('s_wind').value)>25;
+  if(short>0.5){ st.textContent='LOAD SHED — SUPPLY SHORTFALL'; st.setAttribute('fill','#ef4444');
+    banner('bad','SUPPLY SHORTFALL — '+r(short)+' kW unserved · all sources exhausted'); }
+  else if(S.genOn){ st.textContent='SUPPLIED · GENSET ASSIST'; st.setAttribute('fill','#f59e0b');
+    banner('warn','GENSET RUNNING — renewables insufficient · '+r(rf)+'% renewable'+(wcut?' · turbine cut-out (storm)':'')); }
+  else if(d.bess>0.5){ st.textContent='SUPPLIED · BESS DISCHARGING'; st.setAttribute('fill','#22d3ee');
+    banner('warn','BESS DISPATCH — battery covering deficit · SOC '+r(S.soc)+'%'); }
+  else { st.textContent='SUPPLIED · STABLE'; st.setAttribute('fill','#22c55e');
+    banner('ok', r(rf)+'% RENEWABLE — load covered by solar & wind'+(d.bess<-0.5?' · BESS charging':'')); }
+}
+function banner(cls,txt){const b=$('banner');b.className='banner '+cls;$('bannerTxt').textContent=txt;}
+function preset(irr,wind,load){ $('s_irr').value=irr; $('s_wind').value=wind; $('s_load').value=load; tickRender(); }
+function tickRender(){ render(dispatch(0)); }
+
+let lastShort=false;
+setInterval(()=>{
+  const d=dispatch(1/120); // each tick = 30 sim-seconds
+  const short=d.load-d.served>0.5;
+  if(short&&!lastShort) S.shed++;
+  lastShort=short;
+  render(d);
+},1000);
+tickRender();
+</script>
+</body>
+</html>
