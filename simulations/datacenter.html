@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#4f46e5">
+<meta name="description" content="Interactive Tier III/IV data center 2N power simulation — trip utility feeds, fail UPS modules, and watch the dual-corded critical load ride through. By Mashuk Elahi, Critical Power Systems Engineer.">
+<title>Data Center 2N Power Simulation — Mashuk Elahi</title>
+<style>
+  :root{
+    --bg:#0b0f1a; --panel:#111827; --panel2:#0f172a; --line:#1f2937;
+    --ind:#4f46e5; --ind2:#6366f1; --txt:#e5e7eb; --mut:#9ca3af;
+    --ok:#22c55e; --warn:#f59e0b; --bad:#ef4444; --cyan:#22d3ee;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;min-height:100vh}
+  a{color:var(--ind2);text-decoration:none}
+  header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 22px;border-bottom:1px solid var(--line);background:rgba(11,15,26,.92);position:sticky;top:0;z-index:10;flex-wrap:wrap}
+  header .brand{font-weight:700;letter-spacing:.3px}
+  header .brand span{color:var(--ind2)}
+  .tag{font-size:12px;color:var(--mut)}
+  .wrap{max-width:1180px;margin:0 auto;padding:20px 18px 60px}
+  h1{font-size:clamp(20px,3vw,30px);margin:14px 0 6px}
+  .sub{color:var(--mut);font-size:14px;max-width:820px;line-height:1.5}
+  .grid{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-top:20px}
+  @media(max-width:920px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+  .card h2{font-size:13px;text-transform:uppercase;letter-spacing:1.4px;color:var(--ind2);margin-bottom:10px}
+  svg{width:100%;height:auto;display:block}
+  .ctrls{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  button.ctl{background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:10px 8px;font-size:13px;cursor:pointer;text-align:left;transition:border-color .15s,background .15s}
+  button.ctl:hover{border-color:var(--ind)}
+  button.ctl .st{display:block;font-size:11px;margin-top:3px;color:var(--ok)}
+  button.ctl.off{background:#1f1116;border-color:#7f1d1d}
+  button.ctl.off .st{color:var(--bad)}
+  .metric{display:flex;justify-content:space-between;align-items:baseline;padding:7px 2px;border-bottom:1px dashed var(--line);font-size:13px}
+  .metric:last-child{border-bottom:none}
+  .metric b{font-size:15px;font-variant-numeric:tabular-nums}
+  .banner{margin-top:14px;border-radius:10px;padding:12px 14px;font-weight:600;font-size:14px;border:1px solid;display:flex;gap:10px;align-items:center}
+  .banner.ok{border-color:#14532d;background:#052e16;color:var(--ok)}
+  .banner.warn{border-color:#713f12;background:#2a1e05;color:var(--warn)}
+  .banner.bad{border-color:#7f1d1d;background:#2a0a0a;color:var(--bad)}
+  .dot{width:10px;height:10px;border-radius:50%;background:currentColor;flex:none;animation:pulse 1.2s infinite}
+  @keyframes pulse{50%{opacity:.35}}
+  .log{max-height:190px;overflow-y:auto;font-family:Consolas,Menlo,monospace;font-size:12px;line-height:1.55}
+  .log div{padding:2px 0;border-bottom:1px solid #0d1522;color:var(--mut)}
+  .log .e-bad{color:var(--bad)} .log .e-ok{color:var(--ok)} .log .e-warn{color:var(--warn)}
+  .bar{height:9px;background:var(--panel2);border-radius:6px;overflow:hidden;margin-top:5px;border:1px solid var(--line)}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ind),var(--cyan));border-radius:6px;transition:width .4s}
+  footer{border-top:1px solid var(--line);color:var(--mut);text-align:center;padding:18px;font-size:12px;margin-top:30px}
+  .hint{font-size:12px;color:var(--mut);margin-top:10px}
+  /* SVG element styles */
+  .box{fill:var(--panel2);stroke:#334155;stroke-width:1.2;rx:6}
+  .lbl{fill:var(--txt);font-size:11px;font-weight:600}
+  .lbl2{fill:var(--mut);font-size:9px}
+  .flow{stroke:var(--ind2);stroke-width:2.4;fill:none;stroke-dasharray:6 7;animation:dash 1s linear infinite}
+  .flow.dead{stroke:#374151;animation:none;stroke-dasharray:3 5}
+  .flow.gen{stroke:var(--warn)}
+  .flow.batt{stroke:var(--cyan)}
+  @keyframes dash{to{stroke-dashoffset:-13}}
+  .node-dead rect{stroke:#7f1d1d!important;fill:#170d12!important}
+  .node-dead text{fill:#6b7280!important}
+  .clickable{cursor:pointer}
+  .clickable:hover rect{stroke:var(--ind2)}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Mashuk <span>Elahi</span> · Critical Power Simulations</div>
+  <nav style="display:flex;gap:16px;font-size:13px">
+    <a href="datacenter.html" style="color:var(--txt);font-weight:600">Data Center 2N</a>
+    <a href="microgrid.html">Hybrid Microgrid</a>
+    <a href="../index.html#simulations">← Back to Portfolio</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <div class="tag">INTERACTIVE SIMULATION · TIER III / IV DESIGN LOGIC</div>
+  <h1>Data Center 2N Critical Power Simulation</h1>
+  <p class="sub">A live single-line diagram of a 2N dual-path power architecture. Trip a utility feed, fail a UPS module, or hold off the standby generator — the dual-corded IT load rides through on the healthy path or UPS battery. Click components in the diagram or use the control panel.</p>
+
+  <div id="banner" class="banner ok"><span class="dot"></span><span id="bannerTxt">SYSTEM NORMAL — 2N redundancy available · both paths energised</span></div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Single-Line Diagram — 2N Architecture</h2>
+      <svg viewBox="0 0 760 560" xmlns="http://www.w3.org/2000/svg" aria-label="2N power single line diagram">
+        <!-- feeders -->
+        <g id="n_utilA" class="clickable" onclick="toggle('utilA')">
+          <rect class="box" x="70" y="20" width="200" height="46" rx="6"/>
+          <text class="lbl" x="170" y="39" text-anchor="middle">UTILITY FEED A</text>
+          <text class="lbl2" x="170" y="54" text-anchor="middle">22kV Intake · click to trip</text>
+        </g>
+        <g id="n_utilB" class="clickable" onclick="toggle('utilB')">
+          <rect class="box" x="490" y="20" width="200" height="46" rx="6"/>
+          <text class="lbl" x="590" y="39" text-anchor="middle">UTILITY FEED B</text>
+          <text class="lbl2" x="590" y="54" text-anchor="middle">22kV Intake · click to trip</text>
+        </g>
+        <path id="f_uA" class="flow" d="M170 66 V 110"/>
+        <path id="f_uB" class="flow" d="M590 66 V 110"/>
+
+        <!-- generator -->
+        <g id="n_gen" class="clickable" onclick="toggle('gen')">
+          <rect class="box" x="300" y="88" width="160" height="50" rx="6"/>
+          <text class="lbl" x="380" y="108" text-anchor="middle">STANDBY GEN 2MVA</text>
+          <text class="lbl2" id="genLbl" x="380" y="123" text-anchor="middle">AUTO · standby</text>
+        </g>
+        <path id="f_gA" class="flow gen dead" d="M300 113 H 240 Q 230 113 230 123 V 140"/>
+        <path id="f_gB" class="flow gen dead" d="M460 113 H 520 Q 530 113 530 123 V 140"/>
+
+        <!-- MV swgr -->
+        <g id="n_mvA"><rect class="box" x="120" y="140" width="200" height="46"/>
+          <text class="lbl" x="220" y="159" text-anchor="middle">MV SWITCHGEAR A</text>
+          <text class="lbl2" x="220" y="174" text-anchor="middle">11kV · ATS Utility/Gen</text></g>
+        <g id="n_mvB"><rect class="box" x="440" y="140" width="200" height="46"/>
+          <text class="lbl" x="540" y="159" text-anchor="middle">MV SWITCHGEAR B</text>
+          <text class="lbl2" x="540" y="174" text-anchor="middle">11kV · ATS Utility/Gen</text></g>
+        <path id="f_mA" class="flow" d="M220 186 V 226"/>
+        <path id="f_mB" class="flow" d="M540 186 V 226"/>
+
+        <!-- TX + LV -->
+        <g id="n_txA"><rect class="box" x="120" y="226" width="200" height="42"/>
+          <text class="lbl" x="220" y="243" text-anchor="middle">TX A · 11kV/400V</text>
+          <text class="lbl2" x="220" y="257" text-anchor="middle">2.5 MVA Dyn11</text></g>
+        <g id="n_txB"><rect class="box" x="440" y="226" width="200" height="42"/>
+          <text class="lbl" x="540" y="243" text-anchor="middle">TX B · 11kV/400V</text>
+          <text class="lbl2" x="540" y="257" text-anchor="middle">2.5 MVA Dyn11</text></g>
+        <path id="f_tA" class="flow" d="M220 268 V 306"/>
+        <path id="f_tB" class="flow" d="M540 268 V 306"/>
+
+        <!-- UPS -->
+        <g id="n_upsA" class="clickable" onclick="toggle('upsA')">
+          <rect class="box" x="120" y="306" width="200" height="52"/>
+          <text class="lbl" x="220" y="325" text-anchor="middle">UPS A · 400kVA</text>
+          <text class="lbl2" id="socALbl" x="220" y="340" text-anchor="middle">Online · Battery 100%</text>
+          <text class="lbl2" x="220" y="352" text-anchor="middle" fill="#475569">click to fail module</text>
+        </g>
+        <g id="n_upsB" class="clickable" onclick="toggle('upsB')">
+          <rect class="box" x="440" y="306" width="200" height="52"/>
+          <text class="lbl" x="540" y="325" text-anchor="middle">UPS B · 400kVA</text>
+          <text class="lbl2" id="socBLbl" x="540" y="340" text-anchor="middle">Online · Battery 100%</text>
+          <text class="lbl2" x="540" y="352" text-anchor="middle" fill="#475569">click to fail module</text>
+        </g>
+        <path id="f_pA" class="flow" d="M220 358 V 398"/>
+        <path id="f_pB" class="flow" d="M540 358 V 398"/>
+
+        <!-- PDU -->
+        <g id="n_pduA"><rect class="box" x="120" y="398" width="200" height="42"/>
+          <text class="lbl" x="220" y="415" text-anchor="middle">PDU A</text>
+          <text class="lbl2" x="220" y="429" text-anchor="middle">Cord A distribution</text></g>
+        <g id="n_pduB"><rect class="box" x="440" y="398" width="200" height="42"/>
+          <text class="lbl" x="540" y="415" text-anchor="middle">PDU B</text>
+          <text class="lbl2" x="540" y="429" text-anchor="middle">Cord B distribution</text></g>
+        <path id="f_lA" class="flow" d="M220 440 Q 220 470 300 480 Q 340 486 360 490"/>
+        <path id="f_lB" class="flow" d="M540 440 Q 540 470 460 480 Q 420 486 400 490"/>
+
+        <!-- Load -->
+        <g id="n_load">
+          <rect class="box" x="255" y="486" width="250" height="56" rx="8" style="stroke:#4f46e5;stroke-width:1.8"/>
+          <text class="lbl" x="380" y="507" text-anchor="middle">CRITICAL IT LOAD · 320 kW</text>
+          <text class="lbl2" id="loadLbl" x="380" y="523" text-anchor="middle" fill="#22c55e">DUAL-CORDED · ONLINE · A+B</text>
+        </g>
+      </svg>
+      <div class="hint">Amber dashes = generator power · cyan = UPS battery ride-through · grey = de-energised path.</div>
+    </div>
+
+    <div>
+      <div class="card">
+        <h2>Controls</h2>
+        <div class="ctrls">
+          <button class="ctl" id="b_utilA" onclick="toggle('utilA')">Utility Feed A<span class="st">CLOSED</span></button>
+          <button class="ctl" id="b_utilB" onclick="toggle('utilB')">Utility Feed B<span class="st">CLOSED</span></button>
+          <button class="ctl" id="b_upsA" onclick="toggle('upsA')">UPS Module A<span class="st">ONLINE</span></button>
+          <button class="ctl" id="b_upsB" onclick="toggle('upsB')">UPS Module B<span class="st">ONLINE</span></button>
+          <button class="ctl" id="b_gen" onclick="toggle('gen')">Generator Mode<span class="st">AUTO</span></button>
+          <button class="ctl" onclick="resetAll()">Reset Scenario<span class="st" style="color:var(--ind2)">RESTORE ALL</span></button>
+        </div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h2>Live Metrics</h2>
+        <div class="metric"><span>Critical load</span><b>320 kW</b></div>
+        <div class="metric"><span>Paths online</span><b id="mPaths">2 / 2</b></div>
+        <div class="metric"><span>Load status</span><b id="mLoad" style="color:var(--ok)">ONLINE</b></div>
+        <div class="metric"><span>Generator</span><b id="mGen">Standby</b></div>
+        <div class="metric"><span>UPS A battery</span><b id="mSocA">100%</b></div>
+        <div class="bar"><i id="barA" style="width:100%"></i></div>
+        <div class="metric" style="margin-top:6px"><span>UPS B battery</span><b id="mSocB">100%</b></div>
+        <div class="bar"><i id="barB" style="width:100%"></i></div>
+        <div class="metric" style="margin-top:6px"><span>Est. ride-through left</span><b id="mRide">—</b></div>
+        <div class="metric"><span>Uptime this scenario</span><b id="mUp">100.000%</b></div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h2>Event Log</h2>
+        <div class="log" id="log"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h2>Design Logic Demonstrated</h2>
+    <p class="sub" style="font-size:13px">This model applies the same principles I commission in the field: <b>2N path separation</b> (no shared single point of failure between A and B), <b>UPS ride-through</b> sized for generator start and transfer (10-minute battery at full load), <b>ATS transfer</b> of the MV boards to standby generation on dual utility loss, and <b>dual-corded load behaviour</b> — the IT load stays online while at least one cord is healthy. Availability is logged against the 99.999% (five-nines) target: 5.26 minutes of allowable downtime per year.</p>
+  </div>
+</div>
+
+<footer>© 2026 Mashuk Elahi — Critical Power Systems Engineer · <a href="../index.html">Portfolio</a> · <a href="mailto:m_nelahi@yahoo.com">m_nelahi@yahoo.com</a></footer>
+
+<script>
+'use strict';
+const S = { utilA:true, utilB:true, upsA:true, upsB:true, genAuto:true,
+  socA:100, socB:100, genRun:false, downSec:0, totSec:0 };
+const BATT_MIN = 10; // minutes at full load
+const $ = id => document.getElementById(id);
+
+function log(msg, cls){
+  const d = document.createElement('div');
+  d.textContent = new Date().toLocaleTimeString() + '  ' + msg;
+  if(cls) d.className = cls;
+  $('log').prepend(d);
+  while($('log').children.length > 40) $('log').lastChild.remove();
+}
+
+function toggle(k){
+  if(k==='gen'){ S.genAuto = !S.genAuto; log('Generator mode set to ' + (S.genAuto?'AUTO':'OFF / LOCKED OUT'), S.genAuto?'e-ok':'e-warn'); }
+  else {
+    S[k] = !S[k];
+    const names = {utilA:'Utility Feed A', utilB:'Utility Feed B', upsA:'UPS Module A', upsB:'UPS Module B'};
+    log(names[k] + (S[k] ? ' RESTORED' : (k.startsWith('util')?' TRIPPED — breaker open':' FAILED — module offline')), S[k]?'e-ok':'e-bad');
+  }
+  render();
+}
+function resetAll(){
+  Object.assign(S,{utilA:true,utilB:true,upsA:true,upsB:true,genAuto:true,socA:100,socB:100,genRun:false,downSec:0,totSec:0});
+  log('Scenario reset — all systems restored, batteries recharged','e-ok');
+  render();
+}
+
+function calc(){
+  // generator starts if any utility lost and mode AUTO
+  const genNeeded = (!S.utilA || !S.utilB) && S.genAuto;
+  S.genRun = genNeeded;
+  const srcA = S.utilA || S.genRun;   // MV board A energised
+  const srcB = S.utilB || S.genRun;
+  // Path alive: (source OR battery>0) AND ups module healthy
+  const battA = !srcA && S.upsA && S.socA > 0;
+  const battB = !srcB && S.upsB && S.socB > 0;
+  const pathA = S.upsA && (srcA || battA);
+  const pathB = S.upsB && (srcB || battB);
+  return {srcA,srcB,battA,battB,pathA,pathB,online:pathA||pathB};
+}
+
+function render(){
+  const c = calc();
+  // buttons
+  const set=(id,on,onTxt,offTxt)=>{const b=$(id);b.classList.toggle('off',!on);b.querySelector('.st').textContent=on?onTxt:offTxt;};
+  set('b_utilA',S.utilA,'CLOSED','TRIPPED');
+  set('b_utilB',S.utilB,'CLOSED','TRIPPED');
+  set('b_upsA',S.upsA,'ONLINE','FAILED');
+  set('b_upsB',S.upsB,'ONLINE','FAILED');
+  set('b_gen',S.genAuto,'AUTO','OFF');
+  // svg nodes
+  $('n_utilA').classList.toggle('node-dead',!S.utilA);
+  $('n_utilB').classList.toggle('node-dead',!S.utilB);
+  $('n_upsA').classList.toggle('node-dead',!S.upsA);
+  $('n_upsB').classList.toggle('node-dead',!S.upsB);
+  $('n_gen').classList.toggle('node-dead',!S.genAuto && !S.genRun);
+  $('genLbl').textContent = S.genRun ? 'RUNNING · on load' : (S.genAuto ? 'AUTO · standby' : 'LOCKED OUT');
+  // flows
+  const f=(id,on)=>$(id).classList.toggle('dead',!on);
+  f('f_uA',S.utilA); f('f_uB',S.utilB);
+  f('f_gA',S.genRun && !S.utilA); f('f_gB',S.genRun && !S.utilB);
+  f('f_mA',c.srcA); f('f_mB',c.srcB);
+  f('f_tA',c.srcA); f('f_tB',c.srcB);
+  f('f_pA',c.pathA); f('f_pB',c.pathB);
+  f('f_lA',c.pathA); f('f_lB',c.pathB);
+  $('f_pA').classList.toggle('batt',c.battA);
+  $('f_pB').classList.toggle('batt',c.battB);
+  $('f_lA').classList.toggle('batt',c.battA);
+  $('f_lB').classList.toggle('batt',c.battB);
+  // metrics
+  const n=(c.pathA?1:0)+(c.pathB?1:0);
+  $('mPaths').textContent = n+' / 2';
+  $('mLoad').textContent = c.online?'ONLINE':'DOWN';
+  $('mLoad').style.color = c.online?'var(--ok)':'var(--bad)';
+  $('mGen').textContent = S.genRun?'Running':'Standby'+(S.genAuto?'':' (off)');
+  $('mSocA').textContent = Math.round(S.socA)+'%';
+  $('mSocB').textContent = Math.round(S.socB)+'%';
+  $('barA').style.width = S.socA+'%';
+  $('barB').style.width = S.socB+'%';
+  $('socALbl').textContent = (S.upsA?(c.battA?'ON BATTERY':'Online'):'FAILED')+' · Battery '+Math.round(S.socA)+'%';
+  $('socBLbl').textContent = (S.upsB?(c.battB?'ON BATTERY':'Online'):'FAILED')+' · Battery '+Math.round(S.socB)+'%';
+  const riding = c.battA||c.battB;
+  $('mRide').textContent = riding ? Math.max(0,(Math.max(c.battA?S.socA:0,c.battB?S.socB:0)/100*BATT_MIN)).toFixed(1)+' min' : '—';
+  // load label + banner
+  const ll=$('loadLbl');
+  if(c.online && n===2){ ll.textContent='DUAL-CORDED · ONLINE · A+B'; ll.setAttribute('fill','#22c55e'); banner('ok','SYSTEM NORMAL — 2N redundancy available · both paths energised'); }
+  else if(c.online && riding){ ll.textContent='ONLINE · UPS BATTERY RIDE-THROUGH'; ll.setAttribute('fill','#22d3ee'); banner('warn','RIDE-THROUGH — load on UPS battery · start standby generation before depletion'); }
+  else if(c.online){ ll.textContent='ONLINE · SINGLE PATH ('+(c.pathA?'A':'B')+') — N'; ll.setAttribute('fill','#f59e0b'); banner('warn','DEGRADED — single path only · redundancy lost, load still online'); }
+  else { ll.textContent='LOAD DOWN — TOTAL LOSS OF POWER'; ll.setAttribute('fill','#ef4444'); banner('bad','CRITICAL FAILURE — load de-energised · restore any source or UPS path'); }
+}
+function banner(cls,txt){ const b=$('banner'); b.className='banner '+cls; $('bannerTxt').textContent=txt; }
+
+// 1-second tick: drain/recharge batteries, track availability
+let lastDown=false;
+setInterval(()=>{
+  const c=calc();
+  const drain = 100/(BATT_MIN*60); // % per second at full load
+  if(c.battA) S.socA=Math.max(0,S.socA-drain); else if(c.srcA&&S.upsA) S.socA=Math.min(100,S.socA+drain/4);
+  if(c.battB) S.socB=Math.max(0,S.socB-drain); else if(c.srcB&&S.upsB) S.socB=Math.min(100,S.socB+drain/4);
+  S.totSec++;
+  if(!c.online){ S.downSec++; if(!lastDown) log('CRITICAL LOAD DE-ENERGISED','e-bad'); }
+  else if(lastDown){ log('Critical load re-energised','e-ok'); }
+  lastDown=!c.online;
+  const avail = S.totSec? (100*(1-S.downSec/S.totSec)) : 100;
+  $('mUp').textContent = avail.toFixed(3)+'%';
+  if((c.battA&&S.socA<=0)||(c.battB&&S.socB<=0)) render();
+  if(c.battA||c.battB||S.socA<100||S.socB<100) render();
+},1000);
+
+log('Simulation initialised — 2N architecture · all systems normal','e-ok');
+render();
+</script>
+</body>
+</html>
