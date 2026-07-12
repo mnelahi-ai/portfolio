@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#4f46e5">
+<meta name="description" content="Interactive lesson: circulating sheath current in single-core armored cables earthed at both ends — induced EMF, sheath losses, heating and bonding strategies (both-end, single-point, cross bonding). By Mashuk Elahi.">
+<title>Cable Sheath Circulating Current — Lessons Learned — Mashuk Elahi</title>
+<style>
+  :root{--bg:#0b0f1a;--panel:#111827;--panel2:#0f172a;--line:#1f2937;--ind:#4f46e5;--ind2:#6366f1;
+  --txt:#e5e7eb;--mut:#9ca3af;--ok:#22c55e;--warn:#f59e0b;--bad:#ef4444;--cyn:#22d3ee}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+  a{color:var(--ind2);text-decoration:none}
+  header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 22px;border-bottom:1px solid var(--line);background:rgba(11,15,26,.92);position:sticky;top:0;z-index:10;flex-wrap:wrap}
+  .brand{font-weight:700}.brand span{color:var(--ind2)}
+  nav{display:flex;gap:14px;font-size:13px;flex-wrap:wrap}
+  .wrap{max-width:1180px;margin:0 auto;padding:20px 18px 60px}
+  .tag{font-size:12px;color:var(--mut)}
+  h1{font-size:clamp(20px,3vw,30px);margin:14px 0 6px}
+  .sub{color:var(--mut);font-size:14px;max-width:880px;line-height:1.5}
+  .grid{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-top:20px}
+  @media(max-width:920px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+  .card h2{font-size:13px;text-transform:uppercase;letter-spacing:1.4px;color:var(--ind2);margin-bottom:10px}
+  svg{width:100%;height:auto;display:block}
+  .modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:6px}
+  .modes button{background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:9px 6px;font-size:12.5px;cursor:pointer}
+  .modes button.on{border-color:var(--ind);background:#1e1b4b;color:#c7d2fe;font-weight:600}
+  label.sl{display:block;font-size:13px;margin:10px 0 4px}label.sl b{float:right;color:var(--cyn)}
+  input[type=range]{width:100%;accent-color:var(--ind);cursor:pointer}
+  .metric{display:flex;justify-content:space-between;padding:7px 2px;border-bottom:1px dashed var(--line);font-size:13px}
+  .metric:last-child{border-bottom:none}.metric b{font-size:14px}
+  .bar{height:10px;background:var(--panel2);border-radius:6px;overflow:hidden;margin-top:5px;border:1px solid var(--line)}
+  .bar i{display:block;height:100%;border-radius:6px;transition:width .3s;background:linear-gradient(90deg,#22c55e,#f59e0b,#ef4444)}
+  .banner{margin-top:14px;border-radius:10px;padding:12px 14px;font-weight:600;font-size:13.5px;border:1px solid;line-height:1.5}
+  .banner.ok{border-color:#14532d;background:#052e16;color:#a7f3d0}
+  .banner.warn{border-color:#713f12;background:#2a1e05;color:#fde68a}
+  .banner.bad{border-color:#7f1d1d;background:#2a0a0a;color:#fecaca}
+  .flow{stroke-width:2.4;fill:none;stroke-dasharray:6 7;animation:d 1s linear infinite}
+  @keyframes d{to{stroke-dashoffset:-13}}
+  .lbl{fill:var(--txt);font-size:11px;font-weight:600}.lbl2{fill:var(--mut);font-size:9.5px}
+  footer{border-top:1px solid var(--line);color:var(--mut);text-align:center;padding:18px;font-size:12px;margin-top:30px}
+  .hint{font-size:12px;color:var(--mut);margin-top:8px;line-height:1.5}
+  .procon{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px;font-size:12px}
+  .procon>div{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:9px}
+  .procon h4{font-size:10.5px;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Mashuk <span>Elahi</span> · Energy Simulations</div>
+  <nav>
+    <a href="datacenter.html">Data Center</a><a href="microgrid.html">Microgrid</a>
+    <a href="hybridvessel.html">Vessel</a><a href="fmea-h697.html">FMEA</a>
+    <a href="cchp.html">CCHP</a><a href="storage.html">Storage</a>
+    <a href="sheathcurrent.html" style="color:var(--txt);font-weight:600">Sheath Current</a>
+    <a href="../index.html#simulations">← Portfolio</a>
+  </nav>
+</header>
+<div class="wrap">
+  <div class="tag">INTERACTIVE LESSON · FIELD FAILURE ANALYSIS · SINGLE-CORE ARMOURED CABLES</div>
+  <h1>Circulating Sheath Current — Why Both-End Earthing Can Start a Fire</h1>
+  <p class="sub">A single-core cable's load current induces EMF in its metallic sheath/armour. Earth the sheath at <b>both ends</b> and that EMF drives a circulating current around the loop — pure loss, turned into heat inside the cable. I've investigated the aftermath in the field: overheated glands, burnt terminations, fire. Choose the bonding method and watch the sheath current, losses and temperature respond.</p>
+
+  <div id="banner" class="banner bad"></div>
+
+  <div class="grid">
+    <div>
+      <div class="card">
+        <h2>Sheath Loop — Bonding Arrangement</h2>
+        <svg viewBox="0 0 760 330">
+          <rect x="40" y="40" width="120" height="70" rx="6" fill="var(--panel2)" stroke="#334155"/>
+          <text class="lbl" x="100" y="70" text-anchor="middle">PANEL</text><text class="lbl2" x="100" y="86" text-anchor="middle">Breaker end</text>
+          <rect x="600" y="40" width="120" height="70" rx="6" fill="var(--panel2)" stroke="#334155"/>
+          <text class="lbl" x="660" y="70" text-anchor="middle">LOAD</text><text class="lbl2" x="660" y="86" text-anchor="middle">Terminal box end</text>
+          <!-- conductor -->
+          <line x1="160" y1="60" x2="600" y2="60" stroke="#ef4444" stroke-width="5"/>
+          <text class="lbl2" x="380" y="50" text-anchor="middle" fill="#fca5a5">COPPER CONDUCTOR — load current I</text>
+          <path id="f_cond" class="flow" d="M170 60 H 590" style="stroke:#f87171"/>
+          <!-- sheath -->
+          <line x1="160" y1="92" x2="600" y2="92" stroke="#94a3b8" stroke-width="4"/>
+          <text class="lbl2" x="380" y="110" text-anchor="middle">METALLIC SHEATH / ARMOUR</text>
+          <path id="f_sh" class="flow" d="M590 92 H 170" style="stroke:#fbbf24"/>
+          <!-- earth links -->
+          <g id="e_left"><line x1="160" y1="92" x2="120" y2="150" stroke="#22c55e" stroke-width="3"/>
+            <text class="lbl2" x="98" y="166" fill="#86efac">EARTH (sending)</text></g>
+          <g id="e_right"><line x1="600" y1="92" x2="640" y2="150" stroke="#22c55e" stroke-width="3"/>
+            <text class="lbl2" x="612" y="166" fill="#86efac">EARTH (receiving)</text></g>
+          <line x1="80" y1="170" x2="680" y2="170" stroke="#166534" stroke-width="3" stroke-dasharray="8 5"/>
+          <path id="f_earth" class="flow" d="M120 170 H 640" style="stroke:#4ade80"/>
+          <text class="lbl2" x="380" y="188" text-anchor="middle" fill="#4ade80">EARTH RETURN PATH</text>
+          <!-- SVL -->
+          <g id="svl" style="display:none"><rect x="612" y="112" width="70" height="26" rx="4" fill="#1e1b4b" stroke="#6366f1"/>
+            <text class="lbl2" x="647" y="129" text-anchor="middle" fill="#c7d2fe">SVL</text></g>
+          <!-- thermometer -->
+          <g><rect x="250" y="220" width="260" height="76" rx="8" fill="var(--panel2)" stroke="#334155"/>
+            <text class="lbl" x="380" y="244" text-anchor="middle">CABLE TEMPERATURE</text>
+            <text id="v_temp" x="380" y="276" text-anchor="middle" style="font-size:24px;font-weight:700" fill="#22c55e">45°C</text></g>
+        </svg>
+        <div class="hint" id="looptxt"></div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h2>Pros &amp; Cons of Selected Method</h2>
+        <div class="procon">
+          <div><h4 style="color:var(--ok)">Pros</h4><span id="pros"></span></div>
+          <div><h4 style="color:var(--bad)">Cons</h4><span id="cons"></span></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <h2>Bonding Method</h2>
+        <div class="modes">
+          <button id="b_both" class="on" onclick="setB('both')">Both-end</button>
+          <button id="b_single" onclick="setB('single')">Single-point</button>
+          <button id="b_cross" onclick="setB('cross')">Cross-bonded</button>
+        </div>
+        <label class="sl">Load current <b id="l_i">400 A</b></label>
+        <input type="range" id="s_i" min="50" max="1200" value="400" oninput="run()">
+        <label class="sl">Route length <b id="l_len">250 m</b></label>
+        <input type="range" id="s_len" min="50" max="2000" value="250" step="10" oninput="run()">
+        <label class="sl">Phase spacing / diameter ratio <b id="l_sp">2.0</b></label>
+        <input type="range" id="s_sp" min="10" max="60" value="20" oninput="run()">
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h2>Results</h2>
+        <div class="metric"><span>Induced sheath EMF</span><b id="m_emf">—</b></div>
+        <div class="metric"><span>Sheath circulating current</span><b id="m_ish">—</b></div>
+        <div class="metric"><span>Sheath loss (3 phases)</span><b id="m_loss">—</b></div>
+        <div class="metric"><span>Derating vs single-point</span><b id="m_der">—</b></div>
+        <div class="metric"><span>Open-end standing voltage</span><b id="m_sv">—</b></div>
+        <div class="metric"><span>Thermal margin</span><b id="m_tm">—</b></div>
+        <div class="bar"><i id="bar_t" style="width:20%"></i></div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h2>Field Lesson</h2>
+        <p class="sub" style="font-size:12px;line-height:1.6">In the investigated failure, single-core armoured cables were glanded and earthed at <b>both</b> ends. The induced EMF drove continuous circulating current through the armour; I²R heating cooked the terminations until insulation failed and fire followed. The fix — opening one earth end (single-point bonding) — kills the loop, but the open end must be treated as live during faults: insulate the gland, fit a sheath voltage limiter (SVL), and keep the standing voltage within your safety limit (typ. ≤ 25–65 V at full load). Study before you apply.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>© 2026 Mashuk Elahi · <a href="../index.html">Portfolio</a> · Field failure analysis — single-core armoured cable bonding</footer>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+let mode='both';
+const CONTENT={
+ both:{pros:'Sheath solidly earthed at both ends — no standing voltage anywhere; simple; safe to touch; no SVLs needed.',
+       cons:'Circulating current flows continuously — sheath I²R losses, cable derating (often 10–40%), overheating risk at glands/terminations; the failure mode that causes fires.'},
+ single:{pros:'Loop broken — circulating current eliminated; full cable ampacity; the standard fix for short single-core runs.',
+       cons:'Open end develops standing voltage proportional to length × current — must be insulated and protected by an SVL; touch-safety procedures required; induced voltage rises during faults.'},
+ cross:{pros:'Sheaths transposed in three equal sections — induced EMFs cancel; near-zero circulating current AND bounded standing voltage; the transmission-class solution for long routes.',
+       cons:'Link boxes, section joints and SVLs add cost and maintenance; only worthwhile on long HV routes; installation errors defeat the cancellation.'}
+};
+function setB(m){mode=m;['both','single','cross'].forEach(k=>$('b_'+k).classList.toggle('on',k===m));run();}
+function run(){
+  const I=+$('s_i').value, L=+$('s_len').value/1000, sp=+$('s_sp').value/10;
+  $('l_i').textContent=I+' A';$('l_len').textContent=(L*1000)+' m';$('l_sp').textContent=sp.toFixed(1);
+  // induced EMF per km: E = ω·M·I, M ≈ 2e-7·ln(2s/d) H/m → V/km
+  const M=2e-7*Math.log(2*sp);           // H/m
+  const Vkm=2*Math.PI*50*M*I*1000;       // V per km
+  const emf=Vkm*L;                        // total loop EMF
+  const Rs=0.4;                           // sheath resistance ohm/km (typ. armour)
+  const Xs=2*Math.PI*50*M*1000;          // ohm/km
+  let Ish=0, standing=0;
+  if(mode==='both'){ Ish=emf/(L*Math.hypot(Rs,Xs)); standing=0; }
+  else if(mode==='single'){ Ish=0; standing=emf; }
+  else { Ish=0.05*emf/(L*Math.hypot(Rs,Xs)); standing=Vkm*L/3; }
+  const loss=3*Ish*Ish*Rs*L;             // W
+  const lossKw=loss/1000;
+  const derate=mode==='both'?Math.min(45,100*(Ish*Ish*Rs)/(I*I*0.06)):mode==='cross'?1:0;
+  const temp=45+(mode==='both'?Math.min(80,lossKw/Math.max(.2,L)*8):mode==='cross'?2:0)+I/1200*10;
+  $('m_emf').textContent=Vkm.toFixed(1)+' V/km · '+emf.toFixed(1)+' V loop';
+  $('m_ish').textContent=Math.round(Ish)+' A';
+  $('m_loss').textContent=lossKw>=1?lossKw.toFixed(1)+' kW':Math.round(loss)+' W';
+  $('m_der').textContent=derate.toFixed(0)+'%';
+  $('m_sv').textContent=Math.round(standing)+' V'+(standing>65?' ⚠ SVL + insulated gland required':standing>0?' (fit SVL)':'');
+  const margin=90-temp;
+  $('m_tm').textContent=Math.max(0,margin).toFixed(0)+'°C to 90°C limit';
+  $('bar_t').style.width=Math.min(100,(temp/110)*100)+'%';
+  const vt=$('v_temp');vt.textContent=Math.round(temp)+'°C';
+  vt.setAttribute('fill',temp>90?'#ef4444':temp>70?'#f59e0b':'#22c55e');
+  // svg states
+  $('e_right').style.opacity=mode==='both'?1:0.25;
+  $('svl').style.display=mode==='both'?'none':'block';
+  $('f_sh').style.display=(mode==='both'&&Ish>1)?'block':'none';
+  $('f_earth').style.display=(mode==='both'&&Ish>1)?'block':'none';
+  $('looptxt').textContent=mode==='both'
+    ?'Both ends earthed: EMF drives current around sheath + earth loop (amber/green dashes). All of it becomes heat.'
+    :mode==='single'?'Receiving-end earth opened: loop broken, no circulating current. Open end carries standing voltage — SVL fitted.'
+    :'Three transposed sections: vector sum of induced EMFs ≈ 0. Minimal current, bounded voltage.';
+  $('pros').textContent=CONTENT[mode].pros;
+  $('cons').textContent=CONTENT[mode].cons;
+  const b=$('banner');
+  if(temp>90){b.className='banner bad';b.textContent='⚠ THERMAL RUNAWAY RISK — sheath losses '+lossKw.toFixed(1)+' kW are cooking the cable ('+Math.round(temp)+'°C). This is the both-end-earthing failure that leads to fire. Open one earth or cross-bond.';}
+  else if(mode==='both'&&Ish>50){b.className='banner warn';b.textContent='CIRCULATING CURRENT '+Math.round(Ish)+' A — continuous losses and derating. Acceptable only for short, lightly-loaded runs.';}
+  else if(mode==='single'&&standing>65){b.className='banner warn';b.textContent='LOOP ELIMINATED — but standing voltage '+Math.round(standing)+' V exceeds typical touch limit. SVL and insulated gland are mandatory; consider cross-bonding for this length.';}
+  else {b.className='banner ok';b.textContent='HEALTHY ARRANGEMENT — sheath losses negligible, ampacity preserved, voltages within limits.';}
+}
+run();
+</script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#4f46e5">
+<meta name="description" content="Interactive energy storage explorer — short vs long-duration storage technologies matched to renewable integration and EV charging, based on MSc thesis research. By Mashuk Elahi.">
+<title>Energy Storage Explorer — Mashuk Elahi</title>
+<style>
+  :root{--bg:#0b0f1a;--panel:#111827;--panel2:#0f172a;--line:#1f2937;--ind:#4f46e5;--ind2:#6366f1;
+  --txt:#e5e7eb;--mut:#9ca3af;--ok:#22c55e;--warn:#f59e0b;--bad:#ef4444;--cyn:#22d3ee}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+  a{color:var(--ind2);text-decoration:none}
+  header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 22px;border-bottom:1px solid var(--line);background:rgba(11,15,26,.92);position:sticky;top:0;z-index:10;flex-wrap:wrap}
+  .brand{font-weight:700}.brand span{color:var(--ind2)}
+  nav{display:flex;gap:14px;font-size:13px;flex-wrap:wrap}
+  .wrap{max-width:1180px;margin:0 auto;padding:20px 18px 60px}
+  .tag{font-size:12px;color:var(--mut)}
+  h1{font-size:clamp(20px,3vw,30px);margin:14px 0 6px}
+  .sub{color:var(--mut);font-size:14px;max-width:880px;line-height:1.5}
+  .grid{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-top:20px}
+  @media(max-width:920px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+  .card h2{font-size:13px;text-transform:uppercase;letter-spacing:1.4px;color:var(--ind2);margin-bottom:10px}
+  .techs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  @media(max-width:640px){.techs{grid-template-columns:repeat(2,1fr)}}
+  .tech{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px;cursor:pointer;transition:border-color .15s}
+  .tech:hover{border-color:#607d8b}.tech.on{border-color:var(--ind);background:#171a3a}
+  .tech b{font-size:13px;display:block}.tech small{color:var(--mut);font-size:10.5px;line-height:1.4;display:block;margin-top:3px}
+  .metric{display:flex;justify-content:space-between;padding:7px 2px;border-bottom:1px dashed var(--line);font-size:13px}
+  .metric:last-child{border-bottom:none}.metric b{font-size:14px}
+  label.sl{display:block;font-size:13px;margin:10px 0 4px}label.sl b{float:right;color:var(--cyn)}
+  input[type=range]{width:100%;accent-color:var(--ind);cursor:pointer}
+  canvas{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:8px}
+  .verdict{margin-top:12px;border-radius:10px;border:1px solid;padding:11px 13px;font-size:13px;line-height:1.5}
+  .verdict.ok{border-color:#14532d;background:#052e16;color:#a7f3d0}
+  .verdict.warn{border-color:#713f12;background:#2a1e05;color:#fde68a}
+  footer{border-top:1px solid var(--line);color:var(--mut);text-align:center;padding:18px;font-size:12px;margin-top:30px}
+  .hint{font-size:12px;color:var(--mut);margin-top:8px;line-height:1.5}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Mashuk <span>Elahi</span> · Energy Simulations</div>
+  <nav>
+    <a href="datacenter.html">Data Center</a><a href="microgrid.html">Microgrid</a>
+    <a href="hybridvessel.html">Vessel</a><a href="fmea-h697.html">FMEA</a>
+    <a href="cchp.html">CCHP</a><a href="storage.html" style="color:var(--txt);font-weight:600">Storage</a>
+    <a href="sheathcurrent.html">Sheath Current</a>
+    <a href="../index.html#simulations">← Portfolio</a>
+  </nav>
+</header>
+<div class="wrap">
+  <div class="tag">INTERACTIVE EXPLORER · MSc THESIS BASIS — SDES / LDES × RENEWABLES × EV CHARGING</div>
+  <h1>Energy Storage Explorer — Short &amp; Long Duration</h1>
+  <p class="sub">Built from my MSc (Sustainable Electricity Generation) thesis — a systematic review of short- and long-duration energy storage integrated with renewables and EV charging across European countries. Pick a technology, set the renewable surplus window and the demand it must bridge — the model dispatches a day and grades the match.</p>
+
+  <div class="grid">
+    <div>
+      <div class="card">
+        <h2>Select Storage Technology</h2>
+        <div class="techs" id="techs"></div>
+        <div class="hint" id="techinfo"></div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h2>24 h Dispatch — Renewables · Load · Storage</h2>
+        <canvas id="cv" width="720" height="300"></canvas>
+        <div class="hint">Green = renewable output · grey = load · blue fill = storage charging · amber fill = storage discharging · red = unserved energy (grid/genset needed).</div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <h2>Scenario</h2>
+        <label class="sl">Renewable capacity <b id="l_ren">3.0 MW</b></label>
+        <input type="range" id="s_ren" min="5" max="80" value="30" oninput="run()">
+        <label class="sl">Evening peak load <b id="l_load">2.5 MW</b></label>
+        <input type="range" id="s_load" min="5" max="60" value="25" oninput="run()">
+        <label class="sl">EV charging (overnight) <b id="l_ev">0.6 MW</b></label>
+        <input type="range" id="s_ev" min="0" max="30" value="6" oninput="run()">
+        <label class="sl">Storage power <b id="l_pw">2.0 MW</b></label>
+        <input type="range" id="s_pw" min="2" max="60" value="20" oninput="run()">
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h2>Results</h2>
+        <div class="metric"><span>Storage energy (P × duration)</span><b id="m_en">—</b></div>
+        <div class="metric"><span>Round-trip efficiency</span><b id="m_rte">—</b></div>
+        <div class="metric"><span>Renewable energy time-shifted</span><b id="m_shift">—</b></div>
+        <div class="metric"><span>Curtailment avoided</span><b id="m_curt">—</b></div>
+        <div class="metric"><span>Unserved energy</span><b id="m_uns">—</b></div>
+        <div class="metric"><span>Renewable share of load</span><b id="m_share">—</b></div>
+        <div id="verdict" class="verdict ok"></div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h2>Thesis Takeaway</h2>
+        <p class="sub" style="font-size:12px;line-height:1.6">Short-duration systems (Li-ion, ≤4 h) excel at daily solar shifting and EV-charging peaks; long-duration technologies (pumped hydro, flow, hydrogen, CAES) are what decarbonise multi-day wind lulls — but at lower round-trip efficiency and higher energy-capacity cost. No single technology wins: portfolios matched to the renewable profile of each country performed best in the reviewed literature.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>© 2026 Mashuk Elahi · <a href="../index.html">Portfolio</a> · Based on MSc thesis, Universidad Católica de Murcia (UCAM)</footer>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const TECH=[
+ {k:'li',n:'Li-ion BESS',dur:4,rte:.90,note:'Workhorse SDES — daily solar shifting, frequency response, EV-hub buffering. Duration typically 1–4 h.'},
+ {k:'flow',n:'Flow battery',dur:10,rte:.75,note:'Decoupled power/energy — 4–12 h. Deep cycling without degradation; good for high-renewables microgrids.'},
+ {k:'phs',n:'Pumped hydro',dur:16,rte:.78,note:'The incumbent LDES — 6–24 h+, site-constrained, decades of life. Backbone of European storage capacity.'},
+ {k:'h2',n:'Hydrogen',dur:72,rte:.38,note:'Power-to-gas-to-power. Seasonal/multi-day storage; low RTE but unmatched energy capacity.'},
+ {k:'caes',n:'CAES',dur:24,rte:.55,note:'Compressed air in caverns — 8–26 h. Mid-cost LDES where geology allows.'},
+ {k:'fly',n:'Flywheel',dur:0.25,rte:.92,note:'Seconds–minutes. Power quality and fast frequency response, not energy shifting.'}
+];
+let sel='li';
+const tw=$('techs');
+TECH.forEach(t=>{
+  const d=document.createElement('div');d.className='tech'+(t.k===sel?' on':'');d.id='t_'+t.k;
+  d.innerHTML=`<b>${t.n}</b><small>${t.dur<1?(t.dur*60)+' min':t.dur+' h'} · RTE ${Math.round(t.rte*100)}%</small>`;
+  d.onclick=()=>{sel=t.k;document.querySelectorAll('.tech').forEach(e=>e.classList.remove('on'));d.classList.add('on');run();};
+  tw.appendChild(d);
+});
+function profile(){
+  // per-hour arrays (MW), solar-ish renewable + evening peak + EV overnight
+  const ren=+$('s_ren').value/10, pk=+$('s_load').value/10, ev=+$('s_ev').value/10;
+  const R=[],L=[];
+  for(let h=0;h<24;h++){
+    R.push(ren*Math.max(0,Math.sin((h-6)/12*Math.PI))**1.5);
+    let base=pk*0.45+pk*0.2*Math.sin((h-9)/24*2*Math.PI);
+    if(h>=18&&h<=22) base=pk;
+    if(h>=0&&h<=5||h>=22) base+=ev;
+    L.push(Math.max(0.1,base));
+  }
+  return {R,L};
+}
+function run(){
+  const t=TECH.find(x=>x.k===sel);
+  $('techinfo').textContent=t.note;
+  $('l_ren').textContent=(+$('s_ren').value/10).toFixed(1)+' MW';
+  $('l_load').textContent=(+$('s_load').value/10).toFixed(1)+' MW';
+  $('l_ev').textContent=(+$('s_ev').value/10).toFixed(1)+' MW';
+  const Pw=+$('s_pw').value/10;
+  $('l_pw').textContent=Pw.toFixed(1)+' MW';
+  const En=Pw*t.dur;
+  const {R,L}=profile();
+  let soc=En*0.3, shift=0, curt=0, uns=0, renDirect=0;
+  const socArr=[],chg=[],dis=[];
+  for(let h=0;h<24;h++){
+    let bal=R[h]-L[h];
+    renDirect+=Math.min(R[h],L[h]);
+    let c=0,d=0;
+    if(bal>0){ c=Math.min(bal,Pw,(En-soc)/1); soc+=c*Math.sqrt(t.rte); curt+=bal-c; }
+    else { d=Math.min(-bal,Pw,soc*Math.sqrt(t.rte)); soc-=d/Math.sqrt(t.rte); shift+=d; uns+=(-bal)-d; }
+    socArr.push(soc);chg.push(c);dis.push(d);
+  }
+  const loadE=L.reduce((a,b)=>a+b,0), renShare=100*(renDirect+shift)/loadE;
+  $('m_en').textContent=En.toFixed(1)+' MWh ('+(t.dur<1?(t.dur*60)+' min':t.dur+' h')+')';
+  $('m_rte').textContent=Math.round(t.rte*100)+'%';
+  $('m_shift').textContent=shift.toFixed(1)+' MWh/day';
+  $('m_curt').textContent=(curt<0.05?'0.0':curt.toFixed(1))+' MWh curtailed';
+  $('m_uns').textContent=uns.toFixed(1)+' MWh';
+  $('m_share').textContent=Math.min(100,renShare).toFixed(0)+'%';
+  const v=$('verdict');
+  if(uns<0.5&&curt<0.5){v.className='verdict ok';v.textContent='WELL MATCHED — '+t.n+' covers the deficit hours with minimal curtailment. Renewable share '+renShare.toFixed(0)+'%.';}
+  else if(uns>2){v.className='verdict warn';v.textContent='UNDER-SIZED / WRONG DURATION — '+uns.toFixed(1)+' MWh unserved. '+(t.dur<6?'Consider longer-duration storage or more power.':'Increase storage power or renewable capacity.');}
+  else {v.className='verdict warn';v.textContent='PARTIAL MATCH — '+curt.toFixed(1)+' MWh curtailed, '+uns.toFixed(1)+' MWh unserved. Tune power/duration to the profile.';}
+  draw(R,L,chg,dis,uns);
+}
+function draw(R,L,chg,dis){
+  const cv=$('cv'),ctx=cv.getContext('2d');
+  ctx.clearRect(0,0,cv.width,cv.height);
+  const W=cv.width,H=cv.height,mx=Math.max(...R,...L)*1.15+.1;
+  const x=h=>30+h*(W-40)/23, y=v=>H-24-v*(H-40)/mx;
+  ctx.strokeStyle='#1f2937';ctx.beginPath();
+  for(let g=0;g<=4;g++){ctx.moveTo(30,y(mx*g/4));ctx.lineTo(W-10,y(mx*g/4));}
+  ctx.stroke();
+  ctx.fillStyle='#64748b';ctx.font='10px Consolas';
+  for(let h=0;h<24;h+=4)ctx.fillText(h+':00',x(h)-10,H-8);
+  // charge/discharge bars
+  for(let h=0;h<24;h++){
+    if(chg[h]>0.02){ctx.fillStyle='rgba(56,189,248,.35)';ctx.fillRect(x(h)-6,y(chg[h]),12,y(0)-y(chg[h]));}
+    if(dis[h]>0.02){ctx.fillStyle='rgba(245,158,11,.4)';ctx.fillRect(x(h)-6,y(dis[h]),12,y(0)-y(dis[h]));}
+    const short=Math.max(0,L[h]-R[h]-dis[h]);
+    if(short>0.02){ctx.fillStyle='rgba(239,68,68,.45)';ctx.fillRect(x(h)-6,y(short),12,y(0)-y(short));}
+  }
+  const line=(A,c)=>{ctx.strokeStyle=c;ctx.lineWidth=2;ctx.beginPath();A.forEach((v,h)=>h?ctx.lineTo(x(h),y(v)):ctx.moveTo(x(h),y(v)));ctx.stroke();};
+  line(R,'#22c55e');line(L,'#94a3b8');
+}
+run();
+</script>
+</body>
+</html>
