@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#4f46e5">
+<meta name="description" content="Interactive CCHP / trigeneration simulation — gas-engine PGU with heat recovery, absorption chiller and boiler vs conventional grid + electric chiller. Live efficiency, fuel and CO2 comparison. By Mashuk Elahi.">
+<title>CCHP Trigeneration Simulation — Mashuk Elahi</title>
+<style>
+  :root{--bg:#0b0f1a;--panel:#111827;--panel2:#0f172a;--line:#1f2937;--ind:#4f46e5;--ind2:#6366f1;
+  --txt:#e5e7eb;--mut:#9ca3af;--ok:#22c55e;--warn:#f59e0b;--bad:#ef4444;--cyn:#22d3ee;--heat:#fb7185;--cool:#38bdf8}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+  a{color:var(--ind2);text-decoration:none}
+  header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 22px;border-bottom:1px solid var(--line);background:rgba(11,15,26,.92);position:sticky;top:0;z-index:10;flex-wrap:wrap}
+  .brand{font-weight:700}.brand span{color:var(--ind2)}
+  nav{display:flex;gap:14px;font-size:13px;flex-wrap:wrap}
+  .wrap{max-width:1180px;margin:0 auto;padding:20px 18px 60px}
+  .tag{font-size:12px;color:var(--mut)}
+  h1{font-size:clamp(20px,3vw,30px);margin:14px 0 6px}
+  .sub{color:var(--mut);font-size:14px;max-width:860px;line-height:1.5}
+  .grid{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-top:20px}
+  @media(max-width:920px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+  .card h2{font-size:13px;text-transform:uppercase;letter-spacing:1.4px;color:var(--ind2);margin-bottom:10px}
+  svg{width:100%;height:auto;display:block}
+  label.sl{display:block;font-size:13px;margin:10px 0 4px}label.sl b{float:right;color:var(--cyn)}
+  input[type=range]{width:100%;accent-color:var(--ind);cursor:pointer}
+  .metric{display:flex;justify-content:space-between;padding:7px 2px;border-bottom:1px dashed var(--line);font-size:13px}
+  .metric:last-child{border-bottom:none}.metric b{font-size:15px}
+  .modes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+  .modes button{background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:9px;font-size:13px;cursor:pointer}
+  .modes button.on{border-color:var(--ind);background:#1e1b4b;color:#c7d2fe;font-weight:600}
+  .banner{margin-top:14px;border-radius:10px;padding:12px 14px;font-weight:600;font-size:14px;border:1px solid}
+  .banner.ok{border-color:#14532d;background:#052e16;color:var(--ok)}
+  .banner.warn{border-color:#713f12;background:#2a1e05;color:var(--warn)}
+  .cmp{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+  .cmp>div{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px}
+  .cmp h4{font-size:11px;letter-spacing:1px;color:var(--mut);text-transform:uppercase;margin-bottom:6px}
+  .cmp b{font-size:18px}
+  .box{fill:var(--panel2);stroke:#334155;stroke-width:1.2}
+  .lbl{fill:var(--txt);font-size:11px;font-weight:600}.lbl2{fill:var(--mut);font-size:9px}.val{fill:var(--cyn);font-size:11px;font-weight:700}
+  .flow{stroke-width:2.6;fill:none;stroke-dasharray:6 7;animation:d 1s linear infinite}
+  .f-el{stroke:#a5b4fc}.f-ht{stroke:var(--heat)}.f-cl{stroke:var(--cool)}.f-fu{stroke:var(--warn)}
+  .flow.dead{stroke:#374151;animation:none}
+  @keyframes d{to{stroke-dashoffset:-13}}
+  .node-dead rect{stroke:#475569!important;fill:#0d1017!important}.node-dead text{fill:#6b7280!important}
+  footer{border-top:1px solid var(--line);color:var(--mut);text-align:center;padding:18px;font-size:12px;margin-top:30px}
+  .hint{font-size:12px;color:var(--mut);margin-top:10px}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Mashuk <span>Elahi</span> · Energy Simulations</div>
+  <nav>
+    <a href="datacenter.html">Data Center</a><a href="microgrid.html">Microgrid</a>
+    <a href="hybridvessel.html">Vessel</a><a href="fmea-h697.html">FMEA</a>
+    <a href="cchp.html" style="color:var(--txt);font-weight:600">CCHP</a>
+    <a href="storage.html">Storage</a><a href="sheathcurrent.html">Sheath Current</a>
+    <a href="../index.html#simulations">← Portfolio</a>
+  </nav>
+</header>
+<div class="wrap">
+  <div class="tag">INTERACTIVE SIMULATION · TRIGENERATION · MSc COURSEWORK BASIS</div>
+  <h1>CCHP — Combined Cooling, Heat &amp; Power</h1>
+  <p class="sub">A gas-engine power generation unit (PGU) serves a building's electricity while recovered exhaust and jacket heat drive an absorption chiller and space heating — topped up by a boiler and the grid. Toggle to conventional supply (grid + electric chiller + boiler) and compare fuel use, overall efficiency and CO₂ in real time.</p>
+
+  <div id="banner" class="banner ok">CCHP MODE — heat recovery serving cooling &amp; heating loads</div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Energy Flow Diagram</h2>
+      <svg viewBox="0 0 760 470">
+        <g id="n_gas"><rect class="box" x="20" y="60" width="140" height="46" rx="6"/>
+          <text class="lbl" x="90" y="79" text-anchor="middle">⛽ GAS SUPPLY</text>
+          <text class="val" id="v_gas" x="90" y="95" text-anchor="middle">0 kW fuel</text></g>
+        <g id="n_pgu"><rect class="box" x="220" y="30" width="170" height="56" rx="6"/>
+          <text class="lbl" x="305" y="50" text-anchor="middle">PGU · GAS ENGINE 800 kWe</text>
+          <text class="val" id="v_pgu" x="305" y="66" text-anchor="middle">0 kWe</text>
+          <text class="lbl2" x="305" y="79" text-anchor="middle">ηe 38% · exhaust 350–450°C</text></g>
+        <g id="n_hr"><rect class="box" x="220" y="130" width="170" height="50" rx="6"/>
+          <text class="lbl" x="305" y="150" text-anchor="middle">HEAT RECOVERY</text>
+          <text class="val" id="v_hr" x="305" y="166" text-anchor="middle">0 kWth</text></g>
+        <g id="n_boil"><rect class="box" x="220" y="220" width="170" height="50" rx="6"/>
+          <text class="lbl" x="305" y="240" text-anchor="middle">BOILER · ηth 90%</text>
+          <text class="val" id="v_boil" x="305" y="256" text-anchor="middle">0 kWth</text></g>
+        <g id="n_grid"><rect class="box" x="220" y="310" width="170" height="50" rx="6"/>
+          <text class="lbl" x="305" y="330" text-anchor="middle">🗼 GRID</text>
+          <text class="val" id="v_grid" x="305" y="346" text-anchor="middle">0 kWe</text></g>
+        <g id="n_abs"><rect class="box" x="470" y="110" width="170" height="56" rx="6"/>
+          <text class="lbl" x="555" y="130" text-anchor="middle">ABSORPTION CHILLER</text>
+          <text class="val" id="v_abs" x="555" y="146" text-anchor="middle">0 kWc</text>
+          <text class="lbl2" x="555" y="159" text-anchor="middle">COP 0.75 · heat-driven</text></g>
+        <g id="n_ec"><rect class="box" x="470" y="196" width="170" height="50" rx="6"/>
+          <text class="lbl" x="555" y="216" text-anchor="middle">ELECTRIC CHILLER</text>
+          <text class="val" id="v_ec" x="555" y="232" text-anchor="middle">0 kWc · COP 3.5</text></g>
+        <g id="n_bld"><rect class="box" x="470" y="300" width="170" height="120" rx="8" style="stroke:#4f46e5;stroke-width:1.8"/>
+          <text class="lbl" x="555" y="322" text-anchor="middle">🏢 BUILDING LOADS</text>
+          <text class="val" id="v_be" x="555" y="344" text-anchor="middle">⚡ 0 kWe</text>
+          <text class="val" id="v_bc" x="555" y="366" text-anchor="middle" fill="#38bdf8">❄ 0 kWc</text>
+          <text class="val" id="v_bh" x="555" y="388" text-anchor="middle" fill="#fb7185">♨ 0 kWth</text>
+          <text class="lbl2" id="v_bst" x="555" y="406" text-anchor="middle" fill="#22c55e">ALL LOADS SERVED</text></g>
+        <path id="f_gas1" class="flow f-fu" d="M160 72 H 220 L 240 58"/>
+        <path id="f_gas2" class="flow f-fu" d="M160 95 Q 190 95 210 180 Q 215 220 220 240"/>
+        <path id="f_pe" class="flow f-el" d="M390 58 Q 440 58 452 300 L 470 315"/>
+        <path id="f_ph" class="flow f-ht" d="M305 86 V 130"/>
+        <path id="f_habs" class="flow f-ht" d="M390 150 H 470 L 480 138"/>
+        <path id="f_hbld" class="flow f-ht" d="M390 165 Q 430 175 455 340 L 470 380"/>
+        <path id="f_bh" class="flow f-ht" d="M390 245 Q 440 250 460 360 L 470 385"/>
+        <path id="f_ge" class="flow f-el" d="M390 335 H 470"/>
+        <path id="f_gec" class="flow f-el" d="M390 320 Q 430 300 470 228"/>
+        <path id="f_ac" class="flow f-cl" d="M555 166 V 300"/>
+        <path id="f_ecc" class="flow f-cl" d="M580 246 Q 590 270 575 300"/>
+      </svg>
+      <div class="hint">Amber = fuel · violet = electricity · rose = heat · blue = chilled water. CHP band typically 1–30 MWe with 1–60 tph steam equivalent.</div>
+    </div>
+    <div>
+      <div class="card">
+        <h2>Mode &amp; Building Demand</h2>
+        <div class="modes">
+          <button id="m_cchp" class="on" onclick="setMode(true)">CCHP / Trigeneration</button>
+          <button id="m_conv" onclick="setMode(false)">Conventional</button>
+        </div>
+        <label class="sl">Electrical load <b id="l_e">600 kWe</b></label>
+        <input type="range" id="s_e" min="100" max="1200" value="600" oninput="run()">
+        <label class="sl">Cooling load <b id="l_c">400 kWc</b></label>
+        <input type="range" id="s_c" min="0" max="900" value="400" oninput="run()">
+        <label class="sl">Heating load <b id="l_h">150 kWth</b></label>
+        <input type="range" id="s_h" min="0" max="600" value="150" oninput="run()">
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h2>Live Comparison</h2>
+        <div class="cmp">
+          <div><h4>Total fuel input</h4><b id="c_fuel" style="color:var(--warn)">—</b></div>
+          <div><h4>Overall efficiency</h4><b id="c_eff" style="color:var(--ok)">—</b></div>
+          <div><h4>CO₂ intensity</h4><b id="c_co2" style="color:var(--cyn)">—</b></div>
+          <div><h4>vs Conventional</h4><b id="c_sav" style="color:var(--ok)">—</b></div>
+        </div>
+        <div class="metric" style="margin-top:10px"><span>PGU output / loading</span><b id="m_pgu">—</b></div>
+        <div class="metric"><span>Heat recovered</span><b id="m_hr">—</b></div>
+        <div class="metric"><span>Absorption cooling</span><b id="m_abs">—</b></div>
+        <div class="metric"><span>Electric chiller top-up</span><b id="m_ec">—</b></div>
+        <div class="metric"><span>Boiler supplement</span><b id="m_boil">—</b></div>
+        <div class="metric"><span>Grid import</span><b id="m_grid">—</b></div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h2>Model Assumptions</h2>
+        <p class="sub" style="font-size:12px;line-height:1.6">Gas engine ηe 38%, recoverable heat 45% of fuel; absorption chiller COP 0.75; electric chiller COP 3.5; boiler ηth 90%; grid CO₂ 0.408 kg/kWh (SG OM), gas 0.185 kg/kWhf; grid delivered-fuel factor 2.5 kWhf/kWhe. PGU min load 30%, priority: electrical load first, recovered heat → heating then absorption cooling.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>© 2026 Mashuk Elahi · <a href="../index.html">Portfolio</a> · Based on MSc coursework — Combined Cooling, Heat &amp; Power</footer>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+let cchp=true;
+const P={pgu:800,etaE:.38,etaH:.45,copA:.75,copE:3.5,etaB:.9,co2Gas:.185,co2Grid:.408,gridPEF:2.5};
+function setMode(m){cchp=m;$('m_cchp').classList.toggle('on',m);$('m_conv').classList.toggle('on',!m);run();}
+function calcConv(E,C,H){
+  const ecE=C/P.copE, grid=E+ecE, fuelB=H/P.etaB;
+  const fuel=grid*P.gridPEF+fuelB;
+  const co2=grid*P.co2Grid+fuelB*P.co2Gas;
+  return {fuel,co2,grid,ec:C,boil:H,useful:E+C+H};
+}
+function run(){
+  const E=+$('s_e').value,C=+$('s_c').value,H=+$('s_h').value;
+  $('l_e').textContent=E+' kWe';$('l_c').textContent=C+' kWc';$('l_h').textContent=H+' kWth';
+  const conv=calcConv(E,C,H);
+  let r;
+  if(cchp){
+    const pgu=Math.max(Math.min(E,P.pgu),P.pgu*.3*(E>0?1:0));
+    const fuelP=pgu/P.etaE, hr=fuelP*P.etaH;
+    const hHeat=Math.min(hr,H);
+    const hAbs=Math.min(hr-hHeat,C/P.copA);
+    const cAbs=hAbs*P.copA;
+    const cEc=Math.max(0,C-cAbs), ecE=cEc/P.copE;
+    const boilH=Math.max(0,H-hHeat), fuelB=boilH/P.etaB;
+    const grid=Math.max(0,E+ecE-pgu);
+    const fuel=fuelP+fuelB+grid*P.gridPEF;
+    const co2=(fuelP+fuelB)*P.co2Gas+grid*P.co2Grid;
+    r={fuel,co2,pgu,hr,hAbs,cAbs,cEc,boilH,grid,useful:E+C+H};
+    $('v_pgu').textContent=Math.round(pgu)+' kWe';
+    $('v_hr').textContent=Math.round(hr)+' kWth';
+    $('v_abs').textContent=Math.round(cAbs)+' kWc';
+    $('v_ec').textContent=Math.round(cEc)+' kWc · COP 3.5';
+    $('v_boil').textContent=Math.round(boilH/P.etaB*0+boilH)+' kWth';
+    $('v_grid').textContent=Math.round(grid)+' kWe';
+    $('v_gas').textContent=Math.round(fuelP+boilH/P.etaB)+' kW fuel';
+    $('m_pgu').textContent=Math.round(pgu)+' kWe · '+Math.round(100*pgu/P.pgu)+'%';
+    $('m_hr').textContent=Math.round(hr)+' kWth';
+    $('m_abs').textContent=Math.round(cAbs)+' kWc';
+    $('m_ec').textContent=Math.round(cEc)+' kWc';
+    $('m_boil').textContent=Math.round(boilH)+' kWth';
+    $('m_grid').textContent=Math.round(grid)+' kWe';
+    const f=(id,on)=>$(id).classList.toggle('dead',!on);
+    f('f_gas1',true);f('f_pe',pgu>1);f('f_ph',hr>1);f('f_habs',hAbs>1);f('f_hbld',hHeat>1);
+    f('f_bh',boilH>1);f('f_gas2',boilH>1);f('f_ge',grid>1);f('f_gec',cEc>1&&grid>0);
+    f('f_ac',cAbs>1);f('f_ecc',cEc>1);
+    ['n_pgu','n_hr','n_abs'].forEach(n=>$(n).classList.remove('node-dead'));
+    $('n_boil').classList.toggle('node-dead',boilH<1);
+    $('n_ec').classList.toggle('node-dead',cEc<1);
+    $('n_grid').classList.toggle('node-dead',grid<1);
+    banner(grid>1?'warn':'ok', grid>1?'CCHP + GRID TOP-UP — PGU at capacity':'CCHP MODE — heat recovery serving cooling & heating loads');
+  } else {
+    r=conv;
+    $('v_pgu').textContent='OFF';$('v_hr').textContent='0 kWth';$('v_abs').textContent='0 kWc';
+    $('v_ec').textContent=Math.round(C)+' kWc · COP 3.5';
+    $('v_boil').textContent=Math.round(H)+' kWth';
+    $('v_grid').textContent=Math.round(r.grid)+' kWe';
+    $('v_gas').textContent=Math.round(H/P.etaB)+' kW fuel';
+    $('m_pgu').textContent='off';$('m_hr').textContent='0';$('m_abs').textContent='0';
+    $('m_ec').textContent=Math.round(C)+' kWc';$('m_boil').textContent=Math.round(H)+' kWth';
+    $('m_grid').textContent=Math.round(r.grid)+' kWe';
+    const f=(id,on)=>$(id).classList.toggle('dead',!on);
+    f('f_gas1',false);f('f_pe',false);f('f_ph',false);f('f_habs',false);f('f_hbld',false);
+    f('f_bh',H>1);f('f_gas2',H>1);f('f_ge',true);f('f_gec',C>1);f('f_ac',false);f('f_ecc',C>1);
+    ['n_pgu','n_hr','n_abs'].forEach(n=>$(n).classList.add('node-dead'));
+    $('n_boil').classList.toggle('node-dead',H<1);
+    $('n_ec').classList.toggle('node-dead',C<1);
+    $('n_grid').classList.remove('node-dead');
+    banner('warn','CONVENTIONAL — grid + electric chiller + boiler');
+  }
+  $('v_be').textContent='⚡ '+E+' kWe';$('v_bc').textContent='❄ '+C+' kWc';$('v_bh').textContent='♨ '+H+' kWth';
+  $('c_fuel').textContent=Math.round(r.fuel)+' kW';
+  $('c_eff').textContent=Math.round(100*r.useful/Math.max(1,r.fuel))+'%';
+  $('c_co2').textContent=(r.co2/Math.max(1,r.useful)).toFixed(2)+' kg/kWh';
+  const sav=100*(1-r.co2/Math.max(1,conv.co2));
+  $('c_sav').textContent=cchp?(sav>=0?'−':'+')+Math.abs(sav).toFixed(0)+'% CO₂':'baseline';
+}
+function banner(cls,txt){const b=$('banner');b.className='banner '+cls;b.textContent=txt;}
+run();
+</script>
+</body>
+</html>
