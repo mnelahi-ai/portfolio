@@ -354,12 +354,15 @@ function inject(){
   if(nodes.includes('nd_cu')) $('nd_bcu').classList.add('degr');
   if(nodes.includes('nd_pwr')) $('pwrst').textContent='ONE SOURCE LOST · AUTO-TRANSFERRED', $('pwrst').setAttribute('fill','#ffb300');
   const s=sev(r);
-  const oneTrain=nodes.some(n=>/_p$/.test(n));
-  $('vs_prop').textContent='PROPULSION '+(/engine|gearbox|waterjet|clutch/i.test(r[1])?'1/2':'2/2');
-  $('vs_prop').setAttribute('fill',/engine|gearbox|waterjet|clutch/i.test(r[1])?'#ffb300':'#43d675');
-  $('vs_str').textContent='STEERING '+(/steering|hydraulic|nozzle|feedback|jet control/i.test(r[1]+r[2])?'1/2':'2/2');
-  $('vs_str').setAttribute('fill',/steering|hydraulic|nozzle|feedback|jet control/i.test(r[1]+r[2])?'#ffb300':'#43d675');
-  $('vs_note').textContent='Redundant train / lane carries the vessel — see corrective action';
+  // capability from END EFFECT column: "None..." = no end effect on the vessel
+  const end=(r[5]||'').trim(), endOk=/^none\b/i.test(end)||/full control/i.test(end);
+  const propHit=!endOk && /jet|engine|propulsion|thrust|clutch|gearbox/i.test(end);
+  const strHit=!endOk && /steer|respond to (the )?helm|manoeuvr/i.test(end+' '+r[4]);
+  $('vs_prop').textContent='PROPULSION '+(propHit?'1/2':'2/2');
+  $('vs_prop').setAttribute('fill',propHit?'#ffb300':'#43d675');
+  $('vs_str').textContent='STEERING '+(strHit?'1/2':'2/2');
+  $('vs_str').setAttribute('fill',strHit?'#ffb300':'#43d675');
+  $('vs_note').textContent=endOk?'No end effect — redundancy absorbs the failure':'Redundant train / lane carries the vessel — see corrective action';
   $('mimst').textContent='FAILURE INJECTED — TEST '+r[0]; $('mimst').style.color='var(--red)';
   // lamps
   const crit=/hazardous|catastrophic/i.test(s);
