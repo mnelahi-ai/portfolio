@@ -27,6 +27,26 @@
   .note{font-size:11.5px;color:var(--mut);margin-top:10px;line-height:1.5}
   footer{border-top:1px solid var(--line);padding:16px 28px;color:var(--mut);font-size:11.5px;line-height:1.6}
   @media print{.bar,.btn,header p{display:none}body{background:#fff;color:#000}th,td{border-color:#999}}
+
+  /* --- visual uplift 2026-10-10: depth, accent glow, motion --- */
+  body{background:radial-gradient(1200px 600px at 12% -12%,rgba(61,155,233,.10),transparent 60%),radial-gradient(900px 520px at 100% 0%,rgba(52,184,160,.09),transparent 55%),var(--bg) fixed}
+  header{position:relative}
+  header::after{content:"";display:block;height:2px;margin-top:12px;background:linear-gradient(90deg,var(--acc),var(--acc2),transparent)}
+  header h1{letter-spacing:.2px}
+  nav button,.bar a{transition:transform .15s ease,box-shadow .15s ease,color .15s ease}
+  nav button:hover{transform:translateY(-1px);border-color:var(--acc2)}
+  nav button.on{box-shadow:0 2px 16px -2px rgba(52,184,160,.55)}
+  .bar a.on{text-shadow:0 0 10px rgba(52,184,160,.45)}
+  .card,.src{position:relative;overflow:hidden;box-shadow:0 10px 26px -16px rgba(0,0,0,.6);transition:box-shadow .2s ease,transform .2s ease}
+  .card::before,.src::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,var(--acc),var(--acc2))}
+  .card:hover,.src:hover{box-shadow:0 16px 32px -16px rgba(0,0,0,.7);transform:translateY(-2px)}
+  .btn{background:linear-gradient(135deg,var(--acc2),var(--acc))!important;box-shadow:0 6px 18px -6px rgba(61,155,233,.55);transition:transform .15s ease,box-shadow .15s ease;border:none!important}
+  .btn:hover{transform:translateY(-1px);box-shadow:0 10px 22px -6px rgba(61,155,233,.65)}
+  .btn.g{background:linear-gradient(135deg,#34b8a0,#2c7a60)!important}
+  .btn.r{background:linear-gradient(135deg,#e96a5a,#7a3b34)!important}
+  table th{position:relative}
+  table th::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--acc2);opacity:.45}
+  footer{opacity:.85}
 </style>
 </head>
 <body>
