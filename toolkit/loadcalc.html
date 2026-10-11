@@ -5,66 +5,50 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Free marine electrical load analysis builder — consumers, load factors, diversity factors, operating modes, generator loading.">
 <title>Electrical Load Analysis Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Saira+Condensed:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="toolkit.css">
 <style>
-  :root{--bg:#0f1722;--panel:#16222f;--panel2:#1d2c3d;--line:#2b4258;--txt:#e8eef4;--mut:#8fa6ba;--acc:#34b8a0;--acc2:#3d9be9;--amber:#e9a23d;--err:#e96a5a;}
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--txt);min-height:100vh}
-  header{padding:22px 28px 14px;border-bottom:1px solid var(--line)}
-  header h1{font-size:21px;font-weight:600} header p{color:var(--mut);font-size:13px;margin-top:4px;max-width:860px;line-height:1.5}
-  .bar{display:flex;gap:10px;padding:10px 28px;border-bottom:1px solid var(--line);font-size:13px;flex-wrap:wrap}
-  .bar a{color:var(--mut);text-decoration:none}.bar a.on{color:var(--acc);font-weight:600}
-  main{max-width:1200px;margin:0 auto;padding:24px 20px 60px}
+  main{max-width:1280px}
   .row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
-  input,select{background:var(--panel);color:var(--txt);border:1px solid var(--line);border-radius:6px;padding:8px 10px;font-size:13px}
-  .btn{background:var(--acc2);color:#fff;border:none;border-radius:6px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer}
-  .btn.g{background:#2c7a60}.btn.r{background:#7a3b34}
-  table{width:100%;border-collapse:collapse;font-size:12.5px}
-  th,td{border:1px solid var(--line);padding:5px 6px;text-align:left;vertical-align:middle}
-  th{background:var(--panel2);color:var(--mut);font-size:11.5px}
-  td input{width:100%;padding:4px 6px;border-radius:4px}
-  td input[type=number]{width:62px}
-  .modehdr{background:#1a2e42!important;color:#9fc3e8!important;text-align:center}
-  .ld{color:var(--acc);font-weight:600;text-align:right;white-space:nowrap}
-  .tot td{background:#13202e;font-weight:700}
-  .grp td{background:#101b27;color:var(--amber);font-weight:600}
-  .src{margin-top:22px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}
+  .row input,.row select{flex:0 0 auto;width:auto;min-width:150px;text-align:left}
+  .row .btn{margin-top:0;padding:8px 15px}
+  table{background:var(--sheet);font-size:12px}
+  th{font-size:11.5px}
+  th,td{padding:5px 7px}
+  td input{width:100%;flex:none;text-align:right;padding:4px 6px;border-color:var(--rule-2)}
+  td input[type=number]{width:64px}
+  td input:not([type=number]){text-align:left;min-width:128px}
+  /* row-delete: quiet until you reach for it — a column of filled red fights the data */
+  td .btn.r{background:none;border:1px solid var(--rule-2);color:var(--ink-3);font-weight:400;line-height:1}
+  td .btn.r:hover{background:var(--signal);border-color:var(--signal);color:#fff}
+  .row .btn.r{background:none;border:1px solid var(--signal);color:var(--signal)}
+  .row .btn.r:hover{background:var(--signal);color:#fff}
+  .modehdr{background:var(--plate)!important;color:#fff!important;text-align:center;border-color:var(--plate)!important}
+  .ld{color:var(--ink);font-weight:600;text-align:right;white-space:nowrap}
+  .tot td{background:var(--panel-2);font-weight:700;border-color:var(--rule)}
+  .grp td{background:var(--panel);color:var(--ink);font-weight:600;letter-spacing:.02em}
+  .src{margin-top:26px;background:var(--sheet);border:1px solid var(--rule);padding:18px 20px}
   .src h3{font-size:15px;margin-bottom:10px}
   .pct{font-weight:700}
-  .ok{color:#7be0c3}.warn{color:var(--amber)}.bad{color:var(--err)}
-  .note{font-size:11.5px;color:var(--mut);margin-top:14px;line-height:1.55;max-width:980px}
-  footer{border-top:1px solid var(--line);padding:16px 28px;color:var(--mut);font-size:11.5px;line-height:1.6}
-  @media print{.bar,.row,.btn,header p{display:none}body{background:#fff;color:#000}th,td{border-color:#999}}
-
-  /* --- visual uplift 2026-10-10: depth, accent glow, motion --- */
-  body{background:radial-gradient(1200px 600px at 12% -12%,rgba(61,155,233,.10),transparent 60%),radial-gradient(900px 520px at 100% 0%,rgba(52,184,160,.09),transparent 55%),var(--bg) fixed}
-  header{position:relative}
-  header::after{content:"";display:block;height:2px;margin-top:12px;background:linear-gradient(90deg,var(--acc),var(--acc2),transparent)}
-  header h1{letter-spacing:.2px}
-  nav button,.bar a{transition:transform .15s ease,box-shadow .15s ease,color .15s ease}
-  nav button:hover{transform:translateY(-1px);border-color:var(--acc2)}
-  nav button.on{box-shadow:0 2px 16px -2px rgba(52,184,160,.55)}
-  .bar a.on{text-shadow:0 0 10px rgba(52,184,160,.45)}
-  .card,.src{position:relative;overflow:hidden;box-shadow:0 10px 26px -16px rgba(0,0,0,.6);transition:box-shadow .2s ease,transform .2s ease}
-  .card::before,.src::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,var(--acc),var(--acc2))}
-  .card:hover,.src:hover{box-shadow:0 16px 32px -16px rgba(0,0,0,.7);transform:translateY(-2px)}
-  .btn{background:linear-gradient(135deg,var(--acc2),var(--acc))!important;box-shadow:0 6px 18px -6px rgba(61,155,233,.55);transition:transform .15s ease,box-shadow .15s ease;border:none!important}
-  .btn:hover{transform:translateY(-1px);box-shadow:0 10px 22px -6px rgba(61,155,233,.65)}
-  .btn.g{background:linear-gradient(135deg,#34b8a0,#2c7a60)!important}
-  .btn.r{background:linear-gradient(135deg,#e96a5a,#7a3b34)!important}
-  table th{position:relative}
-  table th::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--acc2);opacity:.45}
-  footer{opacity:.85}
+  @media print{.bar,.row,.btn,header p,header .by{display:none}}
 </style>
 </head>
 <body>
 <header>
-  <h1>⚖️ Electrical Load Analysis Builder</h1>
-  <p>Build a marine/industrial electrical load balance: consumers per switchboard, load &amp; diversity factors, three operating modes, automatic totals and percentage loading per power source. Load = Rated kW × No. in use × LF × DF. Runs entirely in your browser — export CSV for your records (data is not saved on the server; export before closing).</p>
+  <h1><span class="anchor">&#9875;</span>Load Analysis</h1>
+  <p>Build an electrical load balance by consumer: load factors, diversity, operating modes and the resulting generator loading.</p>
+  <span class="by">Built by <a href="../index.html">Mashuk Elahi</a>, marine electrical engineer &middot; Singapore</span>
 </header>
 <div class="bar">
-  <a href="index.html">Calculators</a><a href="loadcalc.html" class="on">Load Analysis</a><a href="checklists.html">Checklists</a>
-  <a href="testforms.html">Test Forms</a><a href="reference.html">Reference</a><a href="projects.html">Projects</a>
-  <a href="../index.html" style="margin-left:auto;color:#e9a23d;font-weight:600">Portfolio ↗</a>
+  <a href="index.html">Calculators</a>
+  <a class="on" href="loadcalc.html">Load analysis</a>
+  <a href="checklists.html">Checklists</a>
+  <a href="testforms.html">Test forms</a>
+  <a href="reference.html">Reference</a>
+  <a href="projects.html">Projects</a>
+  <span class="right"><a href="../index.html">Back to portfolio</a></span>
 </div>
 <main>
   <div class="row">

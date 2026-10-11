@@ -1,0 +1,386 @@
+/* ===========================================================
+   Marine Electrical Toolkit — shared design system
+   Surface language taken from the hardware: RAL 7035 switchboard
+   front, engraved traffolyte plate, white drawing sheet, signal red
+   reserved for state. Figures are tabular; results are the loudest
+   thing on the page; inputs stay quiet.
+   =========================================================== */
+
+:root{
+  --panel:#d9dcdc;        /* RAL 7035 light grey — switchboard front face */
+  --panel-2:#cdd1d1;
+  --plate:#1c1f21;        /* engraved plate core */
+  --plate-2:#2b3033;
+  --sheet:#ffffff;        /* drawing sheet */
+  --ink:#121416;
+  --ink-2:#555d60;
+  --ink-3:#7d8689;
+  --rule:#9aa0a1;         /* heavy rule */
+  --rule-2:#c4c9c9;       /* hairline */
+  --signal:#c8102e;       /* marine signal red — state only, never decoration */
+  --ok:#1f6b3b;
+  --warn:#8a5a00;
+  --rail:236px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+html{-webkit-text-size-adjust:100%}
+
+body{
+  font-family:'Archivo','Segoe UI',system-ui,-apple-system,sans-serif;
+  font-size:14px;
+  line-height:1.5;
+  color:var(--ink);
+  background:var(--panel);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+a{color:var(--ink);text-decoration:none}
+
+/* ---------- top plate: the one engraved-label moment ---------- */
+
+header{
+  background:var(--plate);
+  color:#f4f6f6;
+  padding:14px 26px 13px;
+  display:flex;
+  align-items:baseline;
+  gap:18px;
+  flex-wrap:wrap;
+}
+header h1{
+  font-family:'Saira Condensed','Archivo Narrow','Segoe UI',sans-serif;
+  font-size:23px;
+  font-weight:600;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+  line-height:1;
+}
+header h1 .anchor{color:var(--signal);margin-right:.35em}
+header p{
+  font-size:12.5px;
+  color:#a8b0b2;
+  max-width:62ch;
+  line-height:1.45;
+  flex:1 1 320px;
+}
+header .by{
+  font-size:12px;
+  color:#8e9699;
+  margin-left:auto;
+  white-space:nowrap;
+}
+header .by a{color:#c9d0d1;border-bottom:1px solid #4a5154}
+header .by a:hover{color:#fff;border-bottom-color:var(--signal)}
+
+/* ---------- page bar ---------- */
+
+.bar{
+  display:flex;
+  gap:22px;
+  padding:0 26px;
+  background:var(--panel-2);
+  border-bottom:1px solid var(--rule);
+  font-size:13px;
+  flex-wrap:wrap;
+  align-items:stretch;
+}
+.bar a{
+  color:var(--ink-2);
+  padding:10px 0 9px;
+  border-bottom:2px solid transparent;
+  font-weight:500;
+}
+.bar a:hover{color:var(--ink)}
+.bar a.on{color:var(--ink);border-bottom-color:var(--signal);font-weight:600}
+.bar .right{margin-left:auto;display:flex;gap:22px}
+
+/* ---------- work area: tool index rail + sheet ---------- */
+
+.work{
+  display:flex;
+  align-items:stretch;
+  flex:1;
+  min-height:0;
+}
+
+nav#nav{
+  flex:0 0 var(--rail);
+  background:var(--panel);
+  border-right:1px solid var(--rule);
+  padding:14px 0 26px;
+  counter-reset:tool;
+}
+nav#nav button{
+  counter-increment:tool;
+  display:block;
+  width:100%;
+  text-align:left;
+  background:none;
+  border:0;
+  border-left:3px solid transparent;
+  padding:7px 16px 7px 13px;
+  font:inherit;
+  font-size:13px;
+  color:var(--ink-2);
+  cursor:pointer;
+  transition:background .12s linear,color .12s linear;
+}
+nav#nav button::before{
+  content:counter(tool,decimal-leading-zero);
+  display:inline-block;
+  width:2.2em;
+  color:var(--ink-3);
+  font-variant-numeric:tabular-nums;
+}
+nav#nav button:hover{background:var(--panel-2);color:var(--ink)}
+nav#nav button.on{
+  background:var(--sheet);
+  border-left-color:var(--signal);
+  color:var(--ink);
+  font-weight:600;
+}
+nav#nav button.on::before{color:var(--signal)}
+nav#nav button:focus-visible{outline:2px solid var(--signal);outline-offset:-2px}
+
+main#main{
+  flex:1 1 auto;
+  background:var(--sheet);
+  padding:26px 30px 44px;
+  min-width:0;
+}
+
+/* pages without a tool rail */
+main:not(#main){
+  flex:1;
+  max-width:1180px;
+  margin:0 auto;
+  padding:26px 26px 48px;
+  width:100%;
+}
+
+section{display:none}
+section.on{display:block}
+
+/* ---------- sheet head: title + basis, set as a title-block field ---------- */
+
+h2{
+  font-size:19px;
+  font-weight:600;
+  letter-spacing:-.005em;
+  margin-bottom:9px;
+}
+h3{font-size:15px;font-weight:600;margin-bottom:8px}
+
+.ref{
+  font-size:12.5px;
+  color:var(--ink-2);
+  border-top:1px solid var(--ink);
+  border-bottom:1px solid var(--rule-2);
+  padding:7px 0;
+  margin-bottom:22px;
+  max-width:860px;
+}
+
+/* ---------- input schedule ---------- */
+
+.card{
+  background:none;
+  border:0;
+  border-radius:0;
+  padding:0;
+  margin-bottom:22px;
+  box-shadow:none;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(330px,1fr));
+  column-gap:46px;
+  max-width:860px;
+}
+.grid>div{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:7px 0;
+  border-bottom:1px solid var(--rule-2);
+}
+label{
+  display:block;
+  font-size:13px;
+  color:var(--ink-2);
+  flex:1 1 auto;
+  margin:0;
+  line-height:1.35;
+}
+input,select{
+  flex:0 0 118px;
+  width:118px;
+  background:var(--sheet);
+  color:var(--ink);
+  border:1px solid var(--rule);
+  border-radius:2px;
+  padding:6px 8px;
+  font:inherit;
+  font-size:13.5px;
+  font-variant-numeric:tabular-nums;
+  text-align:right;
+}
+select{flex-basis:148px;width:148px;text-align:left}
+input:focus,select:focus{outline:2px solid var(--signal);outline-offset:-1px;border-color:var(--ink)}
+
+/* ---------- action ---------- */
+
+.btn{
+  margin-top:18px;
+  background:var(--plate);
+  color:#fff;
+  border:1px solid var(--plate);
+  border-radius:2px;
+  padding:9px 20px;
+  font:inherit;
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:.02em;
+  cursor:pointer;
+  transition:background .12s linear;
+}
+.btn:hover{background:var(--plate-2)}
+.btn:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.btn.g{background:var(--ok);border-color:var(--ok)}
+.btn.r{background:var(--signal);border-color:var(--signal)}
+
+/* ---------- readout: the loud element ---------- */
+
+.out{
+  display:none;
+  margin-top:22px;
+  background:var(--plate);
+  color:#b9c1c3;
+  border-left:4px solid var(--signal);
+  border-radius:0;
+  padding:18px 22px 19px;
+  font-size:13px;
+  line-height:1.95;
+  white-space:pre-line;
+  max-width:860px;
+}
+.out b{
+  font-family:'Saira Condensed','Archivo Narrow',sans-serif;
+  font-size:1.62em;
+  font-weight:600;
+  color:#fff;
+  font-variant-numeric:tabular-nums;
+  letter-spacing:.01em;
+}
+
+/* ---------- method notes ---------- */
+
+.note{
+  font-size:11.5px;
+  color:var(--ink-2);
+  line-height:1.6;
+  margin-top:20px;
+  padding-top:11px;
+  border-top:1px solid var(--rule-2);
+  max-width:92ch;
+}
+
+/* ---------- tabular data ---------- */
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:12.5px;
+  font-variant-numeric:tabular-nums;
+  margin-top:10px;
+}
+th,td{
+  border:1px solid var(--rule-2);
+  padding:6px 9px;
+  text-align:left;
+  vertical-align:middle;
+}
+th{
+  background:var(--panel-2);
+  color:var(--ink);
+  font-weight:600;
+  border-color:var(--rule);
+}
+td input{flex:none;width:100%;text-align:right}
+td input[type=number]{width:72px}
+
+/* ---------- footer ---------- */
+
+footer{
+  background:var(--panel-2);
+  border-top:1px solid var(--rule);
+  padding:15px 26px 20px;
+  color:var(--ink-2);
+  font-size:11.5px;
+  line-height:1.6;
+}
+footer b{color:var(--ink)}
+
+/* ---------- states ---------- */
+
+.ok{color:var(--ok)}
+.warn{color:var(--warn)}
+.bad{color:var(--signal)}
+
+/* ---------- narrow screens: rail becomes a scrolling index ---------- */
+
+@media (max-width:880px){
+  .work{flex-direction:column}
+  nav#nav{
+    flex:none;
+    border-right:0;
+    border-bottom:1px solid var(--rule);
+    padding:0;
+    display:flex;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  nav#nav button{
+    width:auto;
+    white-space:nowrap;
+    border-left:0;
+    border-bottom:3px solid transparent;
+    padding:10px 14px;
+  }
+  nav#nav button.on{border-left:0;border-bottom-color:var(--signal)}
+  main#main{padding:20px 18px 36px}
+  main:not(#main){padding:20px 18px 36px}
+  /* wide schedules scroll inside the sheet rather than pushing the page sideways */
+  main{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  header{padding:12px 18px;gap:10px}
+  header h1{font-size:18px;letter-spacing:.07em}
+  header p{font-size:12px;flex-basis:100%}
+  .bar{padding:0 18px;gap:16px}
+  .bar .right{margin-left:0;gap:16px}
+  footer{padding:14px 18px 18px}
+  .grid{column-gap:0}
+}
+
+@media (max-width:560px){
+  header .by{display:none}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+}
+
+@media print{
+  body{background:#fff}
+  header{background:#fff;color:#000;border-bottom:1px solid #000}
+  header h1{color:#000}
+  header p,header .by{color:#333}
+  .bar,nav#nav,.btn{display:none}
+  .out{background:#fff;color:#000;border-left:3px solid #000}
+  .out b{color:#000}
+  th,td{border-color:#999}
+}

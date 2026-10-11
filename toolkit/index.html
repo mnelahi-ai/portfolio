@@ -4,73 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Marine Electrical Engineering Toolkit</title>
-<style>
-  :root{
-    --bg:#0f1722; --panel:#16222f; --panel2:#1d2c3d; --line:#2b4258;
-    --txt:#e8eef4; --mut:#8fa6ba; --acc:#34b8a0; --acc2:#3d9be9; --warn:#e9a23d; --err:#e96a5a;
-  }
-  *{box-sizing:border-box; margin:0; padding:0;}
-  body{font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--txt); min-height:100vh;}
-  header{padding:22px 28px 14px; border-bottom:1px solid var(--line);}
-  header h1{font-size:21px; font-weight:600;}
-  header p{color:var(--mut); font-size:13px; margin-top:4px;}
-  nav{display:flex; flex-wrap:wrap; gap:6px; padding:12px 28px; border-bottom:1px solid var(--line); background:var(--panel);}
-  nav button{background:var(--panel2); color:var(--mut); border:1px solid var(--line); border-radius:6px; padding:7px 12px; font-size:12.5px; cursor:pointer;}
-  nav button.on{background:var(--acc); color:#06251f; border-color:var(--acc); font-weight:600;}
-  main{max-width:880px; margin:0 auto; padding:24px 20px 60px;}
-  section{display:none;}
-  section.on{display:block;}
-  h2{font-size:17px; margin-bottom:4px;}
-  .ref{color:var(--mut); font-size:12px; margin-bottom:14px;}
-  .card{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:18px; margin-bottom:16px;}
-  .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:12px;}
-  label{display:block; font-size:12px; color:var(--mut); margin-bottom:4px;}
-  input,select{width:100%; background:var(--bg); color:var(--txt); border:1px solid var(--line); border-radius:6px; padding:8px 10px; font-size:14px;}
-  .btn{margin-top:14px; background:var(--acc2); color:#fff; border:none; border-radius:6px; padding:9px 18px; font-size:14px; font-weight:600; cursor:pointer;}
-  .out{margin-top:14px; background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:14px; font-size:14px; display:none; white-space:pre-line; line-height:1.7;}
-  .out b{color:var(--acc);}
-  .note{font-size:11.5px; color:var(--mut); margin-top:12px; line-height:1.5;}
-  table{width:100%; border-collapse:collapse; font-size:12.5px; margin-top:8px;}
-  th,td{border:1px solid var(--line); padding:5px 8px; text-align:left;}
-  th{background:var(--panel2); color:var(--mut); font-weight:600;}
-  footer{border-top:1px solid var(--line); padding:16px 28px; color:var(--mut); font-size:11.5px; line-height:1.6;}
-
-  /* --- visual uplift 2026-10-10: depth, accent glow, motion --- */
-  body{background:radial-gradient(1200px 600px at 12% -12%,rgba(61,155,233,.10),transparent 60%),radial-gradient(900px 520px at 100% 0%,rgba(52,184,160,.09),transparent 55%),var(--bg) fixed}
-  header{position:relative}
-  header::after{content:"";display:block;height:2px;margin-top:12px;background:linear-gradient(90deg,var(--acc),var(--acc2),transparent)}
-  header h1{letter-spacing:.2px}
-  nav button,.bar a{transition:transform .15s ease,box-shadow .15s ease,color .15s ease}
-  nav button:hover{transform:translateY(-1px);border-color:var(--acc2)}
-  nav button.on{box-shadow:0 2px 16px -2px rgba(52,184,160,.55)}
-  .bar a.on{text-shadow:0 0 10px rgba(52,184,160,.45)}
-  .card,.src{position:relative;overflow:hidden;box-shadow:0 10px 26px -16px rgba(0,0,0,.6);transition:box-shadow .2s ease,transform .2s ease}
-  .card::before,.src::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,var(--acc),var(--acc2))}
-  .card:hover,.src:hover{box-shadow:0 16px 32px -16px rgba(0,0,0,.7);transform:translateY(-2px)}
-  .btn{background:linear-gradient(135deg,var(--acc2),var(--acc))!important;box-shadow:0 6px 18px -6px rgba(61,155,233,.55);transition:transform .15s ease,box-shadow .15s ease;border:none!important}
-  .btn:hover{transform:translateY(-1px);box-shadow:0 10px 22px -6px rgba(61,155,233,.65)}
-  .btn.g{background:linear-gradient(135deg,#34b8a0,#2c7a60)!important}
-  .btn.r{background:linear-gradient(135deg,#e96a5a,#7a3b34)!important}
-  table th{position:relative}
-  table th::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--acc2);opacity:.45}
-  footer{opacity:.85}
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Saira+Condensed:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="toolkit.css">
 </head>
 <body>
 <header>
-  <h1>⚓ Marine Electrical Engineering Toolkit</h1>
-  <p>Free calculators for marine &amp; industrial electrical design. Indicative results — verify against class rules and manufacturer data.</p>
+  <h1><span class="anchor">&#9875;</span>Marine Electrical Toolkit</h1>
+  <p>Working calculators for marine and industrial electrical design. Each one states the method it uses. Results are indicative &mdash; verify against class rules and manufacturer data.</p>
+  <span class="by">Built by <a href="../index.html">Mashuk Elahi</a>, marine electrical engineer &middot; Singapore</span>
 </header>
-<div style="display:flex;gap:10px;padding:10px 28px;border-bottom:1px solid var(--line);font-size:13px">
-  <a href="index.html" style="color:var(--acc);font-weight:600">Calculators</a>
-  <a href="loadcalc.html" style="color:var(--mut)">Load Analysis</a>
-  <a href="checklists.html" style="color:var(--mut)">Checklists</a>
-  <a href="testforms.html" style="color:var(--mut)">Test Forms</a>
-  <a href="reference.html" style="color:var(--mut)">Reference</a>
-  <a href="projects.html" style="color:var(--mut)">Projects</a>
-  <a href="../index.html" style="margin-left:auto;color:#e9a23d;font-weight:600">Portfolio ↗</a>
+<div class="bar">
+  <a class="on" href="index.html">Calculators</a>
+  <a href="loadcalc.html">Load analysis</a>
+  <a href="checklists.html">Checklists</a>
+  <a href="testforms.html">Test forms</a>
+  <a href="reference.html">Reference</a>
+  <a href="projects.html">Projects</a>
+  <span class="right"><a href="../index.html">Back to portfolio</a></span>
 </div>
-<nav id="nav"></nav>
+<div class="work">
+<nav id="nav" aria-label="Calculator index"></nav>
 <main id="main">
 
 <!-- 1 Short circuit -->
@@ -278,6 +233,7 @@
 </section>
 
 </main>
+</div>
 <footer>
   <b>Disclaimer:</b> These calculators use standard published formulas (IEC 60909, IEC 61439, IEC 60364-5-54, IEC 60076) in simplified form for preliminary estimation only. Results must be verified by a qualified electrical engineer against applicable class rules (DNV, ABS, LR, NSCV, etc.), flag state requirements, and manufacturer data before use in design or construction. No liability accepted.
 </footer>
@@ -325,7 +281,7 @@ function calcEF(){
     const I=(V/Math.sqrt(3))/(Rn+Rf);
     show('ef_out',`Phase-earth voltage: <b>${fmt(V/Math.sqrt(3))} V</b>\nEarth fault current: <b>${fmt(I)} A</b>\nTypical EF pickup (10–20%): <b>${fmt(I*0.1)}–${fmt(I*0.2)} A</b>`);
   }else{
-    show('ef_out',`Solidly earthed: bolted EF current approaches the 3-phase fault level at that point.\nUse the Short Circuit tab for magnitude, then apply zero-sequence correction per IEC 60909-0. <b>[CA]</b> Full calculation requires Z0 data — obtain from system study.`);
+    show('ef_out',`Solidly earthed: bolted EF current approaches the 3-phase fault level at that point.\nUse the Short Circuit tab for magnitude, then apply zero-sequence correction per IEC 60909-0. Full calculation requires Z0 data — obtain from system study.`);
   }
 }
 function calcTX(){
