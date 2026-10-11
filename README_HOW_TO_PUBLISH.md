@@ -9,7 +9,7 @@ from your **LinkedIn → Contact info → Website** field, and anyone can open i
 Portfolio/
 ├── index.html                     ← the whole website (HTML + CSS + JS in one file)
 ├── assets/
-│   └── Mashuk_Elahi_Resume_Marine_Offshore_rev6.pdf    ← the "Download Résumé" button points here
+│   └── Mashuk_Elahi_Resume_Marine_Offshore_rev7.pdf    ← the "Download Résumé" button points here
 └── README_HOW_TO_PUBLISH.md       ← this guide
 ```
 
@@ -100,7 +100,7 @@ Open `index.html` in VS Code. The page is organised in clearly commented section
 (`HERO`, `ABOUT`, `ACHIEVEMENTS`, `EXPERIENCE`, `EXPERTISE`, `EMERGING`, `EDUCATION`,
 `INSIGHTS`, `CONTACT`). Change the text in the matching block, save, and re-publish.
 
-To swap the downloadable résumé, replace `assets/Mashuk_Elahi_Resume_Marine_Offshore_rev6.pdf` with a new file
+To swap the downloadable résumé, replace `assets/Mashuk_Elahi_Resume_Marine_Offshore_rev7.pdf` with a new file
 of the same name.
 
 > **Before going live, set your real links:** the LinkedIn URL is set to
